@@ -1,0 +1,13 @@
+.title {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  letter-spacing: 0.0125em;
+  text-align: center;
+  padding: 1em;
+
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

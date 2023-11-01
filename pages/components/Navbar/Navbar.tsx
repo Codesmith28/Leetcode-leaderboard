@@ -1,10 +1,9 @@
-"use client";
-
 import { AddIcon, CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
   Button,
+  Collapse,
   Flex,
   HStack,
   IconButton,
@@ -14,16 +13,16 @@ import {
   MenuItem,
   MenuList,
   Stack,
-  Text,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import styles from "./Navbar.module.css";
 
 interface Props {
   children: React.ReactNode;
 }
 
-const Links = ["Dashboard", "Projects", "Team"];
+const Links = ["Teams"];
 
 const NavLink = (props: Props) => {
   const { children } = props;
@@ -63,7 +62,6 @@ export default function Navbar() {
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack spacing={8} alignItems={"center"}>
-            <Box>LeetCode LeaderBoard</Box>
             <HStack
               as={"nav"}
               spacing={4}
@@ -74,16 +72,10 @@ export default function Navbar() {
               ))}
             </HStack>
           </HStack>
+
+          <div className={styles.title}>LeetCode LeaderBoard</div>
+
           <Flex alignItems={"center"}>
-            <Button
-              variant={"solid"}
-              colorScheme={"teal"}
-              size={"sm"}
-              mr={4}
-              leftIcon={<AddIcon />}
-            >
-              Action
-            </Button>
             <Menu>
               <MenuButton
                 as={Button}
