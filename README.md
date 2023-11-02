@@ -1,5 +1,9 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+### Link to Figma File:
+
+[Figma File](https://www.figma.com/file/xpcu30g9sw3KVvRNryOlvu/Chakra-UI-Figma-Kit-(Community)?type=design&mode=design&t=lT28K36YU4u74RLH-0)
+
 ## Getting Started
 
 First, run the development server:
