@@ -33,19 +33,19 @@ export default function Groups({ type }: { type: string }) {
             fontSize={"sm"}
             fontWeight={500}
             bg={
-              type === "open"
+              type === "Open"
                 ? useColorModeValue("green.50", "green.900")
-                : useColorModeValue("yellow.50", "yellow.900")
+                : useColorModeValue("orange.50", "orange.900")
             }
             p={2}
             px={3}
-            color={"green.500"}
+            color={type === "Open" ? "green.500" : "orange.500"}
             rounded={"full"}
           >
             {type}
           </Text>
           <Stack direction={"row"} align={"center"} justify={"center"}>
-            <Text fontSize={"4xl"} fontWeight={800}>
+            <Text fontSize={"4xl"} fontWeight={800} letterSpacing={-2}>
               Group A
             </Text>
           </Stack>
@@ -54,7 +54,10 @@ export default function Groups({ type }: { type: string }) {
         <Box bg={useColorModeValue("gray.50", "gray.900")} px={6} py={10}>
           <List spacing={3}>
             <ListItem>
-              <ListIcon as={ArrowRightIcon} color="green.400" />
+              <ListIcon
+                as={ArrowRightIcon}
+                color={type === "Open" ? "green.400" : "orange.400"}
+              />
               Total Members: 10
             </ListItem>
           </List>
@@ -62,18 +65,18 @@ export default function Groups({ type }: { type: string }) {
           <Button
             mt={10}
             w={"full"}
-            bg={"green.400"}
+            bg={type === "Open" ? "green.400" : "orange.400"}
             color={"white"}
             rounded={"xl"}
             boxShadow={"0 5px 20px 0px rgb(72 187 120 / 43%)"}
             _hover={{
-              bg: "green.500",
+              bg: type === "Open" ? "green.500" : "orange.500",
             }}
             _focus={{
-              bg: "green.500",
+              bg: type === "Open" ? "green.500" : "orange.500",
             }}
           >
-            Start your trial
+            Join!
           </Button>
         </Box>
       </Box>

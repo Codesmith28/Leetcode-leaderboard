@@ -19,7 +19,6 @@ export default function Home() {
       </Head>
       <main className={styles.pg}>
         <Layout>
-          <Button>Hi</Button>
           <div className={styles.groups}>
             <Groups type={"Institute"} />
             <Groups type={"Institute"} />

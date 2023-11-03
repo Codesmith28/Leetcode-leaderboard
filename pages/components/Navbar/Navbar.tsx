@@ -22,7 +22,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const Links = ["Teams"];
+const Links = ["MyTeams"];
 
 const NavLink = (props: Props) => {
   const { children } = props;
@@ -102,7 +102,12 @@ export default function Navbar() {
 
         {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>
-            <Stack as={"nav"} spacing={4}>
+            <Stack
+              bg={"gray.50"}
+              className={styles.navBtn}
+              as={"nav"}
+              spacing={4}
+            >
               {Links.map((link) => (
                 <NavLink key={link}>{link}</NavLink>
               ))}
