@@ -3,6 +3,7 @@ import { Button } from "@chakra-ui/react";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import Layout from "./Layout";
+import Groups from "./components/Groups/Groups";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,13 @@ export default function Home() {
       <main className={styles.pg}>
         <Layout>
           <Button>Hi</Button>
+          <div className={styles.groups}>
+            <Groups type={"Institute"} />
+            <Groups type={"Institute"} />
+            <Groups type={"Open"} />
+            <Groups type={"Institute"} />
+            <Groups type={"Institute"} />
+          </div>
         </Layout>
       </main>
     </>
