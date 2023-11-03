@@ -13,6 +13,8 @@ import {
 import styles from "./Groups.module.css";
 
 export default function Groups({ type }: { type: string }) {
+  const colMain: string = type === "Open" ? "green" : "orange";
+
   return (
     <Center py={6}>
       <Box
@@ -32,14 +34,10 @@ export default function Groups({ type }: { type: string }) {
           <Text
             fontSize={"sm"}
             fontWeight={500}
-            bg={
-              type === "Open"
-                ? useColorModeValue("green.50", "green.900")
-                : useColorModeValue("orange.50", "orange.900")
-            }
+            bg={useColorModeValue(`${colMain}.50`, `${colMain}.900`)}
             p={2}
             px={3}
-            color={type === "Open" ? "green.500" : "orange.500"}
+            color={`${colMain}.500`}
             rounded={"full"}
           >
             {type}
@@ -54,10 +52,7 @@ export default function Groups({ type }: { type: string }) {
         <Box bg={useColorModeValue("gray.50", "gray.900")} px={6} py={10}>
           <List spacing={3}>
             <ListItem>
-              <ListIcon
-                as={ArrowRightIcon}
-                color={type === "Open" ? "green.400" : "orange.400"}
-              />
+              <ListIcon as={ArrowRightIcon} color={`${colMain}.400`} />
               Total Members: 10
             </ListItem>
           </List>
@@ -65,15 +60,15 @@ export default function Groups({ type }: { type: string }) {
           <Button
             mt={10}
             w={"full"}
-            bg={type === "Open" ? "green.400" : "orange.400"}
+            bg={`${colMain}.400`}
             color={"white"}
             rounded={"xl"}
             boxShadow={"0 5px 20px 0px rgb(72 187 120 / 43%)"}
             _hover={{
-              bg: type === "Open" ? "green.500" : "orange.500",
+              bg: `${colMain}.500`,
             }}
             _focus={{
-              bg: type === "Open" ? "green.500" : "orange.500",
+              bg: `${colMain}.500`,
             }}
           >
             Join!
