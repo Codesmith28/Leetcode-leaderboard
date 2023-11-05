@@ -25,7 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import React from "react";
+import { useState } from "react";
 import styles from "./Navbar.module.css";
 
 interface Props {
@@ -34,18 +34,20 @@ interface Props {
 
 const Links = ["MyTeams"];
 
-// post request to upload leetcode username and institution name to database if not already there 
-function submitLeetcodeUsername() {
-  const username = document.getElementById("lc-username") as HTMLInputElement;
-  const institution = document.getElementById("institution-name") as HTMLInputElement;
-  fetch("/api/submitLeetcodeUsername", {
-    method: "POST",
-    body: JSON.stringify({
-      username: username.value,
-      institution: institution.value,
-    }),
-  });
-}
+// // post request to upload leetcode username and institution name to database if not already there
+// function submitLeetcodeUsername() {
+//   const username = document.getElementById("lc-username") as HTMLInputElement;
+//   const institution = document.getElementById(
+//     "institution-name"
+//   ) as HTMLInputElement;
+//   fetch("/api/submitLeetcodeUsername", {
+//     method: "POST",
+//     body: JSON.stringify({
+//       username: username.value,
+//       institution: institution.value,
+//     }),
+//   });
+// }
 
 const NavLink = (props: Props) => {
   const { children } = props;
@@ -107,9 +109,28 @@ function UsrnModal({
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
 
-  const authBtn =
-    session && session.user ? (
+  const {
+    isOpen: isLCOpen,
+    onOpen: onLCOpen,
+    onClose: onLCClose,
+  } = useDisclosure();
+
+  let authBtn;
+
+  // if a user exist:
+  if (session && session.user) {
+    // if it is an admin:
+    if (session.user.role === "Admin") {
+    }
+
+    if (session.user.LCUserName === null) {
+      // redirect to noUserName page
+    }
+
+    // if it is a user:
+    authBtn = (
       <div className={styles.navMenu}>
         <Menu>
           <MenuButton>
@@ -132,9 +153,21 @@ export default function Navbar() {
           </MenuList>
         </Menu>
       </div>
-    ) : (
-      <Button onClick={onOpen}>Open Modal</Button>
     );
+  } else {
+    // if no user exist:
+    authBtn = (
+      <Button
+        isLoading={loading}
+        onClick={async () => {
+          setLoading(true);
+          await signIn("google");
+        }}
+      >
+        {loading ? "Signin In..." : "Sign in"}
+      </Button>
+    );
+  }
 
   return (
     <>
