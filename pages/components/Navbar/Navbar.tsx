@@ -16,6 +16,8 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useState } from "react";
 import styles from "./Navbar.module.css";
 
 interface Props {
@@ -45,6 +47,52 @@ const NavLink = (props: Props) => {
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
+
+  let authBtn;
+
+  // if a user exist:
+  if (session && session.user) {
+    // if it is an admin:
+    if (session.user.role === "Admin") {
+    }
+
+    // if it is a user:
+    authBtn = (
+      <div className={styles.navMenu}>
+        <Menu>
+          <MenuButton>
+            <Avatar className={styles.avatarButton} src={session.user.image!} />
+          </MenuButton>
+          <MenuList className={styles.menuList} minWidth="100x">
+            <Button
+              onClick={() =>
+                signOut({
+                  callbackUrl: "/",
+                })
+              }
+            >
+              Sign out
+            </Button>
+          </MenuList>
+        </Menu>
+      </div>
+    );
+  } else {
+    // if no user exist:
+    authBtn = (
+      <Button
+        isLoading={loading}
+        onClick={async () => {
+          setLoading(true);
+          await signIn("google");
+        }}
+      >
+        {loading ? "Signin In..." : "Sign in"}
+      </Button>
+    );
+  }
 
   return (
     <>
@@ -76,27 +124,7 @@ export default function Navbar() {
           <div className={styles.title}>LeetCode LeaderBoard</div>
 
           <Flex alignItems={"center"}>
-            <Menu>
-              <MenuButton
-                as={Button}
-                rounded={"full"}
-                variant={"link"}
-                cursor={"pointer"}
-                minW={0}
-              >
-                <Avatar
-                  size={"md"}
-                  src={
-                    "https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
-                />
-              </MenuButton>
-              <MenuList minWidth="100x">
-                <>
-                  <Button>Sign Out</Button>
-                </>
-              </MenuList>
-            </Menu>
+            <Menu>{authBtn}</Menu>
           </Flex>
         </Flex>
 

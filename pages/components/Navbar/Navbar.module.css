@@ -14,3 +14,11 @@
 .navBtn {
   border-radius: 0.5rem;
 }
+
+.avatarButton {
+  cursor: pointer;
+}
+.menuList {
+  min-width: 100px;
+  padding: 0.3em;
+}
