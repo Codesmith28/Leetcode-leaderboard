@@ -52,7 +52,11 @@ export default function Groups({ type }: { type: string }) {
         <Box bg={useColorModeValue("gray.50", "gray.900")} px={6} py={10}>
           <List spacing={3}>
             <ListItem>
-              <ListIcon as={ArrowRightIcon} color={`${colMain}.400`} />
+              <ListIcon
+                as={ArrowRightIcon}
+                color={`${colMain}.400`}
+                mb={"0.1rem"}
+              />
               Total Members: 10
             </ListItem>
           </List>
@@ -63,7 +67,7 @@ export default function Groups({ type }: { type: string }) {
             bg={`${colMain}.400`}
             color={"white"}
             rounded={"xl"}
-            boxShadow={"0 5px 20px 0px rgb(72 187 120 / 43%)"}
+            boxShadow={`0 5px 20px 0px ${colMain} `}
             _hover={{
               bg: `${colMain}.500`,
             }}

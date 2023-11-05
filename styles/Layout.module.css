@@ -1,0 +1,13 @@
+.main {
+  margin-inline: 1em;
+}
+
+.nav {
+  position: sticky;
+  top: 1em;
+  z-index: 1;
+}
+
+.children {
+  margin: 1.5rem;
+}
