@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 export type UserCol = {
   name: string;
   email: string;
-  LCuserName?: string;
+  LCUserName?: string;
   LCTotalSolved?: number;
   LCEasySolved?: number;
   LCMediumSolved?: number;

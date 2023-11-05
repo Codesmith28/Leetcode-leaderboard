@@ -58,6 +58,11 @@ export default function Navbar() {
     if (session.user.role === "Admin") {
     }
 
+    if (session.user.LCUserName === null) {
+      // redirect to noUserName page
+      
+    }
+
     // if it is a user:
     authBtn = (
       <div className={styles.navMenu}>
