@@ -16,6 +16,7 @@ export default function ProfileCard() {
   const { data: session } = useSession();
 
   // make an array of all data from the user:
+  
 
   return (
     <Center>

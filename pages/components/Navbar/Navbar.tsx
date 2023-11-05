@@ -3,18 +3,18 @@ import {
   Avatar,
   Box,
   Button,
-  Collapse,
   Flex,
+  FormControl,
+  FormLabel,
   HStack,
   IconButton,
+  Input,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -25,7 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import styles from "./Navbar.module.css";
 
 interface Props {
@@ -53,60 +53,50 @@ const NavLink = (props: Props) => {
   );
 };
 
-// modal that asks for Leetcode username if not provided
+// Modal that asks for Leetcode username if not provided
 function UsrnModal({
   isOpen,
-  onOpen,
   onClose,
 }: {
   isOpen: boolean;
-  onOpen: () => void;
   onClose: () => void;
 }) {
   return (
-    <>
-      <Modal isCentered isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <h1>Custom backdrop filters!</h1>
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+    <Modal isCentered isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Some Credentials missing!</ModalHeader>
+
+        <ModalBody className={styles.modalForm}>
+          <div>
+            <FormControl variant="floating" id="lc-username" isRequired>
+              <Input placeholder=" " />
+              <FormLabel>LeetCode Username</FormLabel>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl variant="floating" id="institution-name">
+              <Input placeholder=" " />
+              <FormLabel>Institution Name</FormLabel>
+            </FormControl>
+          </div>
+        </ModalBody>
+
+        {/* submit leetcode username: */}
+        <ModalFooter>
+          <Button>Submit</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
-  const [loading, setLoading] = useState(false);
 
-  const {
-    isOpen: isLCOpen,
-    onOpen: onLCOpen,
-    onClose: onLCClose,
-  } = useDisclosure();
-
-  let authBtn;
-
-  // if a user exist:
-  if (session && session.user) {
-    // if it is an admin:
-    if (session.user.role === "Admin") {
-    }
-
-    if (session.user.LCUserName === null) {
-      // redirect to noUserName page
-    }
-
-    // if it is a user:
-    authBtn = (
+  const authBtn =
+    session && session.user ? (
       <div className={styles.navMenu}>
         <Menu>
           <MenuButton>
@@ -129,24 +119,14 @@ export default function Navbar() {
           </MenuList>
         </Menu>
       </div>
+    ) : (
+      <Button onClick={onOpen}>Open Modal</Button>
     );
-  } else {
-    // if no user exist:
-    authBtn = (
-      <Button
-        isLoading={loading}
-        onClick={async () => {
-          setLoading(true);
-          await signIn("google");
-        }}
-      >
-        {loading ? "Signin In..." : "Sign in"}
-      </Button>
-    );
-  }
 
   return (
     <>
+      <UsrnModal isOpen={isOpen} onClose={onClose} />
+
       <Box
         bg={useColorModeValue("gray.100", "gray.900")}
         px={4}
@@ -172,17 +152,20 @@ export default function Navbar() {
             </HStack>
           </HStack>
 
+          {/* button to trigger modal */}
+          <Button
+            leftIcon={<AddIcon />}
+            colorScheme="teal"
+            variant="solid"
+            onClick={onOpen}
+          />
+
           <Link href={"/"} className={styles.title}>
             LeetCode LeaderBoard
           </Link>
 
-          {/* button to open modal */}
-          <Button onClick={onOpen}>Open Modal</Button>
-
           <Flex alignItems={"center"}>{authBtn}</Flex>
         </Flex>
-
-        <UsrnModal isOpen={isLCOpen} onOpen={onLCOpen} onClose={onLCClose} />
 
         {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>

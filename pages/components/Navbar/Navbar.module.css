@@ -1,5 +1,3 @@
-
-
 .title {
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -60,4 +58,11 @@
   color: white;
   transform: scale(0.95);
   transition: all 0.2s ease-in-out;
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1em;
 }
