@@ -34,6 +34,19 @@ interface Props {
 
 const Links = ["MyTeams"];
 
+// post request to upload leetcode username and institution name to database if not already there 
+function submitLeetcodeUsername() {
+  const username = document.getElementById("lc-username") as HTMLInputElement;
+  const institution = document.getElementById("institution-name") as HTMLInputElement;
+  fetch("/api/submitLeetcodeUsername", {
+    method: "POST",
+    body: JSON.stringify({
+      username: username.value,
+      institution: institution.value,
+    }),
+  });
+}
+
 const NavLink = (props: Props) => {
   const { children } = props;
   return (
