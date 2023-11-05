@@ -67,7 +67,7 @@ export default function Groups({ type }: { type: string }) {
             bg={`${colMain}.400`}
             color={"white"}
             rounded={"xl"}
-            boxShadow={"0 5px 20px 0px rgb(72 187 120 / 43%)"}
+            boxShadow={`0 5px 20px 0px ${colMain} `}
             _hover={{
               bg: `${colMain}.500`,
             }}
