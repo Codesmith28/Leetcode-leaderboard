@@ -12,12 +12,20 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { useState } from "react";
+import Link from "next/link";
+import React, { useState } from "react";
 import styles from "./Navbar.module.css";
 
 interface Props {
@@ -45,10 +53,45 @@ const NavLink = (props: Props) => {
   );
 };
 
+// modal that asks for Leetcode username if not provided
+function UsrnModal({
+  isOpen,
+  onOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}) {
+  return (
+    <>
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <h1>Custom backdrop filters!</h1>
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose}>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}
+
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
+
+  const {
+    isOpen: isLCOpen,
+    onOpen: onLCOpen,
+    onClose: onLCClose,
+  } = useDisclosure();
 
   let authBtn;
 
@@ -60,7 +103,6 @@ export default function Navbar() {
 
     if (session.user.LCUserName === null) {
       // redirect to noUserName page
-      
     }
 
     // if it is a user:
@@ -71,7 +113,11 @@ export default function Navbar() {
             <Avatar className={styles.avatarButton} src={session.user.image!} />
           </MenuButton>
           <MenuList className={styles.menuList} minWidth="100x">
-            <Button
+            <Link href={"./Profile"}>
+              <MenuItem className={styles.menuItem}>My Profile</MenuItem>
+            </Link>
+            <MenuItem
+              className={styles.menuOut}
               onClick={() =>
                 signOut({
                   callbackUrl: "/",
@@ -79,7 +125,7 @@ export default function Navbar() {
               }
             >
               Sign out
-            </Button>
+            </MenuItem>
           </MenuList>
         </Menu>
       </div>
@@ -126,12 +172,17 @@ export default function Navbar() {
             </HStack>
           </HStack>
 
-          <div className={styles.title}>LeetCode LeaderBoard</div>
+          <Link href={"/"} className={styles.title}>
+            LeetCode LeaderBoard
+          </Link>
 
-          <Flex alignItems={"center"}>
-            <Menu>{authBtn}</Menu>
-          </Flex>
+          {/* button to open modal */}
+          <Button onClick={onOpen}>Open Modal</Button>
+
+          <Flex alignItems={"center"}>{authBtn}</Flex>
         </Flex>
+
+        <UsrnModal isOpen={isLCOpen} onOpen={onLCOpen} onClose={onLCClose} />
 
         {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>

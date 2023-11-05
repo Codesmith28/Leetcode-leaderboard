@@ -1,0 +1,12 @@
+.main {
+  margin-inline: 1em;
+}
+
+.nav {
+  position: sticky;
+  top: 1em;
+}
+
+.children {
+  margin: 1.5rem;
+}
