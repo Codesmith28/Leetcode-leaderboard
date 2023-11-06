@@ -38,7 +38,6 @@
   border-radius: 0.8em;
 }
 .menuItem:hover {
-  background-color: #f5f5f5;
   transform: scale(0.95);
   transition: all 0.2s ease-in-out;
 }
@@ -55,7 +54,6 @@
 }
 .menuOut:hover {
   background-color: rgb(255, 91, 91);
-  color: white;
   transform: scale(0.95);
   transition: all 0.2s ease-in-out;
 }
