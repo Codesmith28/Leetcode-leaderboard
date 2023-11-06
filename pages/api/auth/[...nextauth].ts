@@ -2,11 +2,13 @@ import { clientPromise } from "@/util/DB";
 import { UserCol } from "@/util/types";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+
 if (!process.env.GOOGLE_CLIENT_ID) {
   throw Error("GOOGLE_CLIENT_ID is not available in .env");
 } else if (!process.env.GOOGLE_CLIENT_SECRET) {
   throw Error("GOOGLE_CLIENT_SECRET is not available in .env");
 }
+
 const authOptions = NextAuth({
   providers: [
     GoogleProvider({
@@ -14,6 +16,7 @@ const authOptions = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+
   callbacks: {
     async signIn({ user, account, credentials, email, profile }) {
       const db = (await clientPromise).db("leetcodeleaderboard");
@@ -30,7 +33,7 @@ const authOptions = NextAuth({
 
       return true;
     },
-    
+
     async session({ session }) {
       const user = await (await clientPromise)
         .db("leetcodeleaderboard")
