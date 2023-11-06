@@ -9,11 +9,17 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  
-  const session: any = await getServerSession(req, res, authOptions);
+  const session: MySession | null = await getServerSession(
+    req,
+    res,
+    authOptions
+  );
   if (!session) {
     return res.status(403).send("Not logged in");
   }
+  
+  console.log(session);
+
   if (req.method === "PUT") {
     return PUT(req, res, session);
   } else {

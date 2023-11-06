@@ -142,7 +142,6 @@ export default function Navbar() {
     // if it is an admin:
     if (session.user.role === "Admin") {
     }
-
     // if it is a user:
     authBtn = (
       <div className={styles.navMenu}>

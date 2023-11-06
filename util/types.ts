@@ -1,5 +1,4 @@
 import { ObjectId } from "mongodb";
-
 type Role = "Admin" | "Member";
 
 export type UserCol = {
