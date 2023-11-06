@@ -34,20 +34,20 @@ interface Props {
 
 const Links = ["MyTeams"];
 
-// // post request to upload leetcode username and institution name to database if not already there
-// function submitLeetcodeUsername() {
-//   const username = document.getElementById("lc-username") as HTMLInputElement;
-//   const institution = document.getElementById(
-//     "institution-name"
-//   ) as HTMLInputElement;
-//   fetch("/api/submitLeetcodeUsername", {
-//     method: "POST",
-//     body: JSON.stringify({
-//       username: username.value,
-//       institution: institution.value,
-//     }),
-//   });
-// }
+// post request to upload leetcode username and institution name to database if not already there
+async function submitLCUsername(username: string, institution: string) {
+  const res = await fetch("/api/submitLCUsername", {
+    method: "PUT",
+    body: JSON.stringify({
+      username: username,
+      institution: institution,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await res.json();
+}
 
 const NavLink = (props: Props) => {
   const { children } = props;
@@ -71,11 +71,16 @@ const NavLink = (props: Props) => {
 // Modal that asks for Leetcode username if not provided
 function UsrnModal({
   isOpen,
+  onOpen,
   onClose,
 }: {
   isOpen: boolean;
+  onOpen: () => void;
   onClose: () => void;
 }) {
+  const [username, setUsername] = useState("");
+  const [institution, setInstitution] = useState("");
+
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -85,13 +90,23 @@ function UsrnModal({
         <ModalBody className={styles.modalForm}>
           <div>
             <FormControl variant="floating" id="lc-username" isRequired>
-              <Input placeholder=" " />
+              <Input
+                placeholder=" "
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
+              />
               <FormLabel>LeetCode Username</FormLabel>
             </FormControl>
           </div>
           <div>
             <FormControl variant="floating" id="institution-name">
-              <Input placeholder=" " />
+              <Input
+                placeholder=" "
+                onChange={(e) => {
+                  setInstitution(e.target.value);
+                }}
+              />
               <FormLabel>Institution Name</FormLabel>
             </FormControl>
           </div>
@@ -99,7 +114,13 @@ function UsrnModal({
 
         {/* submit leetcode username: */}
         <ModalFooter>
-          <Button>Submit</Button>
+          <Button
+            onClick={() => {
+              submitLCUsername(username, institution);
+            }}
+          >
+            Submit
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -111,6 +132,7 @@ export default function Navbar() {
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
 
+  // for modal:
   const {
     isOpen: isLCOpen,
     onOpen: onLCOpen,
@@ -124,11 +146,6 @@ export default function Navbar() {
     // if it is an admin:
     if (session.user.role === "Admin") {
     }
-
-    if (session.user.LCUserName === null) {
-      // redirect to noUserName page
-    }
-
     // if it is a user:
     authBtn = (
       <div className={styles.navMenu}>
@@ -171,13 +188,12 @@ export default function Navbar() {
 
   return (
     <>
-      <UsrnModal isOpen={isOpen} onClose={onClose} />
-
       <Box
         bg={useColorModeValue("gray.100", "gray.900")}
         px={4}
         borderRadius="lg"
       >
+        <UsrnModal isOpen={isLCOpen} onOpen={onLCOpen} onClose={onLCClose} />
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
@@ -203,7 +219,7 @@ export default function Navbar() {
             leftIcon={<AddIcon />}
             colorScheme="teal"
             variant="solid"
-            onClick={onOpen}
+            onClick={onLCOpen}
           />
 
           <Link href={"/"} className={styles.title}>
