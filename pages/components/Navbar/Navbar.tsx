@@ -47,7 +47,6 @@ async function submitLCUsername(username: string, institution: string) {
     },
   });
   const data = await res.json();
-  console.log(data);
 }
 
 const NavLink = (props: Props) => {
@@ -130,7 +129,6 @@ export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
-console.log(session);
   const {
     isOpen: isLCOpen,
     onOpen: onLCOpen,

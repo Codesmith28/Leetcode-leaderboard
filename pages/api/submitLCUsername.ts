@@ -11,7 +11,6 @@ export default async function handler(
 ) {
   
   const session: any = await getServerSession(req, res, authOptions);
-  console.log(session,655);
   if (!session) {
     return res.status(403).send("Not logged in");
   }
@@ -31,7 +30,6 @@ async function PUT(
     username: string;
     institution: string;
   } = req.body;
-  console.log(body);
 
   if (!body.username || !body.institution) {
     return res.status(400).json({ error: "Missing username or institution" });
@@ -40,8 +38,6 @@ async function PUT(
   const db = (await clientPromise).db("leetcodeleaderboard");
   const usersCollection = db.collection<UserCol>("users");
   const id = session?.user.id;
-  console.log(session);
-  // console.log(id);
   const updateUser = await usersCollection.updateOne(
     { _id: id },
     {
