@@ -1,5 +1,7 @@
 import { ObjectId } from "mongodb";
 
+type Role = "Admin" | "Member";
+
 export type UserCol = {
   name: string;
   email: string;
@@ -8,6 +10,16 @@ export type UserCol = {
   LCEasySolved?: number;
   LCMediumSolved?: number;
   LCHardSolved?: number;
-  role: "Admin" | "Member" | undefined;
+  role: Role;
   _id?: ObjectId;
 };
+
+export type MySession = {
+  user: {
+    id: ObjectId;
+    role: Role;
+    name: string;
+    email: string;
+    image: string;
+  };
+} | null;

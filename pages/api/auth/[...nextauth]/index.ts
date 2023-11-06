@@ -7,8 +7,7 @@ if (!process.env.GOOGLE_CLIENT_ID) {
 } else if (!process.env.GOOGLE_CLIENT_SECRET) {
   throw Error("GOOGLE_CLIENT_SECRET is not available in .env");
 }
-
-const handler = NextAuth({
+const authOptions = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -31,7 +30,7 @@ const handler = NextAuth({
 
       return true;
     },
-
+    
     async session({ session }) {
       const user = await (await clientPromise)
         .db("leetcodeleaderboard")
@@ -39,6 +38,7 @@ const handler = NextAuth({
         .findOne({
           email: session.user.email!,
         });
+
       session.user.role = user?.role;
       session.user.id = user?._id;
 
@@ -47,4 +47,4 @@ const handler = NextAuth({
   },
 });
 
-export default handler;
+export default authOptions;
