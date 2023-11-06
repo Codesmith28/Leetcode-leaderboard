@@ -1,5 +1,5 @@
 .title {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   line-height: 1.75rem;
   letter-spacing: -0.01em;
   text-align: center;
@@ -10,6 +10,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.25rem;
+  }
 }
 
 .navBtn {
