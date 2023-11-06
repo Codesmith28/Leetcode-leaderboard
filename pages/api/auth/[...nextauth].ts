@@ -30,7 +30,7 @@ const authOptions = NextAuth({
           role: "Member",
         });
       }
-
+      
       return true;
     },
 
