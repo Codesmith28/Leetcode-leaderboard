@@ -12,6 +12,12 @@
   align-items: center;
 }
 
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.25rem;
+  }
+}
+
 .navBtn {
   border-radius: 0.5rem;
 }
