@@ -163,7 +163,7 @@ const customTheme = extendTheme({
               left: 0,
               zIndex: 2,
               position: "absolute",
-              backgroundColor: "white",
+              backgroundColor: "gray.700",
               pointerEvents: "none",
               mx: 3,
               px: 1,
