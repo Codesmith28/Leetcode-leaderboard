@@ -71,9 +71,11 @@ const NavLink = (props: Props) => {
 // Modal that asks for Leetcode username if not provided
 function UsrnModal({
   isOpen,
+  onOpen,
   onClose,
 }: {
   isOpen: boolean;
+  onOpen: () => void;
   onClose: () => void;
 }) {
   const [username, setUsername] = useState("");
@@ -129,6 +131,8 @@ export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
+
+  // for modal:
   const {
     isOpen: isLCOpen,
     onOpen: onLCOpen,
@@ -184,13 +188,12 @@ export default function Navbar() {
 
   return (
     <>
-      <UsrnModal isOpen={isOpen} onClose={onClose} />
-
       <Box
         bg={useColorModeValue("gray.100", "gray.900")}
         px={4}
         borderRadius="lg"
       >
+        <UsrnModal isOpen={isLCOpen} onOpen={onLCOpen} onClose={onLCClose} />
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
@@ -216,7 +219,7 @@ export default function Navbar() {
             leftIcon={<AddIcon />}
             colorScheme="teal"
             variant="solid"
-            onClick={onOpen}
+            onClick={onLCOpen}
           />
 
           <Link href={"/"} className={styles.title}>
