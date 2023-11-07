@@ -25,7 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Navbar.module.css";
 
 interface Props {
@@ -80,6 +80,7 @@ function UsrnModal({
 }) {
   const [username, setUsername] = useState("");
   const [institution, setInstitution] = useState("");
+  const [loading, setLoading] = useState(false);
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -115,8 +116,12 @@ function UsrnModal({
         {/* submit leetcode username: */}
         <ModalFooter>
           <Button
-            onClick={() => {
-              submitLCUsername(username, institution);
+            isLoading={loading}
+            onClick={async () => {
+              setLoading(true);
+              await submitLCUsername(username, institution);
+              setLoading(false);
+              onClose();
             }}
           >
             Submit
@@ -126,13 +131,25 @@ function UsrnModal({
     </Modal>
   );
 }
-
+async function ft(onOpen: () => void) {
+  const res = await fetch("/api/isFirstTime", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await res.json();
+  if (res.status === 200) {
+    if (data.isFirstTime) {
+      onOpen();
+    }
+  }
+}
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
 
-  // for modal:
   const {
     isOpen: isLCOpen,
     onOpen: onLCOpen,
@@ -141,12 +158,21 @@ export default function Navbar() {
 
   let authBtn;
 
-  // if a user exist:
+  useEffect(() => {
+    if (session && session.user) {
+      ft(onLCOpen);
+    }
+  }, [session, onLCOpen]);
+
   if (session && session.user) {
-    // if it is an admin:
+    // if user's username is null
+    if (session.user.username === null) {
+      onLCOpen();
+    }
+
     if (session.user.role === "Admin") {
     }
-    // if it is a user:
+
     authBtn = (
       <div className={styles.navMenu}>
         <Menu>
@@ -172,13 +198,13 @@ export default function Navbar() {
       </div>
     );
   } else {
-    // if no user exist:
     authBtn = (
       <Button
         isLoading={loading}
         onClick={async () => {
           setLoading(true);
           await signIn("google");
+          setLoading(false);
         }}
       >
         {loading ? "Signin In..." : "Sign in"}

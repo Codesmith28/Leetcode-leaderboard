@@ -34,18 +34,17 @@ const authOptions = NextAuth({
       return true;
     },
 
-    async session({ session }) {
+    async jwt({ token }) {
       const user = await (await clientPromise)
         .db("leetcodeleaderboard")
         .collection<UserCol>("Users")
         .findOne({
-          email: session.user.email!,
+          email: token.email!,
         });
 
-      session.user.role = user?.role;
-      session.user.id = user?._id;
-
-      return session;
+      token.role = user?.role;
+      token.id = user?._id;
+      return token;
     },
   },
 });
