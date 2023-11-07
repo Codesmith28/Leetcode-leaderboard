@@ -165,11 +165,6 @@ export default function Navbar() {
   }, [session, onLCOpen]);
 
   if (session && session.user) {
-    // if user's username is null
-    if (session.user.username === null) {
-      onLCOpen();
-    }
-
     if (session.user.role === "Admin") {
     }
 
