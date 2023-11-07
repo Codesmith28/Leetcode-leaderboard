@@ -25,7 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Navbar.module.css";
 
 interface Props {
@@ -126,7 +126,20 @@ function UsrnModal({
     </Modal>
   );
 }
-
+async function ft(onOpen: () => void) {
+  const res = await fetch("/api/isFirstTime", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await res.json();
+  if (res.status === 200) {
+    if (data.isFirstTime) {
+      onOpen();
+    }
+  }
+}
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
@@ -140,9 +153,19 @@ export default function Navbar() {
 
   let authBtn;
 
+  useEffect(() => {
+    ft(onLCOpen);
+  }, []);
+
   if (session && session.user) {
+    // if user's username is null
+    if (session.user.username === null) {
+      onLCOpen();
+    }
+
     if (session.user.role === "Admin") {
     }
+
     authBtn = (
       <div className={styles.navMenu}>
         <Menu>
