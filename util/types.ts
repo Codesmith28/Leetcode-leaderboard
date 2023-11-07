@@ -21,4 +21,4 @@ export type MySession = {
     email: string;
     image: string;
   };
-} | null;
+};

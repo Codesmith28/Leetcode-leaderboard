@@ -143,6 +143,7 @@ export default function Navbar() {
 
   // if a user exist:
   if (session && session.user) {
+    setInterval(()=>(console.log(session)),1000)
     // if it is an admin:
     if (session.user.role === "Admin") {
     }

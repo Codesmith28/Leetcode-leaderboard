@@ -1,7 +1,9 @@
 import { clientPromise } from "@/util/DB";
 import { MySession, UserCol } from "@/util/types";
+import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
+import { decode } from "next-auth/jwt";
 import { useSession } from "next-auth/react";
 import authOptions from "../api/auth/[...nextauth]";
 
@@ -9,19 +11,17 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session: MySession | null = await getServerSession(
-    req,
-    res,
-    authOptions
-  );
-  if (!session) {
+  const sessionToken = req.cookies["next-auth.session-token"]!;
+  const token = await decode({
+    token: sessionToken,
+    secret: process.env.NEXTAUTH_SECRET!,
+  });
+  if (token === null) {
     return res.status(403).send("Not logged in");
   }
-  
-  console.log(session);
 
   if (req.method === "PUT") {
-    return PUT(req, res, session);
+    return PUT(req, res, token as MySession["user"]);
   } else {
     return res.status(405).send("Method not allowed");
   }
@@ -30,7 +30,7 @@ export default async function handler(
 async function PUT(
   req: NextApiRequest,
   res: NextApiResponse,
-  session: Exclude<MySession, null>
+  session: MySession["user"]
 ) {
   const body: {
     username: string;
@@ -42,10 +42,12 @@ async function PUT(
   }
 
   const db = (await clientPromise).db("leetcodeleaderboard");
-  const usersCollection = db.collection<UserCol>("users");
-  const id = session?.user.id;
+  const usersCollection = db.collection<UserCol>("Users");
+  const id = session.id;
+  console.log(id);
+
   const updateUser = await usersCollection.updateOne(
-    { _id: id },
+    { _id: new ObjectId(id) },
     {
       $set: {
         username: body.username,
