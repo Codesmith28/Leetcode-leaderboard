@@ -80,6 +80,7 @@ function UsrnModal({
 }) {
   const [username, setUsername] = useState("");
   const [institution, setInstitution] = useState("");
+  const [loading, setLoading] = useState(false);
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -115,8 +116,12 @@ function UsrnModal({
         {/* submit leetcode username: */}
         <ModalFooter>
           <Button
-            onClick={() => {
-              submitLCUsername(username, institution);
+            isLoading={loading}
+            onClick={async () => {
+              setLoading(true);
+              await submitLCUsername(username, institution);
+              setLoading(false);
+              onClose();
             }}
           >
             Submit
@@ -154,8 +159,10 @@ export default function Navbar() {
   let authBtn;
 
   useEffect(() => {
-    ft(onLCOpen);
-  }, []);
+    if (session && session.user) {
+      ft(onLCOpen);
+    }
+  }, [session, onLCOpen]);
 
   if (session && session.user) {
     // if user's username is null
@@ -197,6 +204,7 @@ export default function Navbar() {
         onClick={async () => {
           setLoading(true);
           await signIn("google");
+          setLoading(false);
         }}
       >
         {loading ? "Signin In..." : "Sign in"}
