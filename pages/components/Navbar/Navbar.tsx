@@ -160,9 +160,11 @@ export default function Navbar() {
 
   useEffect(() => {
     if (session && session.user) {
-      ft(onLCOpen);
+      if (!session.user.username) {
+        ft(onLCOpen);
+      }
     }
-  }, [session, onLCOpen]);
+  }, [session]);
 
   if (session && session.user) {
     if (session.user.role === "Admin") {
