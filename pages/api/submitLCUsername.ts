@@ -2,10 +2,7 @@ import { clientPromise } from "@/util/DB";
 import { MySession, UserCol } from "@/util/types";
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
 import { decode } from "next-auth/jwt";
-import { useSession } from "next-auth/react";
-import authOptions from "../api/auth/[...nextauth]";
 
 export default async function handler(
   req: NextApiRequest,
