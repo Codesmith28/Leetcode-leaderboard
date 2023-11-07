@@ -132,7 +132,6 @@ export default function Navbar() {
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
 
-  // for modal:
   const {
     isOpen: isLCOpen,
     onOpen: onLCOpen,
@@ -141,13 +140,9 @@ export default function Navbar() {
 
   let authBtn;
 
-  // if a user exist:
   if (session && session.user) {
-    setInterval(()=>(console.log(session)),1000)
-    // if it is an admin:
     if (session.user.role === "Admin") {
     }
-    // if it is a user:
     authBtn = (
       <div className={styles.navMenu}>
         <Menu>
@@ -173,7 +168,6 @@ export default function Navbar() {
       </div>
     );
   } else {
-    // if no user exist:
     authBtn = (
       <Button
         isLoading={loading}

@@ -4,7 +4,8 @@ type Role = "Admin" | "Member";
 export type UserCol = {
   name: string;
   email: string;
-  LCUserName?: string;
+  username?: string;
+  institution?: string;
   LCTotalSolved?: number;
   LCEasySolved?: number;
   LCMediumSolved?: number;
