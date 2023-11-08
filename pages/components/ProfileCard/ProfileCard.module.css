@@ -6,3 +6,9 @@
   align-items: center;
   gap: 0.5em;
 }
+
+.txt {
+  font-size: large;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}

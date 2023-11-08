@@ -17,13 +17,12 @@ export default function ProfileCard() {
   return (
     <Center>
       <Box
-        maxW={"320px"}
+        maxW={"400px"}
         w={"full"}
         bg={useColorModeValue("white", "gray.900")}
         boxShadow={"2xl"}
         rounded={"lg"}
         textAlign={"center"}
-        p={12}
       >
         <Avatar
           size={"xl"}
@@ -32,28 +31,44 @@ export default function ProfileCard() {
           mb={4}
           pos={"relative"}
         />
-        {/* name */}
+
         <Heading fontSize={"2xl"} fontFamily={"body"}>
           {session?.user.name!}
         </Heading>
-        {/* user name */}
+
         <Text fontWeight={600} color={"gray.500"} mb={4}>
-          @lindsey_jam3s
+          {session?.user.username!}
         </Text>
 
         <div className={styles.label}>
-          <Heading fontSize={"lg"}>Hi:</Heading>
-          <Text fontSize={"lg"}>Hello</Text>
+          <Heading fontSize={"lg"}>Email:</Heading>
+          <div className={styles.txt}>{session?.user.email!}</div>
         </div>
 
-        {/* 
-        Email
-        Institution
-        Total solved
-        Total Easy
-        Total Medium
-        Total Hard
-        */}
+        <div className={styles.label}>
+          <Heading fontSize={"lg"}>Institution:</Heading>
+          {/* <div className={styles.txt}>{session?.user.institution}</div> */}
+        </div>
+
+        <div className={styles.label}>
+          <Heading fontSize={"lg"}>Total solved:</Heading>
+          <div className={styles.txt}>0</div>
+        </div>
+
+        <div className={styles.label}>
+          <Heading fontSize={"lg"}>Total Easy:</Heading>
+          <div className={styles.txt}>0</div>
+        </div>
+
+        <div className={styles.label}>
+          <Heading fontSize={"lg"}>Total Medium:</Heading>
+          <div className={styles.txt}>0</div>
+        </div>
+
+        <div className={styles.label}>
+          <Heading fontSize={"lg"}>Total Hard:</Heading>
+          <div className={styles.txt}>0</div>
+        </div>
       </Box>
     </Center>
   );

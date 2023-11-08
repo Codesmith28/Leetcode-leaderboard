@@ -24,7 +24,7 @@ export default async function handler(
     return res.status(405).send("Method not allowed");
   }
 }
-
+ 
 async function GET(
   req: NextApiRequest,
   res: NextApiResponse,
