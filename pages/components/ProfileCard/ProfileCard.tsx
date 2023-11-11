@@ -34,12 +34,12 @@ async function getInfo() {
   });
 
   const data = await res.json();
-  console.log(data);
   return data;
 }
 
 export default function ProfileCard() {
   const { data: session } = useSession();
+
   const [info, setInfo] = useState<Info>({
     username: "",
     email: "",

@@ -17,9 +17,15 @@ export type UserCol = {
 export type MySession = {
   user: {
     id: ObjectId;
+    username: string;
     role: Role;
     name: string;
     email: string;
     image: string;
+    institution?: string;
+    LCTotalSolved?: number;
+    LCEasySolved?: number;
+    LCMediumSolved?: number;
+    LCHardSolved?: number;
   };
 };
