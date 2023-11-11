@@ -13,32 +13,49 @@ export default async function handler(
     token: sessionToken,
     secret: process.env.NEXTAUTH_SECRET!,
   });
-
   if (token === null) {
     return res.status(403).send("Not logged in");
   }
 
-  if (req.method === "GET") {
-    return GET(req, res, token as MySession["user"]);
+  if (req.method === "PUT") {
+    return PUT(req, res, token as MySession["user"]);
   } else {
     return res.status(405).send("Method not allowed");
   }
 }
- 
-async function GET(
+
+async function PUT(
   req: NextApiRequest,
   res: NextApiResponse,
   session: MySession["user"]
 ) {
+  const body: {
+    easySolved: number;
+    mediumSolved: number;
+    hardSolved: number;
+    totalSolved: number;
+    ranking: number;
+  } = req.body;
+
   const db = (await clientPromise).db("leetcodeleaderboard");
   const usersCollection = db.collection<UserCol>("Users");
   const id = session.id;
 
-  const user = await usersCollection.findOne({ _id: new ObjectId(id) });
-  if (!user) {
-    return res.status(500).json({ error: "Could not find user" });
+  const updateUser = await usersCollection.updateOne(
+    { _id: new ObjectId(id) },
+    {
+      $set: {
+        LCEasySolved: body.easySolved,
+        LCMediumSolved: body.mediumSolved,
+        LCHardSolved: body.hardSolved,
+        LCTotalSolved: body.totalSolved,
+      },
+    }
+  );
+
+  if (!updateUser.acknowledged) {
+    return res.status(500).json({ error: "Could not update user" });
   }
-  return res
-    .status(200)
-    .json({ isFirstTime: !Object.hasOwnProperty.call(user, "username") });
+
+  return res.status(200).json({ message: "Success" });
 }

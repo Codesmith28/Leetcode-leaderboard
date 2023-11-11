@@ -24,7 +24,7 @@ export default async function handler(
     return res.status(405).send("Method not allowed");
   }
 }
- 
+
 async function GET(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -38,7 +38,6 @@ async function GET(
   if (!user) {
     return res.status(500).json({ error: "Could not find user" });
   }
-  return res
-    .status(200)
-    .json({ isFirstTime: !Object.hasOwnProperty.call(user, "username") });
+
+  return res.status(200).json({ username: user.username });
 }

@@ -41,7 +41,6 @@ async function PUT(
   const db = (await clientPromise).db("leetcodeleaderboard");
   const usersCollection = db.collection<UserCol>("Users");
   const id = session.id;
-  console.log(id);
 
   const updateUser = await usersCollection.updateOne(
     { _id: new ObjectId(id) },

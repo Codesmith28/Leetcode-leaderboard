@@ -49,6 +49,23 @@ async function submitLCUsername(username: string, institution: string) {
   const data = await res.json();
 }
 
+async function ft(onOpen: () => void) {
+  const res = await fetch("/api/isFirstTime", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await res.json();
+  if (res.status === 200) {
+    if (data.isFirstTime) {
+      onOpen();
+    } else {
+      console.log("Not first time");
+    }
+  }
+}
+
 const NavLink = (props: Props) => {
   const { children } = props;
   return (
@@ -131,20 +148,7 @@ function UsrnModal({
     </Modal>
   );
 }
-async function ft(onOpen: () => void) {
-  const res = await fetch("/api/isFirstTime", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await res.json();
-  if (res.status === 200) {
-    if (data.isFirstTime) {
-      onOpen();
-    }
-  }
-}
+
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
@@ -160,11 +164,40 @@ export default function Navbar() {
 
   useEffect(() => {
     if (session && session.user) {
-      if (!session.user.username) {
-        ft(onLCOpen);
-      }
+      ft(onLCOpen);
     }
   }, [session]);
+
+  const updateInfo = async (
+    easy: number,
+    medium: number,
+    hard: number,
+    total: number
+  ) => {
+    try {
+      const res = await fetch("/api/updateInfo", {
+        method: "PUT",
+        body: JSON.stringify({
+          easy,
+          medium,
+          hard,
+          total,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update information");
+      }
+
+      const data = await res.json();
+      console.log("Information updated successfully:", data);
+    } catch (error) {
+      console.error("Error updating information:", error);
+    }
+  };
 
   if (session && session.user) {
     if (session.user.role === "Admin") {
