@@ -8,7 +8,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const sessionToken = req.cookies["next-auth.session-token"];
+  const sessionToken = req.cookies["next-auth.session-token"]!;
   const token = await decode({
     token: sessionToken,
     secret: process.env.NEXTAUTH_SECRET!,
