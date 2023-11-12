@@ -15,7 +15,7 @@ export default async function handler(
   });
 
   if (token === null) {
-    return res.status(403);
+    return res.status(403).end();
   }
 
   if (req.method === "GET") {
@@ -30,6 +30,8 @@ async function GET(
   res: NextApiResponse,
   session: MySession["user"]
 ) {
+  console.time("connect DB");
+
   const db = (await clientPromise).db("leetcodeleaderboard");
   const usersCollection = db.collection<UserCol>("Users");
   const id = session.id;
@@ -38,6 +40,9 @@ async function GET(
   if (!user) {
     return res.status(500).json({ error: "Could not find user" });
   }
+
+  console.timeEnd("connect DB");
+
   return res
     .status(200)
     .json({ isFirstTime: !Object.hasOwnProperty.call(user, "username") });
