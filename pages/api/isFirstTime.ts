@@ -14,7 +14,10 @@ export default async function handler(
     secret: process.env.NEXTAUTH_SECRET!,
   });
 
+  console.log("from is first time", token as MySession["user"]);
+
   if (token === null) {
+    console.log("from is first time, user not logged in");
     return res.status(403).send("Not logged in");
   }
 
@@ -24,7 +27,7 @@ export default async function handler(
     return res.status(405).send("Method not allowed");
   }
 }
- 
+
 async function GET(
   req: NextApiRequest,
   res: NextApiResponse,

@@ -60,8 +60,6 @@ async function ft(onOpen: () => void) {
   if (res.status === 200) {
     if (data.isFirstTime) {
       onOpen();
-    } else {
-      console.log("Not first time");
     }
   }
 }
@@ -174,29 +172,24 @@ export default function Navbar() {
     hard: number,
     total: number
   ) => {
-    try {
-      const res = await fetch("/api/updateInfo", {
-        method: "PUT",
-        body: JSON.stringify({
-          easy,
-          medium,
-          hard,
-          total,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+    const res = await fetch("/api/updateInfo", {
+      method: "PUT",
+      body: JSON.stringify({
+        easy,
+        medium,
+        hard,
+        total,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-      if (!res.ok) {
-        throw new Error("Failed to update information");
-      }
-
-      const data = await res.json();
-      console.log("Information updated successfully:", data);
-    } catch (error) {
-      console.error("Error updating information:", error);
+    if (!res.ok) {
+      throw new Error("Failed to update information");
     }
+
+    const data = await res.json();
   };
 
   if (session && session.user) {
