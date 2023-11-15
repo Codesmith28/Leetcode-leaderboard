@@ -43,6 +43,7 @@ const authOptions = NextAuth({
         });
 
       token.role = user?.role;
+      token.username = user?.username;
       token.id = user?._id;
       return token;
     },
