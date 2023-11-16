@@ -63,3 +63,12 @@
   text-align: start;
   gap: 0.5em;
 }
+.denominations > :nth-child(1) {
+  color: green;
+}
+.denominations > :nth-child(2) {
+  color: orange;
+}
+.denominations > :nth-child(3) {
+  color: red;
+}

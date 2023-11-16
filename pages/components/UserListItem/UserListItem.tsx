@@ -23,6 +23,21 @@ function UserListItem() {
 
   // component for the button or the denominations
   let misc;
+
+  let denom;
+  denom = (
+    <div className={styles.misc}>
+      <div className={styles.totalSolved}>
+        <h1>300 solved</h1>
+      </div>
+      <div className={styles.denominations}>
+        <Heading size="xs">Easy: 100</Heading>
+        <Heading size="xs">Medium: 100</Heading>
+        <Heading size="xs">Hard: 100</Heading>
+      </div>
+    </div>
+  );
+
   if (isSmallScreen) {
     misc = (
       <IconButton
@@ -34,18 +49,7 @@ function UserListItem() {
       />
     );
   } else {
-    misc = (
-      <div className={styles.misc}>
-        <div className={styles.totalSolved}>
-          <h1>100</h1>
-        </div>
-        <div className={styles.denominations}>
-          <Heading size="xs">Easy: 100</Heading>
-          <Heading size="xs">Medium: 100</Heading>
-          <Heading size="xs">Hard: 100</Heading>
-        </div>
-      </div>
-    );
+    misc = denom;
   }
 
   return (
@@ -57,13 +61,23 @@ function UserListItem() {
         </div>
 
         {/* Avatar */}
-        <div className={styles.avatar}>
-          <Avatar
-            size="md"
-            name="Prosper Otemuyiwa"
-            src="https://bit.ly/prosper-baba"
-          />
-        </div>
+        {isSmallScreen ? (
+          <div className={styles.avatar}>
+            <Avatar
+              size="md"
+              name="Prosper Otemuyiwa"
+              src="https://bit.ly/prosper-baba"
+            />
+          </div>
+        ) : (
+          <div className={styles.avatar}>
+            <Avatar
+              size="lg"
+              name="Prosper Otemuyiwa"
+              src="https://bit.ly/prosper-baba"
+            />
+          </div>
+        )}
 
         <div className={styles.names}>
           <h1>Prosper Otemuyiwa</h1>

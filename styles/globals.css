@@ -3,6 +3,11 @@ html,
 #__next {
   /* min-height: min-content; */
   height: 100%;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-tap-highlight-color: rgb(0, 0, 0, 0);
 }
 
 ::-webkit-scrollbar {

@@ -199,8 +199,8 @@ export default function Navbar() {
     authBtn = (
       <div className={styles.navMenu}>
         <Menu>
-          <MenuButton>
-            <Avatar className={styles.avatarButton} src={session.user.image!} />
+          <MenuButton className="clicky">
+            <Avatar size={"md"} src={session.user.image!} />
           </MenuButton>
           <MenuList className={styles.menuList} minWidth="100x">
             <Link href={"./Profile"}>
