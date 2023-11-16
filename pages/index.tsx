@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import Head from "next/head";
 import Layout from "./Layout";
 import Groups from "./components/Groups/Groups";
+import UserList from "./components/UserList/UserList";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,12 +20,15 @@ export default function Home() {
       </Head>
       <main className={styles.pg}>
         <Layout>
-          <div className={styles.groups}>
+          {/* <div className={styles.groups}>
             <Groups type={"Institute"} />
             <Groups type={"Institute"} />
             <Groups type={"Open"} />
             <Groups type={"Institute"} />
             <Groups type={"Institute"} />
+          </div> */}
+          <div>
+            <UserList />
           </div>
         </Layout>
       </main>
