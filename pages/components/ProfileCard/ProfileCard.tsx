@@ -25,17 +25,6 @@ interface Info {
 }
 
 // get information of the user using the get request:
-async function getInfo() {
-  const res = await fetch("/api/getInfo", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  const data = await res.json();
-  return data;
-}
 
 export default function ProfileCard() {
   const { data: session } = useSession();
@@ -51,9 +40,19 @@ export default function ProfileCard() {
   });
 
   useEffect(() => {
-    getInfo().then((data) => {
+    const getInfo = async () => {
+      const res = await fetch("/api/getInfo", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await res.json();
       setInfo(data);
-    });
+    };
+
+    getInfo();
   }, []);
 
   return (
