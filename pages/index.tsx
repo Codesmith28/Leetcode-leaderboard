@@ -4,6 +4,8 @@ import { Inter } from "next/font/google";
 import Head from "next/head";
 import Layout from "./Layout";
 import Groups from "./components/Groups/Groups";
+import Pagination from "./components/Pagination/Pagination";
+import SearchBar from "./components/SearchBar/SearchBar";
 import UserList from "./components/UserList/UserList";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -28,6 +30,8 @@ export default function Home() {
             <Groups type={"Institute"} />
           </div> */}
           <div>
+            {/* <SearchBar />
+            <Pagination /> */}
             <UserList />
           </div>
         </Layout>
