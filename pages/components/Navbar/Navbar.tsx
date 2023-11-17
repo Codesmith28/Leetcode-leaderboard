@@ -103,7 +103,7 @@ function UsrnModal({
           <div>
             <FormControl variant="floating" id="institution-name">
               <Input
-                placeholder=" "
+                placeholder=""
                 onChange={(e) => {
                   setInstitution(e.target.value);
                 }}
@@ -119,7 +119,10 @@ function UsrnModal({
             isLoading={loading}
             onClick={async () => {
               setLoading(true);
-              await submitLCUsername(username, institution);
+              await submitLCUsername(
+                username,
+                institution === "" ? "none" : institution
+              );
               setLoading(false);
               onClose();
             }}
