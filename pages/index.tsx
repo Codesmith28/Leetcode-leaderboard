@@ -1,16 +1,84 @@
 import styles from "@/styles/Home.module.css";
+import { TeamCol } from "@/util/types";
 import { Button } from "@chakra-ui/react";
 import { Inter } from "next/font/google";
 import Head from "next/head";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
 import Layout from "./Layout";
 import Groups from "./components/Groups/Groups";
 import Pagination from "./components/Pagination/Pagination";
 import SearchBar from "./components/SearchBar/SearchBar";
 import UserList from "./components/UserList/UserList";
 
-const inter = Inter({ subsets: ["latin"] });
+// api call to get list of all teams:
+// async function getAllTeams() {
+//   const res = await fetch("/api/getTeams", {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+//   const data = await res.json();
+//   return data;
+// }
+
+// function to search all teams:
+function teamSearch(searchQuery: string, page: number, id: string) {
+  //   const { data, error, isLoading, mutate } = useSWR(
+  //   `/api/house/${id}/searchMembers?searchQuery=${searchQuery}&page=${page}`,
+  //   fetcher
+  // );
+  return {
+    // users: data as TeamCol[],
+    // isLoading,
+    // error: error,
+    // mutate,
+  };
+}
+
+// component to list all teams:
+function GroupList({ data }: { data: any }) {
+  return (
+    <div className={styles.groups}>
+      {data.map((group: any, index: number) => (
+        <Groups
+          key={index}
+          type={group.type}
+          name={group.name}
+          totalMembers={group.totalMembers}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function Home() {
+  const [searchText, setSearchText] = useState("");
+  const [page, setPage] = useState(1);
+  const [teams, setTeams] = useState([]);
+
+  // const { teams, isLoading, error, mutate } = teamSearch(
+  //   searchQuery,
+  //   page,
+  //   teamId as string
+  // );
+
+  useEffect(() => {
+    const getAllTeams = async () => {
+      const res = await fetch("/api/getTeams", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setTeams(data);
+    };
+    
+    getAllTeams();
+  }, []);
+
   return (
     <>
       <Head>
@@ -22,17 +90,14 @@ export default function Home() {
       </Head>
       <main className={styles.pg}>
         <Layout>
-          {/* <div className={styles.groups}>
-            <Groups type={"Institute"} />
-            <Groups type={"Institute"} />
-            <Groups type={"Open"} />
-            <Groups type={"Institute"} />
-            <Groups type={"Institute"} />
-          </div> */}
           <div>
-            {/* <SearchBar />
-            <Pagination /> */}
-            <UserList />
+            <SearchBar
+              searchQuery={searchText}
+              setSearchQuery={setSearchText}
+              setPage={setPage}
+            />
+            <GroupList data={teams} />
+            {/* <Pagination page={page} setPage={setPage} items={teams} /> */}
           </div>
         </Layout>
       </main>

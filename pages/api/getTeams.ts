@@ -15,7 +15,7 @@ export default async function handler(
   });
 
   if (token === null) {
-    return res.status(403).end();
+    return res.status(403).send("Not logged in");
   }
 
   if (req.method === "GET") {
@@ -31,14 +31,8 @@ async function GET(
   session: MySession["user"]
 ) {
   const db = (await clientPromise).db("leetcodeleaderboard");
-  const usersCollection = db.collection<UserCol>("Users");
-  const id = session.id;
-
-  const user = await usersCollection.findOne({ _id: new ObjectId(id) });
-  if (!user) {
-    return res.status(500).json({ error: "Could not find user" });
-  }
-
-  const isFirstTime = !user.hasOwnProperty("username"); // Checking existence of "username" property
-  return res.status(200).json({ isFirstTime });
+  // return all the teams available
+  const teamsCollection = db.collection("Teams");
+  const teams = await teamsCollection.find().toArray();
+  return res.status(200).json(teams);
 }

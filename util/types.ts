@@ -13,7 +13,6 @@ export type UserCol = {
   LCHardSolved?: number;
   role: Role;
   _id?: ObjectId;
-
   Teams: string[];
 };
 
@@ -30,21 +29,13 @@ export type MySession = {
     LCEasySolved?: number;
     LCMediumSolved?: number;
     LCHardSolved?: number;
+    Teams: string[];
   };
-} | null;
+};
 
-export type TeamCol =
-  | {
-      _id?: ObjectId;
-      name: string;
-      members: string[];
-      institutional: true; // Set the default value to true
-      institution: string; // Make institution field mandatory by default
-    }
-  | {
-      _id?: ObjectId;
-      name: string;
-      members: string[];
-      institutional: false; // Added a branch for when institutional is false
-      institution?: string; // Make institution field optional when institutional is false
-    };
+export type TeamCol = {
+  _id?: ObjectId;
+  name: string;
+  members: string[];
+  institution: string | null;
+};

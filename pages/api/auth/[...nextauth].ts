@@ -28,6 +28,7 @@ const authOptions = NextAuth({
           name: user.name!,
           email: user.email!,
           role: "Member",
+          Teams: [],
         });
       }
 

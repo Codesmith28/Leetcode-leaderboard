@@ -49,21 +49,6 @@ async function submitLCUsername(username: string, institution: string) {
   const data = await res.json();
 }
 
-async function ft(onOpen: () => void) {
-  const res = await fetch("/api/isFirstTime", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await res.json();
-  if (res.status === 200) {
-    if (data.isFirstTime) {
-      onOpen();
-    }
-  }
-}
-
 const NavLink = (props: Props) => {
   const { children } = props;
   return (
@@ -161,8 +146,21 @@ export default function Navbar() {
   let authBtn;
 
   useEffect(() => {
+    const isFirstTime = async () => {
+      const res = await fetch("/api/isFirstTime", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data.isFirstTime) {
+        onLCOpen();
+      }
+    };
+
     if (session && session.user) {
-      ft(onLCOpen);
+      isFirstTime();
     }
   }, [session]);
 
