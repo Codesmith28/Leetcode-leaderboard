@@ -13,15 +13,20 @@ import {
 import styles from "./Groups.module.css";
 
 export default function Groups({
-  type,
   name,
+  institution,
   totalMembers,
+  disabled,
 }: {
-  type: string;
+  institution: string;
   name: string;
   totalMembers: number;
+  disabled: boolean;
 }) {
-  const colMain: string = type === null ? "green" : "orange";
+  let colMain: string = institution === "none" ? "green" : "orange";
+  if (disabled && institution !== "none") {
+    colMain = "gray";
+  }
 
   return (
     <Center py={6}>
@@ -48,7 +53,7 @@ export default function Groups({
             color={`${colMain}.500`}
             rounded={"full"}
           >
-            {type === null ? "Open" : "Institute"}
+            {institution === "none" ? "Open" : "Institute"}
           </Text>
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"4xl"} fontWeight={800} letterSpacing={-2}>
@@ -70,6 +75,7 @@ export default function Groups({
           </List>
 
           <Button
+            className="clicky"
             mt={10}
             w={"full"}
             bg={`${colMain}.400`}

@@ -19,6 +19,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   Stack,
   useColorModeValue,
   useDisclosure,
@@ -101,15 +102,11 @@ function UsrnModal({
             </FormControl>
           </div>
           <div>
-            <FormControl variant="floating" id="institution-name">
-              <Input
-                placeholder=""
-                onChange={(e) => {
-                  setInstitution(e.target.value);
-                }}
-              />
-              <FormLabel>Institution Name</FormLabel>
-            </FormControl>
+            <Select placeholder="Select option">
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </Select>
           </div>
         </ModalBody>
 
