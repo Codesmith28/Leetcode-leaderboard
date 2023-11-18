@@ -7,6 +7,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { StringDecoder } from "string_decoder";
 import useSWR from "swr";
+import Script from "next/script";
 import Layout from "./Layout";
 import Groups from "./components/Groups/Groups";
 import Pagination from "./components/Pagination/Pagination";
@@ -122,6 +123,20 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         <meta name="color-scheme" content="dark " />
+        <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+        />
+        <Script
+          dangerouslySetInnerHTML={{
+            __html: `
+            cwindow.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('onfig', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}');
+          `,
+          }}
+        />
       </Head>
       <main className={styles.pg}>
         <Layout>
