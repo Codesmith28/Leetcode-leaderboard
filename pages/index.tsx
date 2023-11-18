@@ -2,6 +2,7 @@ import styles from "@/styles/Home.module.css";
 import { Button } from "@chakra-ui/react";
 import { Inter } from "next/font/google";
 import Head from "next/head";
+import Script from "next/script";
 import Layout from "./Layout";
 import Groups from "./components/Groups/Groups";
 
@@ -16,11 +17,11 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         <meta name="color-scheme" content="dark " />
-        <script
+        <Script
           async
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
         />
-        <script
+        <Script
           dangerouslySetInnerHTML={{
             __html: `
             cwindow.dataLayer = window.dataLayer || [];
