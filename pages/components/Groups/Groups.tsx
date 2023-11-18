@@ -24,7 +24,9 @@ export default function Groups({
   disabled: boolean;
 }) {
   let colMain: string = institution === "none" ? "green" : "orange";
-  if (disabled && institution !== "none") {
+  let off = disabled && institution !== "none";
+
+  if (off) {
     colMain = "gray";
   }
 
@@ -75,7 +77,7 @@ export default function Groups({
           </List>
 
           <Button
-            className="clicky"
+            className={off ? "" : "clicky"}
             mt={10}
             w={"full"}
             bg={`${colMain}.400`}
@@ -88,6 +90,7 @@ export default function Groups({
             _focus={{
               bg: `${colMain}.500`,
             }}
+            isDisabled={off}
           >
             Join!
           </Button>
