@@ -24,6 +24,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import { link } from "fs";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -32,8 +33,6 @@ import styles from "./Navbar.module.css";
 interface Props {
   children: React.ReactNode;
 }
-
-const Links = ["MyTeams"];
 
 // post request to upload leetcode username and institution name to database if not already there
 async function submitLCUsername(username: string, institution: string) {
@@ -132,6 +131,8 @@ function UsrnModal({
   );
 }
 
+const Links = ["My Teams"];
+
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
@@ -164,34 +165,10 @@ export default function Navbar() {
     }
   }, [session]);
 
-  const updateInfo = async (
-    easy: number,
-    medium: number,
-    hard: number,
-    total: number
-  ) => {
-    const res = await fetch("/api/updateInfo", {
-      method: "PUT",
-      body: JSON.stringify({
-        easy,
-        medium,
-        hard,
-        total,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to update information");
-    }
-
-    const data = await res.json();
-  };
-
   if (session && session.user) {
+    // session.user.role unfortunately does not exist
     if (session.user.role === "Admin") {
+      Links.push("Admin");
     }
 
     authBtn = (
