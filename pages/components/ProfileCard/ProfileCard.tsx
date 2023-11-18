@@ -52,7 +52,23 @@ export default function ProfileCard() {
       setInfo(data);
     };
 
+    const upDateInfo = async () => {
+      const res = await fetch(
+        `https://leetcode-api-faisalshohag.vercel.app/${info.username}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = await res.json();
+      setInfo(data);
+    };
+
     getInfo();
+    upDateInfo();
   }, []);
 
   return (
