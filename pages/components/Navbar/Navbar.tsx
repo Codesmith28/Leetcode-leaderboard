@@ -79,8 +79,10 @@ function UsrnModal({
   onClose: () => void;
 }) {
   const [username, setUsername] = useState("");
-  const [institution, setInstitution] = useState("");
+  const [institution, setInstitution] = useState("none");
   const [loading, setLoading] = useState(false);
+
+  let institutions = ["DAIICT", "NIRMA", "SEAS", "SVNIT"];
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -101,10 +103,18 @@ function UsrnModal({
             </FormControl>
           </div>
           <div>
-            <Select placeholder="Select option">
-              <option value="option1">Option 1</option>
-              <option value="option2">Option 2</option>
-              <option value="option3">Option 3</option>
+            <Select
+              placeholder="Select Institution"
+              defaultValue={"none"}
+              onChange={(e) => {
+                setInstitution(e.target.value);
+              }}
+            >
+              {institutions.map((inst) => (
+                <option key={inst} value={inst}>
+                  {inst}
+                </option>
+              ))}
             </Select>
           </div>
         </ModalBody>
@@ -115,12 +125,11 @@ function UsrnModal({
             isLoading={loading}
             onClick={async () => {
               setLoading(true);
-              await submitLCUsername(
-                username,
-                institution === "" ? "none" : institution
-              );
+              await submitLCUsername(username, institution);
               setLoading(false);
               onClose();
+              // reload the page
+              window.location.reload();
             }}
           >
             Submit
