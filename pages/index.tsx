@@ -4,10 +4,10 @@ import { Button } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { Inter } from "next/font/google";
 import Head from "next/head";
+import Script from "next/script";
 import { useEffect, useState } from "react";
 import { StringDecoder } from "string_decoder";
 import useSWR from "swr";
-import Script from "next/script";
 import Layout from "./Layout";
 import Groups from "./components/Groups/Groups";
 import Pagination from "./components/Pagination/Pagination";
@@ -130,10 +130,10 @@ export default function Home() {
         <Script
           dangerouslySetInnerHTML={{
             __html: `
-            cwindow.dataLayer = window.dataLayer || [];
+            window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('onfig', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}');
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}');
           `,
           }}
         />
