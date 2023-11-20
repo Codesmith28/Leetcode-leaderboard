@@ -19,10 +19,12 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   Stack,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import { link } from "fs";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -31,8 +33,6 @@ import styles from "./Navbar.module.css";
 interface Props {
   children: React.ReactNode;
 }
-
-const Links = ["MyTeams"];
 
 // post request to upload leetcode username and institution name to database if not already there
 async function submitLCUsername(username: string, institution: string) {
@@ -47,21 +47,6 @@ async function submitLCUsername(username: string, institution: string) {
     },
   });
   const data = await res.json();
-}
-
-async function ft(onOpen: () => void) {
-  const res = await fetch("/api/isFirstTime", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await res.json();
-  if (res.status === 200) {
-    if (data.isFirstTime) {
-      onOpen();
-    }
-  }
 }
 
 const NavLink = (props: Props) => {
@@ -94,8 +79,10 @@ function UsrnModal({
   onClose: () => void;
 }) {
   const [username, setUsername] = useState("");
-  const [institution, setInstitution] = useState("");
+  const [institution, setInstitution] = useState("none");
   const [loading, setLoading] = useState(false);
+
+  let institutions = ["DAIICT", "NIRMA", "SEAS", "SVNIT"];
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -116,15 +103,19 @@ function UsrnModal({
             </FormControl>
           </div>
           <div>
-            <FormControl variant="floating" id="institution-name">
-              <Input
-                placeholder=" "
-                onChange={(e) => {
-                  setInstitution(e.target.value);
-                }}
-              />
-              <FormLabel>Institution Name</FormLabel>
-            </FormControl>
+            <Select
+              placeholder="Select Institution"
+              defaultValue={"none"}
+              onChange={(e) => {
+                setInstitution(e.target.value);
+              }}
+            >
+              {institutions.map((inst) => (
+                <option key={inst} value={inst}>
+                  {inst}
+                </option>
+              ))}
+            </Select>
           </div>
         </ModalBody>
 
@@ -137,6 +128,8 @@ function UsrnModal({
               await submitLCUsername(username, institution);
               setLoading(false);
               onClose();
+              // reload the page
+              window.location.reload();
             }}
           >
             Submit
@@ -146,6 +139,8 @@ function UsrnModal({
     </Modal>
   );
 }
+
+const Links = ["My Teams"];
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -161,46 +156,35 @@ export default function Navbar() {
   let authBtn;
 
   useEffect(() => {
+    const isFirstTime = async () => {
+      const res = await fetch("/api/isFirstTime", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data.isFirstTime) {
+        onLCOpen();
+      }
+    };
+
     if (session && session.user) {
-      ft(onLCOpen);
+      isFirstTime();
     }
   }, [session]);
 
-  const updateInfo = async (
-    easy: number,
-    medium: number,
-    hard: number,
-    total: number
-  ) => {
-    const res = await fetch("/api/updateInfo", {
-      method: "PUT",
-      body: JSON.stringify({
-        easy,
-        medium,
-        hard,
-        total,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to update information");
-    }
-
-    const data = await res.json();
-  };
-
   if (session && session.user) {
+    // session.user.role unfortunately does not exist
     if (session.user.role === "Admin") {
+      Links.push("Admin");
     }
 
     authBtn = (
       <div className={styles.navMenu}>
         <Menu>
-          <MenuButton>
-            <Avatar className={styles.avatarButton} src={session.user.image!} />
+          <MenuButton className="clicky">
+            <Avatar size={"md"} src={session.user.image!} />
           </MenuButton>
           <MenuList className={styles.menuList} minWidth="100x">
             <Link href={"./Profile"}>
@@ -264,12 +248,12 @@ export default function Navbar() {
           </HStack>
 
           {/* button to trigger modal */}
-          <Button
+          {/* <Button
             leftIcon={<AddIcon />}
             colorScheme="teal"
             variant="solid"
             onClick={onLCOpen}
-          />
+          /> */}
 
           <Link href={"/"} className={styles.title}>
             LeetCode LeaderBoard

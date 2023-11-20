@@ -39,5 +39,5 @@ async function GET(
     return res.status(500).json({ error: "Could not find user" });
   }
 
-  return res.status(200).json({ username: user.username });
+  return res.status(200).json(user);
 }

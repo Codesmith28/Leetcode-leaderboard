@@ -4,6 +4,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 
 export default function App({
   Component,
@@ -12,6 +13,7 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <ChakraProvider theme={customTheme}>
+        <GoogleAnalytics trackPageViews={true} />
         <Component {...pageProps} />
       </ChakraProvider>
     </SessionProvider>
