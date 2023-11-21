@@ -33,6 +33,7 @@ const authOptions = NextAuth({
           LCEasySolved: 0,
           LCMediumSolved: 0,
           LCHardSolved: 0,
+          ranking: 0,
         });
       }
 
