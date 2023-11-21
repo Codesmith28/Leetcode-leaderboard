@@ -14,6 +14,7 @@ export type UserCol = {
   role: Role;
   _id?: ObjectId;
   Teams: string[];
+  ranking: number;
 };
 
 export type MySession = {
@@ -30,6 +31,7 @@ export type MySession = {
     LCMediumSolved?: number;
     LCHardSolved?: number;
     Teams: string[];
+    ranking: number;
   };
 };
 
