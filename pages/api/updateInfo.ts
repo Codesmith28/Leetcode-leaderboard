@@ -37,6 +37,16 @@ async function PUT(
     ranking: number;
   } = req.body;
 
+  if (
+    !body.easySolved ||
+    !body.mediumSolved ||
+    !body.hardSolved ||
+    !body.totalSolved ||
+    !body.ranking
+  ) {
+    return res.status(400).json({ error: "Missing data!" });
+  }
+
   const db = (await clientPromise).db("leetcodeleaderboard");
   const usersCollection = db.collection<UserCol>("Users");
   const id = session.id;
@@ -49,6 +59,7 @@ async function PUT(
         LCMediumSolved: body.mediumSolved,
         LCHardSolved: body.hardSolved,
         LCTotalSolved: body.totalSolved,
+        ranking: body.ranking,
       },
     }
   );
