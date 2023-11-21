@@ -140,17 +140,17 @@ export default function ProfileCard() {
           </div>
 
           <div className={styles.label}>
-            <Heading fontSize={"lg"}>Total Easy: </Heading>
+            <Heading fontSize={"lg"}>Easy Solved: </Heading>
             <div className={styles.txt}>{info.easySolved}</div>
           </div>
 
           <div className={styles.label}>
-            <Heading fontSize={"lg"}>Total Medium: </Heading>
+            <Heading fontSize={"lg"}>Medi Solvedum: </Heading>
             <div className={styles.txt}>{info.mediumSolved}</div>
           </div>
 
           <div className={styles.label}>
-            <Heading fontSize={"lg"}>Total Hard: </Heading>
+            <Heading fontSize={"lg"}>Hard Solved: </Heading>
             <div className={styles.txt}>{info.hardSolved}</div>
           </div>
         </div>
