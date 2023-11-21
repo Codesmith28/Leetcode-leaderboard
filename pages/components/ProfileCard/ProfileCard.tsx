@@ -22,6 +22,7 @@ interface Info {
   easySolved: number;
   mediumSolved: number;
   hardSolved: number;
+  ranking: number;
 }
 
 // get information of the user using the get request:
@@ -37,6 +38,7 @@ export default function ProfileCard() {
     easySolved: 0,
     mediumSolved: 0,
     hardSolved: 0,
+    ranking: 0,
   });
 
   useEffect(() => {
@@ -47,8 +49,8 @@ export default function ProfileCard() {
           "Content-Type": "application/json",
         },
       });
-
       const data = await res.json();
+
       const res2 = await fetch(
         `https://leetcode-api-faisalshohag.vercel.app/${data.username}`,
         {
@@ -58,17 +60,40 @@ export default function ProfileCard() {
           },
         }
       );
+      const data2 = await res2.json();
 
-      // console.log(await res2.text());
+      // combine the data from the two api calls:
+      const combinedInfo: Info = {
+        username: data.username,
+        email: data.email,
+        institution: data.institution,
+        totalSolved: data2.totalSolved,
+        easySolved: data2.easySolved,
+        mediumSolved: data2.mediumSolved,
+        hardSolved: data2.hardSolved,
+        ranking: data2.ranking,
+      };
+      setInfo(combinedInfo);
 
-      const userData = await res2.json();
-      setInfo(userData);
+      // update the database with the data2 in the database:
+      const res3 = await fetch("/api/updateInfo", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          easySolved: data2.easySolved,
+          mediumSolved: data2.mediumSolved,
+          hardSolved: data2.hardSolved,
+          totalSolved: data2.totalSolved,
+          ranking: data2.ranking,
+        }),
+      });
+      const data3 = await res3.json();
     };
 
     upDateInfo();
   }, []);
-
-  console.log(info);
 
   return (
     <Center>
@@ -94,6 +119,8 @@ export default function ProfileCard() {
 
         <Text fontWeight={600} color={"gray.500"} mb={4}>
           {info.username}
+          <br />
+          Ranking: {info.ranking}
         </Text>
 
         <div className={styles.card}>
