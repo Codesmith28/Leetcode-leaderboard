@@ -47,6 +47,7 @@ function GroupList({ teamData, myInsti }: { teamData: any; myInsti: string }) {
       {teamData.map((group: any, index: number) => (
         <Groups
           key={index}
+          _id={group._id}
           institution={group.institution}
           name={group.name}
           totalMembers={group.totalMembers}

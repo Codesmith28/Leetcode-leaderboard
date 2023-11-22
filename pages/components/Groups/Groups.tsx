@@ -10,21 +10,52 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { ObjectId } from "mongodb";
+import { useEffect } from "react";
 import styles from "./Groups.module.css";
 
 export default function Groups({
   name,
+  _id,
   institution,
   totalMembers,
   disabled,
 }: {
   institution: string;
+  _id: ObjectId;
   name: string;
   totalMembers: number;
   disabled: boolean;
 }) {
   let colMain: string = institution === "none" ? "green" : "orange";
   let off = disabled && institution !== "none";
+
+  // implement join button functionality:
+  useEffect(() => {
+    // team in user
+    const teamInUser = async () => {
+      const res = await fetch("/api/user/getTeams", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log(data);
+    };
+
+    // user in team
+    const userInTeam = async () => {
+      const res = await fetch("/api/team/getUsers", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log(data);
+    };
+  });
 
   if (off) {
     colMain = "gray";

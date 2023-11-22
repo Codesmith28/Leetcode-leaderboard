@@ -38,6 +38,6 @@ export type MySession = {
 export type TeamCol = {
   _id?: ObjectId;
   name: string;
-  members: string[];
+  members: ObjectId[];
   institution: string | null;
 };
