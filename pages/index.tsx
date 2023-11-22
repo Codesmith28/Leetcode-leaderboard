@@ -14,32 +14,6 @@ import Pagination from "./components/Pagination/Pagination";
 import SearchBar from "./components/SearchBar/SearchBar";
 import UserList from "./components/UserList/UserList";
 
-// api call to get list of all teams:
-// async function getAllTeams() {
-//   const res = await fetch("/api/getTeams", {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
-//   const data = await res.json();
-//   return data;
-// }
-
-// function to search all teams:
-function teamSearch(searchQuery: string, page: number, id: string) {
-  //   const { data, error, isLoading, mutate } = useSWR(
-  //   `/api/house/${id}/searchMembers?searchQuery=${searchQuery}&page=${page}`,
-  //   fetcher
-  // );
-  return {
-    // users: data as TeamCol[],
-    // isLoading,
-    // error: error,
-    // mutate,
-  };
-}
-
 // component to list all teams:
 function GroupList({ teamData, myInsti }: { teamData: any; myInsti: string }) {
   return (
@@ -107,7 +81,6 @@ export default function Home() {
           "Content-Type": "application/json",
         },
       });
-
       const data = await res.json();
       setUserInfo(data);
     };

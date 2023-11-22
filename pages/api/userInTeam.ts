@@ -8,39 +8,67 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "PUT") {
-    const teamId = req.query.teamId as string; // Assuming teamId is in the query parameters
-    return PUT(req, res, teamId as unknown as ObjectId);
-  } else {
-    return res.status(405).send("Method not allowed");
+  try {
+    const sessionToken = req.cookies["next-auth.session-token"];
+    if (!sessionToken) {
+      return res.status(401).json({ error: "Session token not found" });
+    }
+
+    const token = await decode({
+      token: sessionToken,
+      secret: process.env.NEXTAUTH_SECRET!,
+    });
+
+    if (!token || !("user" in token)) {
+      return res.status(401).json({ error: "Invalid token or user not found" });
+    }
+
+    const { teamId } = req.query;
+    if (req.method === "PUT" && typeof teamId === "string") {
+      const result = await addMemberToTeam(
+        req,
+        res,
+        token as MySession["user"],
+        teamId
+      );
+      return result;
+    } else {
+      return res.status(405).send("Method not allowed");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({ error: "Server error" });
   }
 }
 
-async function PUT(
+async function addMemberToTeam(
   req: NextApiRequest,
   res: NextApiResponse,
-  teamId: ObjectId
+  sessionUser: MySession["user"],
+  teamId: string
 ) {
-  const body: {
-    userId: ObjectId;
-  } = req.body;
+  try {
+    const db = (await clientPromise).db("leetcodeleaderboard");
+    const usersCollection = db.collection<TeamCol>("Teams");
+    const id = new ObjectId(teamId);
+    const userId = sessionUser.id;
 
-  const db = (await clientPromise).db("leetcodeleaderboard");
-  const usersCollection = db.collection<TeamCol>("Teams");
-  const id = teamId;
+    const updateUserResult = await usersCollection.updateOne(
+      { _id: id },
+      { $addToSet: { members: userId } }
+    );
 
-  const addUserInTeam = await usersCollection.updateOne(
-    { _id: new ObjectId(id) },
-    {
-      $push: {
-        members: body.userId,
-      },
+    if (!updateUserResult.matchedCount) {
+      return res.status(404).json({ error: "Team not found" });
     }
-  );
 
-  if (!addUserInTeam.acknowledged) {
-    return res.status(500).json({ error: "Could not update user" });
+    if (!updateUserResult.modifiedCount) {
+      return res.status(200).json({ message: "User is already a member" });
+    }
+
+    return res.status(200).json({ message: "User added to team" });
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({ error: "Server error" });
   }
-
-  return res.status(200).json({ message: "Success" });
 }

@@ -14,6 +14,39 @@ import { ObjectId } from "mongodb";
 import { useEffect } from "react";
 import styles from "./Groups.module.css";
 
+// implement join button function -> it will add user in the team and team in user
+
+async function userInTeam(teamId: ObjectId) {
+  const res = await fetch("/api/teams/join", {
+    method: "PUT",
+    body: JSON.stringify({ teamId }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (res.status === 200) {
+    alert("Joined Successfully");
+  } else {
+    alert("Something went wrong");
+  }
+}
+
+async function teamInUser() {
+  const res = await fetch("/api/user/join", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (res.status === 200) {
+    alert("Joined Successfully");
+  } else {
+    alert("Something went wrong");
+  }
+}
+
 export default function Groups({
   name,
   _id,
@@ -29,33 +62,6 @@ export default function Groups({
 }) {
   let colMain: string = institution === "none" ? "green" : "orange";
   let off = disabled && institution !== "none";
-
-  // implement join button functionality:
-  useEffect(() => {
-    // team in user
-    const teamInUser = async () => {
-      const res = await fetch("/api/user/getTeams", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
-      console.log(data);
-    };
-
-    // user in team
-    const userInTeam = async () => {
-      const res = await fetch("/api/team/getUsers", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
-      console.log(data);
-    };
-  });
 
   if (off) {
     colMain = "gray";
@@ -122,6 +128,10 @@ export default function Groups({
               bg: `${colMain}.500`,
             }}
             isDisabled={off}
+            onClick={async () => {
+              await userInTeam(_id);
+              await teamInUser();
+            }}
           >
             Join!
           </Button>

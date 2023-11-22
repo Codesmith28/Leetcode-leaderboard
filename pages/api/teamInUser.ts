@@ -13,6 +13,7 @@ export default async function handler(
     token: sessionToken,
     secret: process.env.NEXTAUTH_SECRET!,
   });
+
   if (token === null) {
     return res.status(403).send("Not logged in");
   }
