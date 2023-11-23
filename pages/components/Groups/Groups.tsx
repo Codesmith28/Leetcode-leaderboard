@@ -11,33 +11,15 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { ObjectId } from "mongodb";
-import { useEffect } from "react";
 import styles from "./Groups.module.css";
 
-// implement join button function -> it will add user in the team and team in user
-
-async function userInTeam(teamId: ObjectId) {
+async function joinTeam(teamId: ObjectId) {
   const res = await fetch("/api/teams/join", {
     method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({ teamId }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (res.status === 200) {
-    alert("Joined Successfully");
-  } else {
-    alert("Something went wrong");
-  }
-}
-
-async function teamInUser() {
-  const res = await fetch("/api/user/join", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
   });
 
   if (res.status === 200) {
@@ -129,8 +111,7 @@ export default function Groups({
             }}
             isDisabled={off}
             onClick={async () => {
-              await userInTeam(_id);
-              await teamInUser();
+              await joinTeam(_id);
             }}
           >
             Join!
