@@ -145,7 +145,7 @@ export default function ProfileCard() {
           </div>
 
           <div className={styles.label}>
-            <Heading fontSize={"lg"}>Medi Solvedum: </Heading>
+            <Heading fontSize={"lg"}>Medium Solvedum: </Heading>
             <div className={styles.txt}>{info.mediumSolved}</div>
           </div>
 

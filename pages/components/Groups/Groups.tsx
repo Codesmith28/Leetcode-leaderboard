@@ -10,15 +10,34 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { ObjectId } from "mongodb";
 import styles from "./Groups.module.css";
+
+async function joinTeam(teamId: ObjectId) {
+  const res = await fetch("/api/teamJoined", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ teamId }),
+  });
+
+  if (res.status === 200) {
+    alert("Team Joined Successfully");
+  } else {
+    alert("Something went wrong");
+  }
+}
 
 export default function Groups({
   name,
+  _id,
   institution,
   totalMembers,
   disabled,
 }: {
   institution: string;
+  _id: ObjectId;
   name: string;
   totalMembers: number;
   disabled: boolean;
@@ -91,6 +110,9 @@ export default function Groups({
               bg: `${colMain}.500`,
             }}
             isDisabled={off}
+            onClick={async () => {
+              await joinTeam(_id);
+            }}
           >
             Join!
           </Button>

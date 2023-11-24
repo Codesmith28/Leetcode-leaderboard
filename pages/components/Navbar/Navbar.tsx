@@ -61,7 +61,7 @@ const NavLink = (props: Props) => {
         textDecoration: "none",
         bg: useColorModeValue("gray.200", "gray.700"),
       }}
-      href={"#"}
+      href={`./Members/${children}`}
     >
       {children}
     </Box>
@@ -140,7 +140,8 @@ function UsrnModal({
   );
 }
 
-const Links = ["My Teams"];
+// all redirects here:
+const Links = ["MyTeams"];
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
