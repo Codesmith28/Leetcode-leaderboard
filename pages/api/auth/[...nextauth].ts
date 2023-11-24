@@ -28,24 +28,30 @@ const authOptions = NextAuth({
           name: user.name!,
           email: user.email!,
           role: "Member",
+          Teams: [],
+          LCTotalSolved: 0, // Add other properties with appropriate initial values
+          LCEasySolved: 0,
+          LCMediumSolved: 0,
+          LCHardSolved: 0,
+          ranking: 0,
         });
       }
       
       return true;
     },
 
-    async session({ session }) {
+    async jwt({ token }) {
       const user = await (await clientPromise)
         .db("leetcodeleaderboard")
         .collection<UserCol>("Users")
         .findOne({
-          email: session.user.email!,
+          email: token.email!,
         });
 
-      session.user.role = user?.role;
-      session.user.id = user?._id;
-
-      return session;
+      token.role = user?.role;
+      token.username = user?.username;
+      token.id = user?._id;
+      return token;
     },
   },
 });

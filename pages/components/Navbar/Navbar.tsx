@@ -19,20 +19,20 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   Stack,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import { link } from "fs";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Navbar.module.css";
 
 interface Props {
   children: React.ReactNode;
 }
-
-const Links = ["MyTeams"];
 
 // post request to upload leetcode username and institution name to database if not already there
 async function submitLCUsername(username: string, institution: string) {
@@ -61,7 +61,7 @@ const NavLink = (props: Props) => {
         textDecoration: "none",
         bg: useColorModeValue("gray.200", "gray.700"),
       }}
-      href={"#"}
+      href={`./Members/${children}`}
     >
       {children}
     </Box>
@@ -71,13 +71,18 @@ const NavLink = (props: Props) => {
 // Modal that asks for Leetcode username if not provided
 function UsrnModal({
   isOpen,
+  onOpen,
   onClose,
 }: {
   isOpen: boolean;
+  onOpen: () => void;
   onClose: () => void;
 }) {
   const [username, setUsername] = useState("");
-  const [institution, setInstitution] = useState("");
+  const [institution, setInstitution] = useState("none");
+  const [loading, setLoading] = useState(false);
+
+  let institutions = ["DAIICT", "NIRMA", "SEAS", "SVNIT"];
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -98,23 +103,33 @@ function UsrnModal({
             </FormControl>
           </div>
           <div>
-            <FormControl variant="floating" id="institution-name">
-              <Input
-                placeholder=" "
-                onChange={(e) => {
-                  setInstitution(e.target.value);
-                }}
-              />
-              <FormLabel>Institution Name</FormLabel>
-            </FormControl>
+            <Select
+              placeholder="Select Institution"
+              defaultValue={"none"}
+              onChange={(e) => {
+                setInstitution(e.target.value);
+              }}
+            >
+              {institutions.map((inst) => (
+                <option key={inst} value={inst}>
+                  {inst}
+                </option>
+              ))}
+            </Select>
           </div>
         </ModalBody>
 
         {/* submit leetcode username: */}
         <ModalFooter>
           <Button
-            onClick={() => {
-              submitLCUsername(username, institution);
+            isLoading={loading}
+            onClick={async () => {
+              setLoading(true);
+              await submitLCUsername(username, institution);
+              setLoading(false);
+              onClose();
+              // reload the page
+              window.location.reload();
             }}
           >
             Submit
@@ -125,10 +140,14 @@ function UsrnModal({
   );
 }
 
+// all redirects here:
+const Links = ["MyTeams"];
+
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
+
   const {
     isOpen: isLCOpen,
     onOpen: onLCOpen,
@@ -137,17 +156,36 @@ export default function Navbar() {
 
   let authBtn;
 
-  // if a user exist:
-  if (session && session.user) {
-    // if it is an admin:
-    if (session.user.role === "Admin") {
+  useEffect(() => {
+    const isFirstTime = async () => {
+      const res = await fetch("/api/isFirstTime", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data.isFirstTime) {
+        onLCOpen();
+      }
+    };
+
+    if (session && session.user) {
+      isFirstTime();
     }
-    // if it is a user:
+  }, [session]);
+
+  if (session && session.user) {
+    // session.user.role unfortunately does not exist
+    if (session.user.role === "Admin") {
+      Links.push("Admin");
+    }
+
     authBtn = (
       <div className={styles.navMenu}>
         <Menu>
-          <MenuButton>
-            <Avatar className={styles.avatarButton} src={session.user.image!} />
+          <MenuButton className="clicky">
+            <Avatar size={"md"} src={session.user.image!} />
           </MenuButton>
           <MenuList className={styles.menuList} minWidth="100x">
             <Link href={"./Profile"}>
@@ -168,13 +206,13 @@ export default function Navbar() {
       </div>
     );
   } else {
-    // if no user exist:
     authBtn = (
       <Button
         isLoading={loading}
         onClick={async () => {
           setLoading(true);
           await signIn("google");
+          setLoading(false);
         }}
       >
         {loading ? "Signin In..." : "Sign in"}
@@ -184,13 +222,12 @@ export default function Navbar() {
 
   return (
     <>
-      <UsrnModal isOpen={isOpen} onClose={onClose} />
-
       <Box
         bg={useColorModeValue("gray.100", "gray.900")}
         px={4}
         borderRadius="lg"
       >
+        <UsrnModal isOpen={isLCOpen} onOpen={onLCOpen} onClose={onLCClose} />
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
@@ -212,12 +249,12 @@ export default function Navbar() {
           </HStack>
 
           {/* button to trigger modal */}
-          <Button
+          {/* <Button
             leftIcon={<AddIcon />}
             colorScheme="teal"
             variant="solid"
-            onClick={onOpen}
-          />
+            onClick={onLCOpen}
+          /> */}
 
           <Link href={"/"} className={styles.title}>
             LeetCode LeaderBoard

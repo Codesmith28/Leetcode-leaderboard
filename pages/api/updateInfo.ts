@@ -30,12 +30,21 @@ async function PUT(
   session: MySession["user"]
 ) {
   const body: {
-    username: string;
-    institution: string;
+    easySolved: number;
+    mediumSolved: number;
+    hardSolved: number;
+    totalSolved: number;
+    ranking: number;
   } = req.body;
 
-  if (!body.username || !body.institution) {
-    return res.status(400).json({ error: "Missing username or institution" });
+  if (
+    !body.easySolved ||
+    !body.mediumSolved ||
+    !body.hardSolved ||
+    !body.totalSolved ||
+    !body.ranking
+  ) {
+    return res.status(400).json({ error: "Missing data!" });
   }
 
   const db = (await clientPromise).db("leetcodeleaderboard");
@@ -46,8 +55,11 @@ async function PUT(
     { _id: new ObjectId(id) },
     {
       $set: {
-        username: body.username,
-        institution: body.institution,
+        LCEasySolved: body.easySolved,
+        LCMediumSolved: body.mediumSolved,
+        LCHardSolved: body.hardSolved,
+        LCTotalSolved: body.totalSolved,
+        ranking: body.ranking,
       },
     }
   );

@@ -1,5 +1,5 @@
 import { clientPromise } from "@/util/DB";
-import { MySession, UserCol } from "@/util/types";
+import { MySession, TeamCol, UserCol } from "@/util/types";
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { decode } from "next-auth/jwt";
@@ -30,29 +30,40 @@ async function PUT(
   session: MySession["user"]
 ) {
   const body: {
-    username: string;
-    institution: string;
+    teamId: ObjectId;
   } = req.body;
 
-  if (!body.username || !body.institution) {
-    return res.status(400).json({ error: "Missing username or institution" });
+  if (!body.teamId || !ObjectId.isValid(body.teamId)) {
+    return res.status(400).json({ error: "Invalid teamId" });
   }
 
   const db = (await clientPromise).db("leetcodeleaderboard");
   const usersCollection = db.collection<UserCol>("Users");
-  const id = session.id;
+  const teamsCollection = db.collection<TeamCol>("Teams");
+  const userId = session.id;
 
+  // Update user's teams and team's members without duplicates
   const updateUser = await usersCollection.updateOne(
-    { _id: new ObjectId(id) },
     {
-      $set: {
-        username: body.username,
-        institution: body.institution,
-      },
+      _id: new ObjectId(userId),
+      teams: { $not: { $elemMatch: { $eq: new ObjectId(body.teamId) } } },
+    },
+    {
+      $addToSet: { teams: new ObjectId(body.teamId) },
     }
   );
 
-  if (!updateUser.acknowledged) {
+  const updateTeam = await teamsCollection.updateOne(
+    {
+      _id: new ObjectId(body.teamId),
+      members: { $not: { $elemMatch: { $eq: new ObjectId(userId) } } },
+    },
+    {
+      $addToSet: { members: new ObjectId(userId) },
+    }
+  );
+
+  if (!updateUser.acknowledged || !updateTeam.acknowledged) {
     return res.status(500).json({ error: "Could not update user" });
   }
 

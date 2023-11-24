@@ -13,48 +13,32 @@ export default async function handler(
     token: sessionToken,
     secret: process.env.NEXTAUTH_SECRET!,
   });
+
   if (token === null) {
-    return res.status(403).send("Not logged in");
+    return res.status(403).end();
   }
 
-  if (req.method === "PUT") {
-    return PUT(req, res, token as MySession["user"]);
+  if (req.method === "GET") {
+    return GET(req, res, token as MySession["user"]);
   } else {
     return res.status(405).send("Method not allowed");
   }
 }
 
-async function PUT(
+async function GET(
   req: NextApiRequest,
   res: NextApiResponse,
   session: MySession["user"]
 ) {
-  const body: {
-    username: string;
-    institution: string;
-  } = req.body;
-
-  if (!body.username || !body.institution) {
-    return res.status(400).json({ error: "Missing username or institution" });
-  }
-
   const db = (await clientPromise).db("leetcodeleaderboard");
   const usersCollection = db.collection<UserCol>("Users");
   const id = session.id;
 
-  const updateUser = await usersCollection.updateOne(
-    { _id: new ObjectId(id) },
-    {
-      $set: {
-        username: body.username,
-        institution: body.institution,
-      },
-    }
-  );
-
-  if (!updateUser.acknowledged) {
-    return res.status(500).json({ error: "Could not update user" });
+  const user = await usersCollection.findOne({ _id: new ObjectId(id) });
+  if (!user) {
+    return res.status(500).json({ error: "Could not find user" });
   }
 
-  return res.status(200).json({ message: "Success" });
+  const isFirstTime = !user.hasOwnProperty("username"); // Checking existence of "username" property
+  return res.status(200).json({ isFirstTime });
 }

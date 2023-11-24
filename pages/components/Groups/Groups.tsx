@@ -10,10 +10,44 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { ObjectId } from "mongodb";
 import styles from "./Groups.module.css";
 
-export default function Groups({ type }: { type: string }) {
-  const colMain: string = type === "Open" ? "green" : "orange";
+async function joinTeam(teamId: ObjectId) {
+  const res = await fetch("/api/teamJoined", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ teamId }),
+  });
+
+  if (res.status === 200) {
+    alert("Team Joined Successfully");
+  } else {
+    alert("Something went wrong");
+  }
+}
+
+export default function Groups({
+  name,
+  _id,
+  institution,
+  totalMembers,
+  disabled,
+}: {
+  institution: string;
+  _id: ObjectId;
+  name: string;
+  totalMembers: number;
+  disabled: boolean;
+}) {
+  let colMain: string = institution === "none" ? "green" : "orange";
+  let off = disabled && institution !== "none";
+
+  if (off) {
+    colMain = "gray";
+  }
 
   return (
     <Center py={6}>
@@ -40,11 +74,11 @@ export default function Groups({ type }: { type: string }) {
             color={`${colMain}.500`}
             rounded={"full"}
           >
-            {type}
+            {institution === "none" ? "Open" : "Institute"}
           </Text>
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"4xl"} fontWeight={800} letterSpacing={-2}>
-              Group A
+              {name}
             </Text>
           </Stack>
         </Stack>
@@ -57,11 +91,12 @@ export default function Groups({ type }: { type: string }) {
                 color={`${colMain}.400`}
                 mb={"0.1rem"}
               />
-              Total Members: 10
+              Total Members: {totalMembers}
             </ListItem>
           </List>
 
           <Button
+            className={off ? "" : "clicky"}
             mt={10}
             w={"full"}
             bg={`${colMain}.400`}
@@ -73,6 +108,10 @@ export default function Groups({ type }: { type: string }) {
             }}
             _focus={{
               bg: `${colMain}.500`,
+            }}
+            isDisabled={off}
+            onClick={async () => {
+              await joinTeam(_id);
             }}
           >
             Join!

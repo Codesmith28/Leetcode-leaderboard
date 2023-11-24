@@ -10,7 +10,7 @@ declare module "next-auth" {
       /** The user's postal address. */
       role?: "Admin" | "Member" | null;
       id?: ObjectId;
-      LCUserName?: string;
+      username?: string;
     } & DefaultSession["user"];
   }
 }
