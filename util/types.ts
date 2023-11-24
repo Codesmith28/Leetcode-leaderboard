@@ -13,7 +13,7 @@ export type UserCol = {
   LCHardSolved?: number;
   role: Role;
   _id?: ObjectId;
-  Teams: string[];
+  teams: string[];
   ranking: number;
 };
 

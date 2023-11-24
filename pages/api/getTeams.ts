@@ -33,6 +33,14 @@ async function GET(
   const db = (await clientPromise).db("leetcodeleaderboard");
   // return all the teams available
   const teamsCollection = db.collection("Teams");
-  const teams = await teamsCollection.find().toArray();
+  const teams = await teamsCollection
+    .aggregate([
+      {
+        $addFields: {
+          totalMembers: { $size: "$members" },
+        },
+      },
+    ])
+    .toArray();
   return res.status(200).json(teams);
 }
