@@ -1,5 +1,5 @@
 import Layout from "@/pages/Layout";
-import Groups from "@/pages/components/Groups/Groups";
+import MyGroups from "@/pages/components/MyGroups/MyGroups";
 import { TeamCol } from "@/util/types";
 import { useEffect, useState } from "react";
 import styles from "./MyTeams.module.css";
@@ -8,7 +8,7 @@ function GroupList({ teamData }: { teamData: any }) {
   return (
     <div className={styles.groups}>
       {teamData.map((group: any, index: number) => (
-        <Groups
+        <MyGroups
           key={index}
           _id={group._id}
           institution={group.institution}
