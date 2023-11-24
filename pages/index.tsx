@@ -56,12 +56,6 @@ export default function Home() {
     totalHard: 0,
   });
 
-  // const { teams, isLoading, error, mutate } = teamSearch(
-  //   searchQuery,
-  //   page,
-  //   teamId as string
-  // );
-
   useEffect(() => {
     const getAllTeams = async () => {
       const res = await fetch("/api/getTeams", {
