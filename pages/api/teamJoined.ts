@@ -42,18 +42,24 @@ async function PUT(
   const teamsCollection = db.collection<TeamCol>("Teams");
   const userId = session.id;
 
-  // push teamId to user's teams and usrId in team's members array
+  // Update user's teams and team's members without duplicates
   const updateUser = await usersCollection.updateOne(
-    { _id: new ObjectId(userId) },
     {
-      $push: { teams: new ObjectId(body.teamId) },
+      _id: new ObjectId(userId),
+      teams: { $not: { $elemMatch: { $eq: new ObjectId(body.teamId) } } },
+    },
+    {
+      $addToSet: { teams: new ObjectId(body.teamId) },
     }
   );
 
   const updateTeam = await teamsCollection.updateOne(
-    { _id: new ObjectId(body.teamId) },
     {
-      $push: { members: new ObjectId(userId) },
+      _id: new ObjectId(body.teamId),
+      members: { $not: { $elemMatch: { $eq: new ObjectId(userId) } } },
+    },
+    {
+      $addToSet: { members: new ObjectId(userId) },
     }
   );
 

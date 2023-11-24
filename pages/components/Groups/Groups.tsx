@@ -14,7 +14,7 @@ import { ObjectId } from "mongodb";
 import styles from "./Groups.module.css";
 
 async function joinTeam(teamId: ObjectId) {
-  const res = await fetch("/api/teams/join", {
+  const res = await fetch("/api/teamJoined", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -23,7 +23,7 @@ async function joinTeam(teamId: ObjectId) {
   });
 
   if (res.status === 200) {
-    alert("Joined Successfully");
+    alert("Team Joined Successfully");
   } else {
     alert("Something went wrong");
   }
