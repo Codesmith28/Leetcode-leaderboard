@@ -1,5 +1,4 @@
 import { ObjectId } from "mongodb";
-import { type } from "os";
 type Role = "Admin" | "Member";
 
 export type UserCol = {
@@ -13,7 +12,7 @@ export type UserCol = {
   LCHardSolved?: number;
   role: Role;
   _id?: ObjectId;
-  teams: string[];
+  teams: ObjectId[];
   ranking: number;
 };
 
@@ -30,7 +29,7 @@ export type MySession = {
     LCEasySolved?: number;
     LCMediumSolved?: number;
     LCHardSolved?: number;
-    Teams: string[];
+    teams: ObjectId[];
     ranking: number;
   };
 };
