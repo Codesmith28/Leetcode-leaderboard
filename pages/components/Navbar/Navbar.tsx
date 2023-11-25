@@ -188,7 +188,7 @@ export default function Navbar() {
             <Avatar size={"md"} src={session.user.image!} />
           </MenuButton>
           <MenuList className={styles.menuList} minWidth="100x">
-            <Link href={"./Profile"}>
+            <Link href={"/Profile"}>
               <MenuItem className={styles.menuItem}>My Profile</MenuItem>
             </Link>
             <MenuItem
