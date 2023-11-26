@@ -34,34 +34,13 @@ interface userInfo {
   ranking: number;
 }
 
-function TeamPlate({ teamId }: { teamId: string }) {
-  const [teamInfo, setteamInfo] = useState<teamInfo>({
-    name: "",
-    institution: "",
-    totalMembers: 0,
-    members: [],
-    disabled: false,
-  });
-
-  useEffect(() => {
-    if (teamId) {
-      const getTeamInfo = async () => {
-        const res = await fetch(`/api/getTeamInfo/${teamId}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const teamData = await res.json();
-        setteamInfo(teamData);
-      };
-      getTeamInfo();
-    }
-  }, [teamId]);
-
-  // names of top three members of the team
-  const topThree = teamInfo.members.slice(0, 3);
-
+function TeamPlate({
+  teamInfo,
+  topThree,
+}: {
+  teamInfo: teamInfo;
+  topThree: userInfo[];
+}) {
   return (
     <>
       <Card
