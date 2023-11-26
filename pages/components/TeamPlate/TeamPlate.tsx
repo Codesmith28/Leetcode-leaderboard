@@ -30,13 +30,14 @@ function TeamPlate({ teamId }: { teamId: string }) {
   useEffect(() => {
     if (teamId) {
       const getTeamInfo = async () => {
-        const res = await fetch(`api/getTeamInfo/${teamId}`, {
+        const res = await fetch(`/api/getTeamInfo/${teamId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
         });
         const teamData = await res.json();
+        console.log("team data: ", teamData);
         setteamInfo(teamData);
       };
       getTeamInfo();
