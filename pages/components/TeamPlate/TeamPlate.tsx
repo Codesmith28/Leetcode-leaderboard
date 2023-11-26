@@ -8,6 +8,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ObjectId } from "mongodb";
+import { userInfo } from "os";
 import React, { useEffect, useState } from "react";
 import styles from "./TeamPlate.module.css";
 
@@ -16,9 +17,21 @@ interface teamInfo {
   name: string;
   institution: string;
   totalMembers: number;
-  topThree: ObjectId[];
-  members: ObjectId[];
+  members: userInfo[];
   disabled: boolean;
+}
+
+interface userInfo {
+  _id: ObjectId;
+  name: string;
+  username: string;
+  email: string;
+  institution: string;
+  totalSolved: number;
+  easySolved: number;
+  mediumSolved: number;
+  hardSolved: number;
+  ranking: number;
 }
 
 function TeamPlate({ teamId }: { teamId: string }) {
@@ -26,7 +39,6 @@ function TeamPlate({ teamId }: { teamId: string }) {
     name: "",
     institution: "",
     totalMembers: 0,
-    topThree: [],
     members: [],
     disabled: false,
   });
@@ -41,12 +53,14 @@ function TeamPlate({ teamId }: { teamId: string }) {
           },
         });
         const teamData = await res.json();
-        console.log("num", teamData);
         setteamInfo(teamData);
       };
       getTeamInfo();
     }
   }, [teamId]);
+
+  // names of top three members of the team
+  const topThree = teamInfo.members.slice(0, 3);
 
   return (
     <>
@@ -67,15 +81,16 @@ function TeamPlate({ teamId }: { teamId: string }) {
         <div>
           {/* total members */}
           <Heading size={"sm"}>Total Members : {teamInfo.totalMembers}</Heading>
+
           <div className={styles.topThree}>
             <Heading size={"sm"} color={"gold"} textDecor={"underline"}>
-              #1
+              #1 {topThree[0]?.name || "N/A"}
             </Heading>
             <Heading size={"sm"} color={"silver"} textDecor={"underline"}>
-              #2
+              #2 {topThree[1]?.name || "N/A"}
             </Heading>
             <Heading size={"sm"} color={"brown"} textDecor={"underline"}>
-              #3
+              #3 {topThree[2]?.name || "N/A"}
             </Heading>
           </div>
         </div>
