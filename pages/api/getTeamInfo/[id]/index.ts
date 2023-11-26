@@ -69,6 +69,7 @@ async function GET(
         $group: {
           _id: "$_id",
           name: { $first: "$name" },
+          institution: { $first: "$institution" },
           members: { $push: "$members" },
           totalMembers: { $first: "$totalMembers" },
         },
