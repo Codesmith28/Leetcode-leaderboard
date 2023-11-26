@@ -36,6 +36,18 @@ const authOptions = NextAuth({
           ranking: 0,
           image: user.image!,
         });
+      } else {
+        // If user exists, update the user's information in the database
+        await users.updateOne(
+          { email: user.email! },
+          {
+            $set: {
+              name: user.name!,
+              image: user.image!,
+              // Update other fields as needed
+            },
+          }
+        );
       }
 
       return true;
