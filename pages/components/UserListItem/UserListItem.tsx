@@ -70,19 +70,11 @@ function UserListItem({ member, rank }: { member: UserCol; rank: number }) {
         {/* Avatar */}
         {isSmallScreen ? (
           <div className={styles.avatar}>
-            <Avatar
-              size="md"
-              name={member.name}
-              // src="https://bit.ly/prosper-baba"
-            />
+            <Avatar size="md" name={member.name} src={member.image} />
           </div>
         ) : (
           <div className={styles.avatar}>
-            <Avatar
-              size="lg"
-              name={member.name}
-              // src="https://bit.ly/prosper-baba"
-            />
+            <Avatar size="lg" name={member.name} src={member.image} />
           </div>
         )}
 

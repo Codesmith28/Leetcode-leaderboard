@@ -34,9 +34,10 @@ const authOptions = NextAuth({
           LCMediumSolved: 0,
           LCHardSolved: 0,
           ranking: 0,
+          image: user.image!,
         });
       }
-      
+
       return true;
     },
 
@@ -51,6 +52,8 @@ const authOptions = NextAuth({
       token.role = user?.role;
       token.username = user?.username;
       token.id = user?._id;
+      token.name = user?.name;
+      token.image = user?.image;
       return token;
     },
   },

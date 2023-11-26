@@ -14,6 +14,7 @@ export type UserCol = {
   _id?: ObjectId;
   teams: ObjectId[];
   ranking: number;
+  image: string;
 };
 
 export type MySession = {

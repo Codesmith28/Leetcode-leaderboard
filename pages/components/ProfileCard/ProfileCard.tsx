@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./ProfileCard.module.css";
 
 interface Info {
+  image: string;
   username: string;
   email: string;
   institution: string;
@@ -31,6 +32,7 @@ export default function ProfileCard() {
   const { data: session } = useSession();
 
   const [info, setInfo] = useState<Info>({
+    image: "",
     username: "",
     email: "",
     institution: "",
@@ -64,6 +66,7 @@ export default function ProfileCard() {
 
       // combine the data from the two api calls:
       const combinedInfo: Info = {
+        image: data.image,
         username: data.username,
         email: data.email,
         institution: data.institution,
