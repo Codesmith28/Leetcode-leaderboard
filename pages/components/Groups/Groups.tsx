@@ -11,6 +11,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { ObjectId } from "mongodb";
+import { useSession } from "next-auth/react";
 import styles from "./Groups.module.css";
 
 async function joinTeam(teamId: ObjectId) {
@@ -112,6 +113,7 @@ export default function Groups({
             isDisabled={off}
             onClick={async () => {
               await joinTeam(_id);
+              window.location.href = "/Member/MyTeams";
             }}
           >
             Join!
