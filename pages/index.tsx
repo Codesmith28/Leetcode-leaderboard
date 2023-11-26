@@ -40,6 +40,7 @@ interface Info {
   totalEasy: number;
   totalMedium: number;
   totalHard: number;
+  image: string;
 }
 
 export default function Home() {
@@ -54,6 +55,7 @@ export default function Home() {
     totalEasy: 0,
     totalMedium: 0,
     totalHard: 0,
+    image: "",
   });
 
   useEffect(() => {

@@ -8,7 +8,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ObjectId } from "mongodb";
-import { userInfo } from "os";
 import React, { useEffect, useState } from "react";
 import styles from "./TeamPlate.module.css";
 
@@ -32,6 +31,7 @@ interface userInfo {
   mediumSolved: number;
   hardSolved: number;
   ranking: number;
+  image: string;
 }
 
 function TeamPlate({

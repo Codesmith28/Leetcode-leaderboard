@@ -15,6 +15,7 @@ interface userInfo {
   mediumSolved: number;
   hardSolved: number;
   ranking: number;
+  image: string;
 }
 
 function UserList({ members }: { members: UserCol[] }) {
