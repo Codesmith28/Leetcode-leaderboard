@@ -29,6 +29,7 @@ interface userInfo {
   ranking: number;
   role: Role;
   teams: ObjectId[];
+  image: string;
 }
 
 function index() {
