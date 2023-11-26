@@ -16,6 +16,8 @@ interface teamInfo {
   name: string;
   institution: string;
   totalMembers: number;
+  topThree: ObjectId[];
+  members: ObjectId[];
   disabled: boolean;
 }
 
@@ -24,6 +26,8 @@ function TeamPlate({ teamId }: { teamId: string }) {
     name: "",
     institution: "",
     totalMembers: 0,
+    topThree: [],
+    members: [],
     disabled: false,
   });
 
@@ -37,14 +41,12 @@ function TeamPlate({ teamId }: { teamId: string }) {
           },
         });
         const teamData = await res.json();
-        console.log("team data: ", teamData);
+        console.log("num", teamData);
         setteamInfo(teamData);
       };
       getTeamInfo();
     }
   }, [teamId]);
-
-  let mem = 10;
 
   return (
     <>
@@ -64,7 +66,7 @@ function TeamPlate({ teamId }: { teamId: string }) {
 
         <div>
           {/* total members */}
-          <Heading size={"sm"}>Total Members : {mem}</Heading>
+          <Heading size={"sm"}>Total Members : {teamInfo.totalMembers}</Heading>
           <div className={styles.topThree}>
             <Heading size={"sm"} color={"gold"} textDecor={"underline"}>
               #1

@@ -35,29 +35,48 @@ async function GET(
 
   const db = (await clientPromise).db("leetcodeleaderboard");
   const teamCollection = db.collection<TeamCol>("Teams");
-  const userCollection
+  const usersCollection = db.collection<UserCol>("Users");
 
-  // get all information of the team with the given id
-  // additionally get total number of members in the team and a sorted list of all memebers which are sorted as per their ranks
-  const team = await teamCollection.findOne({ id: teamId });
-  if (!team) {
-    return res.status(400).send("No team found with the given id");
-  }
-
-  // Get the total number of members in the team
-  const totalMembers = team.members.length;
-
-  // Get the data of the users in the team and sort them by ranking
-  const members = await userCollection
-    .find({ _id: { $in: team.members } })
-    .sort({ ranking: 1 })
+  const team = await teamCollection
+    .aggregate([
+      {
+        $match: {
+          _id: new ObjectId(teamId),
+        },
+      },
+      {
+        $addFields: {
+          totalMembers: { $size: "$members" },
+        },
+      },
+      {
+        $lookup: {
+          from: "Users",
+          localField: "members",
+          foreignField: "_id",
+          as: "members",
+        },
+      },
+      {
+        $unwind: "$members",
+      },
+      {
+        $sort: {
+          "members.ranking": 1,
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          name: { $first: "$name" },
+          members: { $push: "$members" },
+          totalMembers: { $first: "$totalMembers" },
+        },
+      },
+    ])
     .toArray();
 
-  // Add the totalMembers and sorted members to the team object
-  const teamData = {
-    ...team,
-    totalMembers,
-    members,
-  };
+  if (!team) return res.status(400).send("No team found");
 
-  return res.st
+  return res.status(200).json(team[0]);
+}
