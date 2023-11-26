@@ -1,5 +1,6 @@
 import Layout from "@/pages/Layout";
 import TeamPlate from "@/pages/components/TeamPlate/TeamPlate";
+import UserList from "@/pages/components/UserList/UserList";
 import { ObjectId } from "mongodb";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -60,6 +61,7 @@ function index() {
     <>
       <Layout>
         <TeamPlate teamInfo={teamInfo} topThree={topThree} />
+        <UserList members={teamInfo.members} />
       </Layout>
     </>
   );
