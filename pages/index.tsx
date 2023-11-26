@@ -65,7 +65,6 @@ export default function Home() {
         },
       });
       const teamData = await res.json();
-      console.log("team data", teamData);
       setTeams(teamData);
     };
 

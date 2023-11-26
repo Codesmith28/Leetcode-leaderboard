@@ -8,7 +8,7 @@ import styles from "./CurrTeam.module.css";
 function index() {
   const route = useRouter();
   const teamId = route.query.teamId as string;
-  console.log("route = ", teamId);
+  
   return (
     <>
       <Layout>

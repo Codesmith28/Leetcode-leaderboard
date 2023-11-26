@@ -8,10 +8,41 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ObjectId } from "mongodb";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./TeamPlate.module.css";
 
-function TeamPlate({ teamId }: { teamId: string } ) {
+// team info prop:
+interface teamInfo {
+  name: string;
+  institution: string;
+  totalMembers: number;
+  disabled: boolean;
+}
+
+function TeamPlate({ teamId }: { teamId: string }) {
+  const [teamInfo, setteamInfo] = useState<teamInfo>({
+    name: "",
+    institution: "",
+    totalMembers: 0,
+    disabled: false,
+  });
+
+  useEffect(() => {
+    if (teamId) {
+      const getTeamInfo = async () => {
+        const res = await fetch(`api/getTeamInfo/${teamId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const teamData = await res.json();
+        setteamInfo(teamData);
+      };
+      getTeamInfo();
+    }
+  }, [teamId]);
+
   let mem = 10;
 
   return (
@@ -23,10 +54,10 @@ function TeamPlate({ teamId }: { teamId: string } ) {
         className={styles.mainCard}
       >
         <div className={styles.plateHead}>
-          <Heading size={"lg"}>Team Name</Heading>
+          <Heading size={"lg"}>{teamInfo.name}</Heading>
 
           <Heading size={"md"} color={"gray"}>
-            Institution
+            {teamInfo.institution}
           </Heading>
         </div>
 
