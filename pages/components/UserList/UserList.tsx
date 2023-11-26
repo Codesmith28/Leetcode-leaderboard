@@ -1,3 +1,4 @@
+import { UserCol } from "@/util/types";
 import { ObjectId } from "mongodb";
 import React from "react";
 import UserListItem from "../UserListItem/UserListItem";
@@ -16,7 +17,7 @@ interface userInfo {
   ranking: number;
 }
 
-function UserList({ members }: { members: userInfo[] }) {
+function UserList({ members }: { members: UserCol[] }) {
   return (
     <div className={styles.mainList}>
       {members.map((member, index) => (

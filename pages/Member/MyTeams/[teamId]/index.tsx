@@ -1,6 +1,8 @@
 import Layout from "@/pages/Layout";
 import TeamPlate from "@/pages/components/TeamPlate/TeamPlate";
 import UserList from "@/pages/components/UserList/UserList";
+import { Role, UserCol } from "@/util/types";
+import { Divider } from "@chakra-ui/react";
 import { ObjectId } from "mongodb";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -25,6 +27,8 @@ interface userInfo {
   mediumSolved: number;
   hardSolved: number;
   ranking: number;
+  role: Role;
+  teams: ObjectId[];
 }
 
 function index() {
@@ -61,6 +65,7 @@ function index() {
     <>
       <Layout>
         <TeamPlate teamInfo={teamInfo} topThree={topThree} />
+        <Divider marginBlock={"1em"} />
         <UserList members={teamInfo.members} />
       </Layout>
     </>

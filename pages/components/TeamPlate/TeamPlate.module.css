@@ -9,8 +9,8 @@
   border-radius: 10px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin: 10px;
   gap: 20px;
+  cursor: pointer;
 }
 
 .plateHead {
@@ -23,13 +23,11 @@
 @media (max-width: 768px) {
   .mainCard {
     flex-direction: column;
-    text-align: center;
     padding: 15px;
   }
 
   .topThree {
     margin-top: 10px;
-    text-align: center;
   }
 }
 
