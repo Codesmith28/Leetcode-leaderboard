@@ -12,7 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { ObjectId } from "mongodb";
 import Link from "next/link";
-import styles from "./Groups.module.css";
+import MotionDiv from "../MotionDiv";
+import styles from "./MyGroups.module.css";
 
 async function joinTeam(teamId: ObjectId) {
   const res = await fetch("/api/teamJoined", {
@@ -36,12 +37,14 @@ export default function Groups({
   institution,
   totalMembers,
   disabled,
+  transition,
 }: {
   institution: string;
   _id: ObjectId;
   name: string;
   totalMembers: number;
   disabled: boolean;
+  transition: any;
 }) {
   let colMain: string = institution === "none" ? "green" : "orange";
   let off = disabled;
@@ -50,8 +53,19 @@ export default function Groups({
     colMain = "gray";
   }
 
+  const itemVariants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0 },
+  };
+
   return (
-    <Center py={6}>
+    <MotionDiv
+      className={styles.cen}
+      variants={itemVariants}
+      initial="hidden"
+      animate="visible"
+      transition={transition}
+    >
       <Box
         maxW={"300px"}
         w={"full"}
@@ -116,6 +130,6 @@ export default function Groups({
           </Link>
         </Box>
       </Box>
-    </Center>
+    </MotionDiv>
   );
 }

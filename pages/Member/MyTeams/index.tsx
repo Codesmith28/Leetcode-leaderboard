@@ -5,6 +5,11 @@ import { useEffect, useState } from "react";
 import styles from "./MyTeams.module.css";
 
 function GroupList({ teamData }: { teamData: any }) {
+  const transition = {
+    duration: 0.3,
+    ease: "easeInOut",
+  };
+
   return (
     <div className={styles.groups}>
       {teamData.map((group: any, index: number) => (
@@ -15,6 +20,7 @@ function GroupList({ teamData }: { teamData: any }) {
           name={group.name}
           totalMembers={group.totalMembers}
           disabled={false}
+          transition={{ ...transition, delay: index * 0.09 }}
         />
       ))}
     </div>
