@@ -9,9 +9,18 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import MotionDiv from "../MotionDiv/MotionDiv";
 import styles from "./UserListItem.module.css";
 
-function UserListItem({ member, rank }: { member: UserCol; rank: number }) {
+function UserListItem({
+  member,
+  rank,
+  transition,
+}: {
+  member: UserCol;
+  rank: number;
+  transition: any;
+}) {
   // check if the screen is small
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   useEffect(() => {
@@ -55,11 +64,18 @@ function UserListItem({ member, rank }: { member: UserCol; rank: number }) {
     misc = denom;
   }
 
+  const itemVariants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0 },
+  };
+
   return (
-    <Box
-      bg={useColorModeValue("gray.200", "gray.900")}
+    <MotionDiv
       className={styles.main}
-      textAlign={"center"}
+      variants={itemVariants}
+      initial="hidden"
+      animate="visible"
+      transition={transition}
     >
       {/* rank */}
       <Box className={styles.content}>
@@ -85,7 +101,7 @@ function UserListItem({ member, rank }: { member: UserCol; rank: number }) {
 
         <div>{misc}</div>
       </Box>
-    </Box>
+    </MotionDiv>
   );
 }
 

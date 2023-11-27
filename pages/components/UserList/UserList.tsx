@@ -19,10 +19,20 @@ interface userInfo {
 }
 
 function UserList({ members }: { members: UserCol[] }) {
+  const transition = {
+    duration: 0.3,
+    ease: "easeInOut",
+  };
+
   return (
     <div className={styles.mainList}>
       {members.map((member, index) => (
-        <UserListItem key={index} member={member} rank={index + 1} />
+        <UserListItem
+          key={index}
+          member={member}
+          rank={index + 1}
+          transition={{ ...transition, delay: index * 0.09 }}
+        />
       ))}
     </div>
   );
