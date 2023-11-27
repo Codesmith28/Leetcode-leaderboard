@@ -1,42 +1,12 @@
 import styles from "@/styles/Home.module.css";
-import { TeamCol } from "@/util/types";
-import { Button } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
-import { Inter } from "next/font/google";
 import Head from "next/head";
 import Script from "next/script";
 import { useEffect, useState } from "react";
-import { StringDecoder } from "string_decoder";
 import useSWR from "swr";
 import Layout from "./Layout";
-import Groups from "./components/Groups/Groups";
-import Pagination from "./components/Pagination/Pagination";
+import GroupList from "./components/GroupList/GroupList";
 import SearchBar from "./components/SearchBar/SearchBar";
 import UserList from "./components/UserList/UserList";
-
-// component to list all teams:
-function GroupList({ teamData, myInsti }: { teamData: any; myInsti: string }) {
-  const transition = {
-    duration: 0.3,
-    ease: "easeInOut",
-  };
-
-  return (
-    <div className={styles.groups}>
-      {teamData.map((group: any, index: number) => (
-        <Groups
-          key={index}
-          _id={group._id}
-          institution={group.institution}
-          name={group.name}
-          totalMembers={group.totalMembers}
-          disabled={myInsti !== group.institution}
-          transition={{ ...transition, delay: index * 0.09 }}
-        />
-      ))}
-    </div>
-  );
-}
 
 interface Info {
   username: string;
@@ -114,7 +84,7 @@ export default function Home() {
           }}
         />
       </Head>
-      <main className={styles.pg}>
+      <main>
         <Layout>
           <div>
             <SearchBar
