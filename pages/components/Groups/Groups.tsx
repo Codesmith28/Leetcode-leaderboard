@@ -2,7 +2,6 @@ import { ArrowRightIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Center,
   List,
   ListIcon,
   ListItem,
@@ -11,7 +10,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { ObjectId } from "mongodb";
-import { useSession } from "next-auth/react";
+import MotionDiv from "../MotionDiv/MotionDiv";
 import styles from "./Groups.module.css";
 
 async function joinTeam(teamId: ObjectId) {
@@ -36,12 +35,14 @@ export default function Groups({
   institution,
   totalMembers,
   disabled,
+  transition,
 }: {
   institution: string;
   _id: ObjectId;
   name: string;
   totalMembers: number;
   disabled: boolean;
+  transition: any;
 }) {
   let colMain: string = institution === "none" ? "green" : "orange";
   let off = disabled && institution !== "none";
@@ -50,8 +51,19 @@ export default function Groups({
     colMain = "gray";
   }
 
+  const itemVariants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0 },
+  };
+
   return (
-    <Center py={6}>
+    <MotionDiv
+      className={styles.cen}
+      variants={itemVariants}
+      initial="hidden"
+      animate="visible"
+      transition={transition}
+    >
       <Box
         maxW={"300px"}
         w={"full"}
@@ -120,6 +132,6 @@ export default function Groups({
           </Button>
         </Box>
       </Box>
-    </Center>
+    </MotionDiv>
   );
 }

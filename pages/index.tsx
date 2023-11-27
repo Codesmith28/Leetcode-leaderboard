@@ -16,6 +16,11 @@ import UserList from "./components/UserList/UserList";
 
 // component to list all teams:
 function GroupList({ teamData, myInsti }: { teamData: any; myInsti: string }) {
+  const transition = {
+    duration: 0.3,
+    ease: "easeInOut",
+  };
+
   return (
     <div className={styles.groups}>
       {teamData.map((group: any, index: number) => (
@@ -26,6 +31,7 @@ function GroupList({ teamData, myInsti }: { teamData: any; myInsti: string }) {
           name={group.name}
           totalMembers={group.totalMembers}
           disabled={myInsti !== group.institution}
+          transition={{ ...transition, delay: index * 0.09 }}
         />
       ))}
     </div>
