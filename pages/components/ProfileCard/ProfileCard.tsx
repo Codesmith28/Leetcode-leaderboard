@@ -14,37 +14,28 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import styles from "./ProfileCard.module.css";
 
-interface Info {
-  image: string;
-  username: string;
-  email: string;
-  institution: string;
-  totalSolved: number;
-  easySolved: number;
-  mediumSolved: number;
-  hardSolved: number;
-  ranking: number;
-}
-
 // get information of the user using the get request:
 
 export default function ProfileCard() {
   const { data: session } = useSession();
 
-  const [info, setInfo] = useState<Info>({
-    image: "",
-    username: "",
-    email: "",
+  const [info, setInfo] = useState<UserCol>({
+    image: session?.user.image!,
+    username: session?.user.username!,
+    email: session?.user.email!,
     institution: "",
-    totalSolved: 0,
-    easySolved: 0,
-    mediumSolved: 0,
-    hardSolved: 0,
+    LCTotalSolved: 0,
+    LCEasySolved: 0,
+    LCMediumSolved: 0,
+    LCHardSolved: 0,
     ranking: 0,
+    role: session?.user.role!,
+    name: session?.user.name!,
+    teams: [],
   });
 
   useEffect(() => {
-    const upDateInfo = async () => {
+    const getInfo = async () => {
       const res = await fetch("/api/getInfo", {
         method: "GET",
         headers: {
@@ -52,50 +43,11 @@ export default function ProfileCard() {
         },
       });
       const data = await res.json();
-
-      const res2 = await fetch(
-        `https://leetcode-api-faisalshohag.vercel.app/${data.username}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data2 = await res2.json();
-
-      // combine the data from the two api calls:
-      const combinedInfo: Info = {
-        image: data.image,
-        username: data.username,
-        email: data.email,
-        institution: data.institution,
-        totalSolved: data2.totalSolved,
-        easySolved: data2.easySolved,
-        mediumSolved: data2.mediumSolved,
-        hardSolved: data2.hardSolved,
-        ranking: data2.ranking,
-      };
-      setInfo(combinedInfo);
-
-      // update the database with the data2 in the database:
-      const res3 = await fetch("/api/updateInfo", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          easySolved: data2.easySolved,
-          mediumSolved: data2.mediumSolved,
-          hardSolved: data2.hardSolved,
-          totalSolved: data2.totalSolved,
-          ranking: data2.ranking,
-        }),
-      });
-      const data3 = await res3.json();
+      console.log(data);
+      setInfo(data);
     };
 
-    upDateInfo();
+    getInfo();
   }, []);
 
   return (
@@ -108,16 +60,10 @@ export default function ProfileCard() {
         textAlign={"center"}
         p={6}
       >
-        <Avatar
-          size={"xl"}
-          src={session?.user.image!}
-          mt={-30}
-          mb={4}
-          pos={"relative"}
-        />
+        <Avatar size={"xl"} src={info.image} mt={-30} mb={4} pos={"relative"} />
 
         <Heading fontSize={"2xl"} fontFamily={"body"}>
-          {session?.user.name!}
+          {info.name}
         </Heading>
 
         <Text fontWeight={600} color={"gray.500"} mb={4}>
@@ -129,7 +75,7 @@ export default function ProfileCard() {
         <div className={styles.card}>
           <div className={styles.label}>
             <Heading fontSize={"lg"}>Email: </Heading>
-            <div className={styles.txt}>{session?.user.email!}</div>
+            <div className={styles.txt}>{info.email}</div>
           </div>
 
           <div className={styles.label}>
@@ -139,22 +85,22 @@ export default function ProfileCard() {
 
           <div className={styles.label}>
             <Heading fontSize={"lg"}>Total solved: </Heading>
-            <div className={styles.txt}> {info.totalSolved} </div>
+            <div className={styles.txt}> {info.LCTotalSolved} </div>
           </div>
 
           <div className={styles.label}>
             <Heading fontSize={"lg"}>Easy Solved: </Heading>
-            <div className={styles.txt}>{info.easySolved}</div>
+            <div className={styles.txt}>{info.LCEasySolved}</div>
           </div>
 
           <div className={styles.label}>
             <Heading fontSize={"lg"}>Medium Solvedum: </Heading>
-            <div className={styles.txt}>{info.mediumSolved}</div>
+            <div className={styles.txt}>{info.LCMediumSolved}</div>
           </div>
 
           <div className={styles.label}>
             <Heading fontSize={"lg"}>Hard Solved: </Heading>
-            <div className={styles.txt}>{info.hardSolved}</div>
+            <div className={styles.txt}>{info.LCHardSolved}</div>
           </div>
         </div>
       </Box>

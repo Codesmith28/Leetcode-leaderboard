@@ -9,41 +9,85 @@ import SearchBar from "./components/SearchBar/SearchBar";
 import UserList from "./components/UserList/UserList";
 
 interface Info {
+  image: string;
   username: string;
   email: string;
   institution: string;
   totalSolved: number;
-  totalEasy: number;
-  totalMedium: number;
-  totalHard: number;
-  image: string;
+  easySolved: number;
+  mediumSolved: number;
+  hardSolved: number;
+  ranking: number;
 }
 
 export default function Home() {
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [teams, setTeams] = useState([]);
+
   const [userInfo, setUserInfo] = useState<Info>({
+    image: "",
     username: "",
     email: "",
     institution: "",
     totalSolved: 0,
-    totalEasy: 0,
-    totalMedium: 0,
-    totalHard: 0,
-    image: "",
+    easySolved: 0,
+    mediumSolved: 0,
+    hardSolved: 0,
+    ranking: 0,
   });
 
   useEffect(() => {
-    const getAllTeams = async () => {
-      const res = await fetch("/api/getTeams", {
+    // to update the info of the user:
+    const upDateInfo = async () => {
+      const res = await fetch("/api/getInfo", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const teamData = await res.json();
-      setTeams(teamData);
+      const data = await res.json();
+
+      const res2 = await fetch(
+        `https://leetcode-api-faisalshohag.vercel.app/${data.username}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data2 = await res2.json();
+
+      // combine the data from the two api calls:
+      const combinedInfo: Info = {
+        image: data.image,
+        username: data.username,
+        email: data.email,
+        institution: data.institution,
+        totalSolved: data2.totalSolved,
+        easySolved: data2.easySolved,
+        mediumSolved: data2.mediumSolved,
+        hardSolved: data2.hardSolved,
+        ranking: data2.ranking,
+      };
+      setUserInfo(combinedInfo);
+
+      // update the database with the data2 in the database:
+      const res3 = await fetch("/api/updateInfo", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          easySolved: data2.easySolved,
+          mediumSolved: data2.mediumSolved,
+          hardSolved: data2.hardSolved,
+          totalSolved: data2.totalSolved,
+          ranking: data2.ranking,
+        }),
+      });
+      const data3 = await res3.json();
     };
 
     const getInfo = async () => {
@@ -57,8 +101,21 @@ export default function Home() {
       setUserInfo(data);
     };
 
-    getAllTeams();
+    // tp get all the teams:
+    const getAllTeams = async () => {
+      const res = await fetch("/api/getTeams", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const teamData = await res.json();
+      setTeams(teamData);
+    };
+
+    upDateInfo();
     getInfo();
+    getAllTeams();
   }, []);
 
   return (
