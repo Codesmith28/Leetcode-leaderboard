@@ -4,9 +4,9 @@ import Script from "next/script";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import Layout from "./Layout";
-import GroupList from "./components/GroupList/GroupList";
-import SearchBar from "./components/SearchBar/SearchBar";
-import UserList from "./components/UserList/UserList";
+import GroupList from "@/components/GroupList/GroupList";
+import SearchBar from "@/components/SearchBar/SearchBar";
+import UserList from "@/components/UserList/UserList";
 import { TeamData } from "@/util/types";
 
 interface Info {

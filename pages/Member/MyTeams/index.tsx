@@ -1,5 +1,5 @@
 import Layout from "@/pages/Layout";
-import MyGroups from "@/pages/components/MyGroups/MyGroups";
+import MyGroups from "@/components/MyGroups/MyGroups";
 import { TeamCol, TeamData } from "@/util/types";
 import { useEffect, useState } from "react";
 import styles from "./MyTeams.module.css";
