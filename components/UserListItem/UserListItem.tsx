@@ -1,3 +1,4 @@
+import { UserCol } from "@/util/types";
 import { InfoIcon } from "@chakra-ui/icons";
 import {
   Avatar,
@@ -8,9 +9,19 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import MotionDiv from "../MotionDiv/MotionDiv";
 import styles from "./UserListItem.module.css";
 
-function UserListItem() {
+function UserListItem({
+  member,
+  rank,
+  transition,
+}: {
+  member: UserCol;
+  rank: number;
+  transition: any;
+}) {
+  // check if the screen is small
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -28,12 +39,13 @@ function UserListItem() {
   denom = (
     <div className={styles.misc}>
       <div className={styles.totalSolved}>
-        <h1>300 solved</h1>
+        <h1>{member.LCTotalSolved}</h1>
+        <h1>solved</h1>
       </div>
       <div className={styles.denominations}>
-        <Heading size="xs">Easy: 100</Heading>
-        <Heading size="xs">Medium: 100</Heading>
-        <Heading size="xs">Hard: 100</Heading>
+        <Heading size="xs">Easy: {member.LCEasySolved}</Heading>
+        <Heading size="xs">Medium: {member.LCMediumSolved} </Heading>
+        <Heading size="xs">Hard: {member.LCHardSolved}</Heading>
       </div>
     </div>
   );
@@ -52,41 +64,44 @@ function UserListItem() {
     misc = denom;
   }
 
+  const itemVariants = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0 },
+  };
+
   return (
-    <Box bg={useColorModeValue("gray.200", "gray.900")} className={styles.main}>
+    <MotionDiv
+      className={styles.main}
+      variants={itemVariants}
+      initial="hidden"
+      animate="visible"
+      transition={transition}
+    >
       {/* rank */}
       <Box className={styles.content}>
         <div className={styles.rank}>
-          <h1># 10000</h1>
+          <h1># {rank}</h1>
         </div>
 
         {/* Avatar */}
         {isSmallScreen ? (
           <div className={styles.avatar}>
-            <Avatar
-              size="md"
-              name="Prosper Otemuyiwa"
-              src="https://bit.ly/prosper-baba"
-            />
+            <Avatar size="md" name={member.name} src={member.image} />
           </div>
         ) : (
           <div className={styles.avatar}>
-            <Avatar
-              size="lg"
-              name="Prosper Otemuyiwa"
-              src="https://bit.ly/prosper-baba"
-            />
+            <Avatar size="lg" name={member.name} src={member.image} />
           </div>
         )}
 
         <div className={styles.names}>
-          <h1>Prosper Otemuyiwa</h1>
-          <h1>@unicodeveloper</h1>
+          <h1>{member.name}</h1>
+          <h1>@{member.username}</h1>
         </div>
 
         <div>{misc}</div>
       </Box>
-    </Box>
+    </MotionDiv>
   );
 }
 

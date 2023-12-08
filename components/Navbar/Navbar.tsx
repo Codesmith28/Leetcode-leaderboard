@@ -61,7 +61,7 @@ const NavLink = (props: Props) => {
         textDecoration: "none",
         bg: useColorModeValue("gray.200", "gray.700"),
       }}
-      href={`./Members/${children}`}
+      href={`/Member/${children}`}
     >
       {children}
     </Box>
@@ -188,7 +188,7 @@ export default function Navbar() {
             <Avatar size={"md"} src={session.user.image!} />
           </MenuButton>
           <MenuList className={styles.menuList} minWidth="100x">
-            <Link href={"./Profile"}>
+            <Link href={"/Profile"}>
               <MenuItem className={styles.menuItem}>My Profile</MenuItem>
             </Link>
             <MenuItem
