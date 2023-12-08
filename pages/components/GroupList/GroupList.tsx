@@ -1,3 +1,4 @@
+import { TeamCol } from "@/util/types";
 import Groups from "../Groups";
 import styles from "./GroupList.module.css";
 
@@ -5,7 +6,7 @@ export default function GroupList({
   teamData,
   myInsti,
 }: {
-  teamData: any;
+  teamData: TeamCol[];
   myInsti: string;
 }) {
   const transition = {

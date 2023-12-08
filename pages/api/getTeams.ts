@@ -40,7 +40,13 @@ async function GET(
           totalMembers: { $size: "$members" },
         },
       },
+      {
+        $project: {
+          members: 0, // Exclude the members field
+        },
+      },
     ])
     .toArray();
+
   return res.status(200).json(teams);
 }
