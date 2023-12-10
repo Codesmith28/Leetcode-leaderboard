@@ -30,6 +30,7 @@ async function PUT(
   session: MySession["user"]
 ) {
   const body: {
+    _id: ObjectId;
     easySolved: number;
     mediumSolved: number;
     hardSolved: number;
@@ -38,6 +39,7 @@ async function PUT(
   } = req.body;
 
   if (
+    !body._id ||
     !body.easySolved ||
     !body.mediumSolved ||
     !body.hardSolved ||
@@ -49,7 +51,7 @@ async function PUT(
 
   const db = (await clientPromise).db("leetcodeleaderboard");
   const usersCollection = db.collection<UserCol>("Users");
-  const id = session.id;
+  const id = body._id;
 
   const updateUser = await usersCollection.updateOne(
     { _id: new ObjectId(id) },
