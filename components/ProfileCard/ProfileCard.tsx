@@ -43,7 +43,6 @@ export default function ProfileCard() {
         },
       });
       const data = await res.json();
-      console.log(data);
       setInfo(data);
     };
 
