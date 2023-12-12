@@ -7,12 +7,15 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import classNames from "classnames";
 import { ObjectId } from "mongodb";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import styles from "./TeamPlate.module.css";
 
 // team info prop:
 interface teamInfo {
+  _id: ObjectId;
   name: string;
   institution: string;
   totalMembers: number;
@@ -34,6 +37,25 @@ interface userInfo {
   image: string;
 }
 
+async function getOut({ teamId }: { teamId: ObjectId }) {
+  const res = await fetch("/api/leaveTeam", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ teamId }),
+  });
+
+  if (res.status === 200) {
+    alert("Team Left Successfully");
+
+    // redirect to my teams page:
+    window.location.href = "/Member/MyTeams";
+  } else {
+    alert("Something went wrong");
+  }
+}
+
 function TeamPlate({
   teamInfo,
   topThree,
@@ -53,7 +75,7 @@ function TeamPlate({
           <Heading size={"lg"}>{teamInfo.name}</Heading>
 
           <Heading size={"md"} color={"gray"}>
-            {teamInfo.institution}
+            {teamInfo.institution === "none" ? "" : teamInfo.institution}
           </Heading>
         </div>
 
@@ -74,6 +96,35 @@ function TeamPlate({
           </div>
         </div>
       </Card>
+      <div className={styles.leave}>
+        <Button
+          className="clicky"
+          background={"red.500"}
+          color={"white"}
+          _hover={{ bg: "red.600" }}
+          size={"sm"}
+          rightIcon={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="16"
+              width="16"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="white"
+                d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"
+              />
+            </svg>
+          }
+          onClick={() => {
+            getOut({
+              teamId: teamInfo._id,
+            });
+          }}
+        >
+          Leave Group
+        </Button>
+      </div>
     </>
   );
 }

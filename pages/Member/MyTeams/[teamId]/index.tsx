@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./CurrTeam.module.css";
 
 interface teamInfo {
+  _id: ObjectId;
   name: string;
   institution: string;
   totalMembers: number;
@@ -51,6 +52,7 @@ function index() {
   // fetch data from leetcode api for all users and update it in the database:
 
   const [teamInfo, setteamInfo] = useState<teamInfo>({
+    _id: teamId as unknown as ObjectId,
     name: "",
     institution: "",
     totalMembers: 0,
@@ -96,8 +98,8 @@ function index() {
           }
         );
         const memberData = await res.json();
-				
-				// this data is correct:
+
+        // this data is correct:
         // console.log("user: ", member.username, "data: ", memberData);
 
         await fetch("/api/updateInfo", {
@@ -114,7 +116,6 @@ function index() {
             ranking: memberData.ranking,
           }),
         });
-				
       }
     };
 
