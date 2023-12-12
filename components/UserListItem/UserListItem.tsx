@@ -8,6 +8,7 @@ import {
   IconButton,
   useColorModeValue,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import MotionDiv from "../MotionDiv/MotionDiv";
 import styles from "./UserListItem.module.css";
@@ -96,7 +97,9 @@ function UserListItem({
 
         <div className={styles.names}>
           <h1>{member.name}</h1>
-          <h1>@{member.username}</h1>
+          <Link href={`https://leetcode.com/${member.username}`}>
+            <h1>@{member.username}</h1>
+          </Link>
         </div>
 
         <div>{misc}</div>
