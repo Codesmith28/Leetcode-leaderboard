@@ -6,6 +6,13 @@ import {
   Button,
   Heading,
   IconButton,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -40,8 +47,7 @@ function UserListItem({
   denom = (
     <div className={styles.misc}>
       <div className={styles.totalSolved}>
-        <h1>{member.LCTotalSolved}</h1>
-        <h1>solved</h1>
+        <h1>{member.LCTotalSolved} solved</h1>
       </div>
       <div className={styles.denominations}>
         <Heading size="xs">Easy: {member.LCEasySolved}</Heading>
@@ -53,13 +59,21 @@ function UserListItem({
 
   if (isSmallScreen) {
     misc = (
-      <IconButton
-        className="clicky"
-        colorScheme="teal"
-        aria-label="info"
-        size={"sm"}
-        icon={<InfoIcon />}
-      />
+      <Popover placement="left" gutter={0} >
+        <PopoverTrigger>
+          <IconButton
+            className="clicky"
+            colorScheme="teal"
+            aria-label="info"
+            size={"sm"}
+            icon={<InfoIcon />}
+          />
+        </PopoverTrigger>
+        <PopoverContent width={"fit-content"}>
+          <PopoverArrow />
+          <PopoverBody>{denom}</PopoverBody>
+        </PopoverContent>
+      </Popover>
     );
   } else {
     misc = denom;
