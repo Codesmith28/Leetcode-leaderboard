@@ -19,11 +19,11 @@
 
 /* Responsive design at four levels */
 
-/* Mobile devices */
-@media (max-width: 768px) {
+@media (max-width: 425px) {
   .mainCard {
     flex-direction: column;
     padding: 15px;
+    text-align: center;
   }
 
   .topThree {
@@ -35,6 +35,7 @@
 @media (min-width: 769px) and (max-width: 1023px) {
   .mainCard {
     padding: 18px;
+    text-align: lef;
   }
 }
 
