@@ -34,8 +34,6 @@ async function PUT(
   const userCollection = db.collection<UserCol>("Users");
   const teamCollection = db.collection<TeamCol>("Teams");
 
-  console.log(typeof userId);
-  console.log(typeof teamId);
   const result = await teamCollection.updateOne(
     { _id: new ObjectId(teamId) },
     {
