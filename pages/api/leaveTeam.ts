@@ -38,8 +38,18 @@ async function PUT(
   const team = await teamCollection.findOne({ _id: new ObjectId(teamId) });
 
   if (user && team) {
-    const newMembers = team.members.filter((memberId) => memberId !== userId);
-    const newTeams = user.teams.filter((userTeamId) => userTeamId !== teamId);
+    const newMembers = team.members.filter((memberId) => {
+      return memberId.toString() !== userId.toString();
+    });
+    const newTeams = user.teams.filter((userTeamId) => {
+      return userTeamId.toString() !== teamId.toString();
+    });
+
+    console.log("old members", team.members);
+    console.log("old teams", user.teams);
+
+    console.log("newMembers", newMembers);
+    console.log("newTeams", newTeams);
 
     await teamCollection.updateOne(
       { _id: new ObjectId(teamId) },
