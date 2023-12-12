@@ -248,14 +248,6 @@ export default function Navbar() {
             </HStack>
           </HStack>
 
-          {/* button to trigger modal */}
-          {/* <Button
-            leftIcon={<AddIcon />}
-            colorScheme="teal"
-            variant="solid"
-            onClick={onLCOpen}
-          /> */}
-
           <Link href={"/"} className={styles.title}>
             LeetCode LeaderBoard
           </Link>

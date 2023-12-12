@@ -25,6 +25,18 @@
   padding-block: 1em;
 }
 
+.labelEdit {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .txt {
   color: gray;
+}
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1em;
 }
