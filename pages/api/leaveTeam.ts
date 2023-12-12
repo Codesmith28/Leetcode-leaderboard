@@ -34,31 +34,21 @@ async function PUT(
   const userCollection = db.collection<UserCol>("Users");
   const teamCollection = db.collection<TeamCol>("Teams");
 
-  const user = await userCollection.findOne({ _id: new ObjectId(userId) });
-  const team = await teamCollection.findOne({ _id: new ObjectId(teamId) });
+  console.log(typeof userId);
+  console.log(typeof teamId);
+  const result = await teamCollection.updateOne(
+    { _id: new ObjectId(teamId) },
+    {
+      $pull: { members: new ObjectId(userId) },
+    }
+  );
 
-  if (user && team) {
-    const newMembers = team.members.filter((memberId) => {
-      return memberId.toString() !== userId.toString();
-    });
-    const newTeams = user.teams.filter((userTeamId) => {
-      return userTeamId.toString() !== teamId.toString();
-    });
-
-    console.log("old members", team.members);
-    console.log("old teams", user.teams);
-
-    console.log("newMembers", newMembers);
-    console.log("newTeams", newTeams);
-
-    await teamCollection.updateOne(
-      { _id: new ObjectId(teamId) },
-      { $set: { members: newMembers } }
-    );
-
+  if (result.matchedCount > 0) {
     await userCollection.updateOne(
       { _id: new ObjectId(userId) },
-      { $set: { teams: newTeams } }
+      {
+        $pull: { teams: new ObjectId(teamId) },
+      }
     );
 
     return res.status(200).json({ message: "User removed from the team" });
