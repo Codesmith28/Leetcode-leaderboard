@@ -34,26 +34,6 @@ async function PUT(
   const userCollection = db.collection<UserCol>("Users");
   const teamCollection = db.collection<TeamCol>("Teams");
 
-  // const result = await teamCollection.updateOne(
-  //   { _id: new ObjectId(teamId) },
-  //   {
-  //     $pull: { members: new ObjectId(userId) },
-  //   }
-  // );
-
-  // if (result.matchedCount > 0) {
-  //   await userCollection.updateOne(
-  //     { _id: new ObjectId(userId) },
-  //     {
-  //       $pull: { teams: new ObjectId(teamId) },
-  //     }
-  //   );
-
-  //   return res.status(200).json({ message: "User removed from the team" });
-  // } else {
-  //   return res.status(404).send("User or team not found");
-  // }
-
   const operation1 = [
     {
       updateOne: {
@@ -76,13 +56,8 @@ async function PUT(
     },
   ];
 
-  console.time("one");
   const res1 = await teamCollection.bulkWrite(operation1);
-  console.timeEnd("one");
-
-  console.time("two");
   const res2 = await userCollection.bulkWrite(operation2);
-  console.timeEnd("two");
 
   if (res1.modifiedCount > 0 && res2.modifiedCount > 0) {
     return res.status(200).json({ message: "User removed from the team" });
@@ -90,4 +65,3 @@ async function PUT(
     return res.status(404).send("User or team not found");
   }
 }
-  

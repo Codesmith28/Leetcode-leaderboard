@@ -79,6 +79,7 @@ function EditInstitutionModal({
         </ModalBody>
         <ModalFooter>
           <Button
+            className="clicky"
             isLoading={loading}
             onClick={async () => {
               setLoading(true);
@@ -88,7 +89,7 @@ function EditInstitutionModal({
               window.location.reload();
             }}
           >
-            Submit
+            Change
           </Button>
         </ModalFooter>
       </ModalContent>
