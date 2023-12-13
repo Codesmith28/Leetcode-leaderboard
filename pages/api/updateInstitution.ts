@@ -52,7 +52,6 @@ async function PUT(
     institution: oldInstitution,
   });
 
-  // ! if oldInstitution === "none", then only one operation is needed that is to update the user's institution and nothign else
 
   if (oldInstitution === "none") {
     const operation = [
