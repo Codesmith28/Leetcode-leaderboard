@@ -33,7 +33,7 @@ async function GET(
 	const db = (await clientPromise).db("leetcodeleaderboard");
 	const teamCollection = db.collection<TeamCol>("Teams");
 	const usersCollection = db.collection<UserCol>("Users");
-
+ 
 	const team = await teamCollection
 		.aggregate([
 			{
