@@ -48,13 +48,13 @@ async function PUT(
   const oldInstitution = user.institution;
   const newInstitution = body.institution;
 
-  const oldInstitutionTeam = await teamsCollection.findOne({
+  const oldInstitutionId = await teamsCollection.findOne({
     institution: oldInstitution,
   });
 
-  // ! if oldInstitutionTeam is null, then only one operation is needed that is to update the user's institution and nothign else
+  // ! if oldInstitution === "none", then only one operation is needed that is to update the user's institution and nothign else
 
-  if (oldInstitutionTeam === null) {
+  if (oldInstitution === "none") {
     const operation = [
       {
         updateOne: {
@@ -92,7 +92,7 @@ async function PUT(
         updateOne: {
           filter: { _id: new ObjectId(userId) },
           update: {
-            $pull: { teams: oldInstitutionTeam?._id },
+            $pull: { teams: oldInstitutionId?._id },
             $set: { institution: newInstitution },
           },
         },
