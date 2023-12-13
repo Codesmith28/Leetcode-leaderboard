@@ -1,6 +1,6 @@
 import { clientPromise } from "@/util/DB";
 import { decodeReq } from "@/util/functions";
-import { MySession, UserCol } from "@/util/types";
+import { MySession, TeamCol, UserCol } from "@/util/types";
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { decode } from "next-auth/jwt";
@@ -36,20 +36,76 @@ async function PUT(
 
   const db = (await clientPromise).db("leetcodeleaderboard");
   const usersCollection = db.collection<UserCol>("Users");
-  const id = session.id;
+  const teamsCollection = db.collection<TeamCol>("Teams");
 
-  const updateUser = await usersCollection.updateOne(
-    { _id: new ObjectId(id) },
-    {
-      $set: {
-        institution: body.institution,
-      },
-    }
-  );
+  const userId = session.id;
+  const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
 
-  if (!updateUser.acknowledged) {
-    return res.status(500).json({ error: "Could not update user" });
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
   }
 
-  return res.status(200).json({ message: "Success" });
+  const oldInstitution = user.institution;
+  const newInstitution = body.institution;
+
+  const oldInstitutionTeam = await teamsCollection.findOne({
+    institution: oldInstitution,
+  });
+
+  // ! if oldInstitutionTeam is null, then only one operation is needed that is to update the user's institution and nothign else
+
+  if (oldInstitutionTeam === null) {
+    const operation = [
+      {
+        updateOne: {
+          filter: { _id: new ObjectId(userId) },
+          update: {
+            $set: { institution: newInstitution },
+          },
+        },
+      },
+    ];
+
+    const res1 = await usersCollection.bulkWrite(operation);
+
+    if (res1.modifiedCount > 0) {
+      return res.status(200).json({ message: "Institution updated" });
+    } else {
+      return res.status(404).send("User not found");
+    }
+  } else if (oldInstitution === newInstitution) {
+    return res.status(400).json({ error: "Same institution" });
+  } else {
+    const operation1 = [
+      {
+        updateOne: {
+          filter: { institution: oldInstitution },
+          update: {
+            $pull: { members: new ObjectId(userId) },
+          },
+        },
+      },
+    ];
+
+    const operation2 = [
+      {
+        updateOne: {
+          filter: { _id: new ObjectId(userId) },
+          update: {
+            $pull: { teams: oldInstitutionTeam?._id },
+            $set: { institution: newInstitution },
+          },
+        },
+      },
+    ];
+
+    const res1 = await teamsCollection.bulkWrite(operation1);
+    const res2 = await usersCollection.bulkWrite(operation2);
+
+    if (res1.modifiedCount > 0 && res2.modifiedCount > 0) {
+      return res.status(200).json({ message: "Institution updated" });
+    } else {
+      return res.status(404).send("User or team not found");
+    }
+  }
 }
