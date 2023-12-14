@@ -27,6 +27,7 @@ import {
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import styles from "./ProfileCard.module.css";
+import Loading from "./loading";
 
 async function updateInstitution(institution: string) {
   const res = await fetch("/api/updateInstitution", {
@@ -153,11 +154,22 @@ export default function ProfileCard() {
     getInfo();
   }, []);
 
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    if (info) {
+      setIsLoading(false);
+    }
+  }, [info]);
+
   const {
     isOpen: isEditInstitutionOpen,
     onOpen: onEditInstitutionOpen,
     onClose: onEditInstitutionClose,
   } = useDisclosure();
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <Center>
@@ -193,7 +205,7 @@ export default function ProfileCard() {
               <IconButton
                 className="clicky"
                 colorScheme="teal"
-                aria-label="Call Segun"
+                aria-label="edit institution"
                 size="xs"
                 icon={<EditIcon />}
                 top={"1em"}
