@@ -49,11 +49,11 @@ export type TeamData = Omit<
   "members"
 >;
 
-export type ReceivedUserDataOnClient = Omit<
+export type ReceivedTeamDataOnClient = Omit<
   TeamCol & {
-    // members: UserCol[];
     _id: ObjectId;
     name: string;
+    totalMembers: number;
   },
-  "members" | "institution"
+  "members" 
 >;

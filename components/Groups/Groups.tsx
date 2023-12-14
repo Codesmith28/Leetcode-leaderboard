@@ -1,3 +1,4 @@
+import { ReceivedTeamDataOnClient } from "@/util/types";
 import { ArrowRightIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -46,22 +47,18 @@ async function isMemberOf(teamId: ObjectId) {
 }
 
 export default function Groups({
-  name,
-  _id,
-  institution,
-  totalMembers,
+  teamData,
+  mutate,
   disabled,
   transition,
 }: {
-  institution: string | null;
-  _id: ObjectId;
-  name: string;
-  totalMembers: number;
+  teamData: ReceivedTeamDataOnClient;
+  mutate: () => void;
   disabled: boolean;
   transition: any;
 }) {
-  let colMain: string = institution === "none" ? "green" : "orange";
-  let off = disabled && institution !== "none";
+  let colMain: string = teamData.institution === "none" ? "green" : "orange";
+  let off = disabled && teamData.institution !== "none";
 
   if (off) {
     colMain = "gray";
@@ -77,7 +74,7 @@ export default function Groups({
   // set the value of isMember:
   useEffect(() => {
     const getIsMember = async () => {
-      const res = await isMemberOf(_id);
+      const res = await isMemberOf(teamData._id);
       setIsMember(res);
     };
     getIsMember();
@@ -114,11 +111,11 @@ export default function Groups({
             color={`${colMain}.500`}
             rounded={"full"}
           >
-            {institution === "none" ? "Open" : "Institute"}
+            {teamData.institution === "none" ? "Open" : "Institute"}
           </Text>
           <Stack direction={"row"} align={"center"} justify={"center"}>
             <Text fontSize={"4xl"} fontWeight={800} letterSpacing={-2}>
-              {name}
+              {teamData.name}
             </Text>
           </Stack>
         </Stack>
@@ -131,12 +128,12 @@ export default function Groups({
                 color={`${colMain}.400`}
                 mb={"0.1rem"}
               />
-              Total Members: {totalMembers}
+              Total Members: {teamData.totalMembers}
             </ListItem>
           </List>
 
           {isMember ? (
-            <Link href={`/Member/MyTeams/${_id}`}>
+            <Link href={`/Member/MyTeams/${teamData._id}`}>
               <Button
                 className={off ? "" : "clicky"}
                 mt={10}
@@ -172,7 +169,7 @@ export default function Groups({
               }}
               isDisabled={off}
               onClick={async () => {
-                await joinTeam(_id);
+                await joinTeam(teamData._id);
                 window.location.href = "/Member/MyTeams";
               }}
             >
