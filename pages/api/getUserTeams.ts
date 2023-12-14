@@ -77,5 +77,7 @@ async function GET(
     ])
     .toArray();
 
-  return res.status(200).json(user[0].teams);
+  return res
+    .status(200)
+    .json(user[0].teams.sort((a: any, b: any) => a.name.localeCompare(b.name)));
 }

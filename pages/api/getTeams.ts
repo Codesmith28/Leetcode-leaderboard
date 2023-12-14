@@ -43,5 +43,7 @@ async function GET(
     ])
     .toArray();
 
-  return res.status(200).json(teams);
+  return res
+    .status(200)
+    .json(teams.sort((a: any, b: any) => a.name.localeCompare(b.name)));
 }
