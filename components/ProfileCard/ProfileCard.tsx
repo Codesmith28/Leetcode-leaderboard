@@ -66,7 +66,6 @@ function EditInstitutionModal({
         inst.push(d.name);
       });
 
-      console.log("inst", inst);
       setInstitutions(inst);
     };
 

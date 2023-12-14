@@ -98,7 +98,6 @@ function UsrnModal({
         inst.push(d.name);
       });
 
-      console.log("inst", inst);
       setInstitutions(inst);
     };
 

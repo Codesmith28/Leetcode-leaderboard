@@ -100,8 +100,6 @@ function index() {
         const memberData = await res.json();
 
         // this data is correct:
-        // console.log("user: ", member.username, "data: ", memberData);
-
         await fetch("/api/updateInfo", {
           method: "PUT",
           headers: {

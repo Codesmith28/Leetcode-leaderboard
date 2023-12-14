@@ -1,7 +1,29 @@
-import React from "react";
-import styles from "./SearchBar.module.css";
-import { FormControl, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
+import { ReceivedUserDataOnClient } from "@/util/types";
+import { fetcher } from "@/util/functions";
 import { Search2Icon } from "@chakra-ui/icons";
+import {
+  FormControl,
+  Input,
+  InputGroup,
+  InputLeftElement,
+} from "@chakra-ui/react";
+import React from "react";
+import useSWR from "swr";
+import styles from "./SearchBar.module.css";
+
+function useSearch(searchQuery: string, role: string, page: number) {
+  const { data, error, isLoading, mutate } = useSWR(
+    `/api/allUsers/search?searchQuery=${searchQuery}&page=${page}`,
+    fetcher
+  );
+
+  return {
+    users: data as ReceivedUserDataOnClient[],
+    isLoading,
+    error: error,
+    mutate,
+  };
+}
 
 interface SearchBarProps {
   searchQuery: string;
