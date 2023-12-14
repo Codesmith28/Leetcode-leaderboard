@@ -15,10 +15,9 @@ export async function decodeReq(
   return token as MySession["user"] | null;
 }
 
-// @ts-ignore
-export const fetcher = (...args) =>
-  // @ts-ignore
-
-  fetch(...args)
-    .then((res) => res.json())
-    .catch((err) => console.error(err));
+// // @ts-ignore
+// export const fetcher = (...args) =>
+//   // @ts-ignore
+//   fetch(...args)
+//     .then((res) => res.json())
+//     .catch((err) => console.error(err));

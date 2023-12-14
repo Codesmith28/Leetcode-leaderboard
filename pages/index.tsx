@@ -1,9 +1,7 @@
 import GroupList from "@/components/GroupList/GroupList";
-import SearchBar from "@/components/SearchBar/SearchBar";
 import Pagination from "@/components/Pagination/Pagination";
-import UserList from "@/components/UserList/UserList";
-import styles from "@/styles/Home.module.css";
-import { fetcher } from "@/util/functions";
+import SearchBar from "@/components/SearchBar/SearchBar";
+// import { fetcher } from "@/util/functions";
 import { ReceivedTeamDataOnClient, TeamData } from "@/util/types";
 import Head from "next/head";
 import Script from "next/script";
@@ -25,8 +23,8 @@ interface Info {
 
 function useSearch(searchQuery: string, page: number) {
   const { data, error, isLoading, mutate } = useSWR(
-    `/api/teamSearch/?searchQuery=${searchQuery}&page=${page}`,
-    fetcher
+    `/api/teamSearch/searchQuery=${searchQuery}&page=${page}`
+    // fetcher
   );
   return {
     teams: data as ReceivedTeamDataOnClient[],

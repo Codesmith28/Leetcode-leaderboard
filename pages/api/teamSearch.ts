@@ -50,5 +50,7 @@ async function GET(
     .limit(maxResults)
     .toArray();
 
+  console.log(" teams: ", teams);
+
   return res.status(200).json(teams);
 }
