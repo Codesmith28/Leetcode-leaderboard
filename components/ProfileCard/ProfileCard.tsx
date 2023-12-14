@@ -2,15 +2,11 @@ import { UserCol } from "@/util/types";
 import { EditIcon } from "@chakra-ui/icons";
 import {
   Avatar,
-  Badge,
   Box,
   Button,
   Center,
-  FormControl,
-  FormLabel,
   Heading,
   IconButton,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -19,7 +15,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
-  Stack,
   Text,
   useColorModeValue,
   useDisclosure,

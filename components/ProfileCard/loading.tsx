@@ -1,14 +1,9 @@
-import { EditIcon } from "@chakra-ui/icons";
 import {
-  Avatar,
   Box,
   Center,
   Heading,
-  IconButton,
   Skeleton,
   SkeletonCircle,
-  Stack,
-  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
