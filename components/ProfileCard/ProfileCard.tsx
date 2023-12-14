@@ -52,7 +52,30 @@ function EditInstitutionModal({
   const [institution, setInstitution] = useState("none");
   const [loading, setLoading] = useState(false);
 
-  let institutions = ["DAIICT", "NIRMA", "SEAS", "SVNIT"];
+  // let institutions = ["DAIICT", "NIRMA", "SEAS", "SVNIT"];
+
+  const [institutions, setInstitutions] = useState<string[]>([]);
+  useEffect(() => {
+    const getInstitutions = async () => {
+      const res = await fetch("/api/getInstitutions", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+
+      let inst: string[] = [];
+      data?.map((d: any) => {
+        inst.push(d.name);
+      });
+
+      console.log("inst", inst);
+      setInstitutions(inst);
+    };
+
+    getInstitutions();
+  }, []);
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose} size={"sm"}>
@@ -69,7 +92,7 @@ function EditInstitutionModal({
                 setInstitution(e.target.value);
               }}
             >
-              {institutions.map((inst) => (
+              {institutions?.map((inst) => (
                 <option key={inst} value={inst}>
                   {inst}
                 </option>
