@@ -8,6 +8,7 @@ import Script from "next/script";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import Layout from "./Layout";
+import { Center } from "@chakra-ui/react";
 
 interface Info {
   image: string;
@@ -143,6 +144,13 @@ export default function Home() {
   }, []);
 
   const { teams, isLoading, error, mutate } = useSearch(searchQuery, page);
+
+  if (isLoading)
+    return (
+      <Layout>
+        <Center>Loading...</Center>
+      </Layout>
+    );
 
   return (
     <>

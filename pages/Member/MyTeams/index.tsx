@@ -8,6 +8,7 @@ import styles from "./MyTeams.module.css";
 
 import Pagination from "@/components/Pagination/Pagination";
 import SearchBar from "@/components/SearchBar/SearchBar";
+import { Center } from "@chakra-ui/react";
 
 // function GroupList({ teamData }: { teamData: TeamData[] }) {
 //   const transition = {
@@ -78,6 +79,12 @@ function index() {
   const [page, setPage] = useState(1);
   const { teams, isLoading, error, mutate } = useSearch(searchQuery, page);
 
+  if (isLoading)
+    return (
+      <Layout>
+        <Center>Loading...</Center>
+      </Layout>
+    );
 
   return (
     <>
