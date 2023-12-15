@@ -61,7 +61,6 @@ function index() {
       });
       const teamData = await resTeam.json();
 
-      console.log("team Data", teamData);
 
       setteamInfo(teamData);
 

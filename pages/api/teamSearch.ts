@@ -45,12 +45,18 @@ async function GET(
   }
 
   const teams = await teamsCollection
-    .find(teamsQuery)
-    .sort({ name: 1 })
-    .skip((page - 1) * maxResults)
-    .limit(maxResults)
+    .aggregate([
+      { $match: teamsQuery }, // Optionally match specific criteria
+      { $sort: { name: 1 } }, // Sort by name
+      { $skip: (page - 1) * maxResults }, // Skip based on pagination
+      { $limit: maxResults }, // Limit results per page
+      {
+        $addFields: {
+          totalMembers: { $size: "$members" }, // Calculate total members in each team
+        },
+      },
+    ])
     .toArray();
-
 
   if (searchQuery && teams.length === 0) {
     // If search query provided and no teams found, return not found status

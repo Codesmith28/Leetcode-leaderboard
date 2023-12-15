@@ -145,6 +145,7 @@ export default function Home() {
 
   const { teams, isLoading, error, mutate } = useSearch(searchQuery, page);
 
+
   return (
     <>
       <Head>
