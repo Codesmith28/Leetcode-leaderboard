@@ -24,7 +24,7 @@ interface Info {
 async function fetcher(url: string) {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error('Failed to fetch data');
+    throw new Error("Failed to fetch data");
   }
   return response.json();
 }
@@ -42,7 +42,6 @@ function useSearch(searchQuery: string, page: number) {
     mutate,
   };
 }
-
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -145,6 +144,7 @@ export default function Home() {
 
   const { teams, isLoading, error, mutate } = useSearch(searchQuery, page);
 
+  console.log("teams", teams);
 
   return (
     <>
