@@ -15,6 +15,7 @@ interface teamInfo {
   totalMembers: number;
   members: userInfo[];
   disabled: boolean;
+  myRank: number;
 }
 
 interface userInfo {
@@ -58,6 +59,7 @@ function index() {
     totalMembers: 0,
     members: [],
     disabled: false,
+    myRank: 0,
   });
 
   const [userInfo, setUserInfo] = useState<Info>({
@@ -83,6 +85,9 @@ function index() {
         },
       });
       const teamData = await resTeam.json();
+
+      console.log("team Data", teamData);
+
       setteamInfo(teamData);
 
       // Iterate through each member in the teamInfo.members array

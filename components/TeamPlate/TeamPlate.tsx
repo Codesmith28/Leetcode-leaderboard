@@ -21,6 +21,7 @@ interface teamInfo {
   totalMembers: number;
   members: userInfo[];
   disabled: boolean;
+  myRank: number;
 }
 
 interface userInfo {
@@ -96,7 +97,10 @@ function TeamPlate({
           </div>
         </div>
       </Card>
-      <div className={styles.leave}>
+
+      <div className={styles.bottom}>
+        <div className={styles.myRank}>Current rank: {teamInfo.myRank}</div>
+
         <Button
           className="clicky"
           background={"red.500"}

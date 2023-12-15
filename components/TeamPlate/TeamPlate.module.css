@@ -13,11 +13,20 @@
   cursor: pointer;
 }
 
-.leave {
+.bottom {
   /* place it on the left */
   margin-top: 1em;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+
+.myRank {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: center;
+  font-size: 1.25em;
+  font-weight: 500;
 }
 
 .plateHead {
@@ -36,13 +45,16 @@
   .topThree {
     margin-top: 10px;
   }
+  .myRank {
+    font-size: 1em;
+  }
 }
 
 /* Tablets */
 @media (min-width: 769px) and (max-width: 1023px) {
   .mainCard {
     padding: 18px;
-    text-align: lef;
+    text-align: left;
   }
 }
 
