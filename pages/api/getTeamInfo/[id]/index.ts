@@ -69,19 +69,7 @@ async function GET(
           institution: { $first: "$institution" },
           members: { $push: "$members" },
           totalMembers: { $first: "$totalMembers" },
-          myRank: {
-            $push: {
-              $cond: {
-                if: { $eq: ["$members._id", new ObjectId(userId)] },
-                then: "$members.ranking",
-                else: null,
-              },
-            },
-          },
-        },	
-      },
-      {	
-        $unwind: "$myRank",
+        },
       },
     ])
     .toArray();

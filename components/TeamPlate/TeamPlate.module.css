@@ -17,7 +17,7 @@
   /* place it on the left */
   margin-top: 1em;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .myRank {

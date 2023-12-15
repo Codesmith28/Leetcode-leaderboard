@@ -27,7 +27,7 @@ async function GET(
 
   const maxResults = query.maxResults
     ? parseInt(query.maxResults as string)
-    : 10;
+    : 8;
 
   const page = query.page ? parseInt(query.page as string) : 1;
 

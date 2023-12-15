@@ -30,6 +30,8 @@ async function GET(
   const userId = session.id;
   const query = req.query;
   const searchQuery = query.searchQuery as string;
+  const page = query.page ? parseInt(query.page as string) : 1;
+  const pageSize = query.pageSize ? parseInt(query.pageSize as string) : 8;
 
   const pipeline = [
     {
@@ -84,10 +86,10 @@ async function GET(
     },
   ];
 
-  if (!searchQuery) {
-    // If no search query provided, remove the $match stage from the pipeline
-    pipeline.splice(5, 1);
-  }
+  pipeline.push(
+    { $skip: (page - 1) * pageSize } as any, // Skip records based on page number
+    { $limit: pageSize } as any // Limit records per page
+  );
 
   const user = await usersCollection.aggregate(pipeline).toArray();
 
