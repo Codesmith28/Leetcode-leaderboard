@@ -21,12 +21,10 @@ function SearchBar({ searchQuery, setSearchQuery, setPage }: SearchBarProps) {
     <div className={styles.searchBar}>
       <FormControl id="search">
         <InputGroup>
-          <InputLeftElement pointerEvents="none">
-            <Search2Icon />
-          </InputLeftElement>
+          <InputLeftElement pointerEvents="none"></InputLeftElement>
           <Input
-            type="text"
-            placeholder="Search"
+            type="search"
+            placeholder="Search Teams"
             onChange={(e) => {
               setSearchQuery(e.target.value);
               setPage(1);

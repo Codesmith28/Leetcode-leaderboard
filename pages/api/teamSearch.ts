@@ -1,6 +1,6 @@
 import { clientPromise } from "@/util/DB";
 import { decodeReq } from "@/util/functions";
-import { MySession, UserCol } from "@/util/types";
+import { MySession, TeamCol, UserCol } from "@/util/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -38,7 +38,7 @@ async function GET(
   }
 
   const db = (await clientPromise).db("leetcodeleaderboard");
-  const teamsCollection = db.collection<UserCol>("Users");
+  const teamsCollection = db.collection<TeamCol>("Teams");
   const regex = new RegExp(searchQuery, "i");
 
   const teams = await teamsCollection
@@ -50,7 +50,7 @@ async function GET(
     .limit(maxResults)
     .toArray();
 
-  console.log(" teams: ", teams);
+  console.log("teams: ", teams);
 
   return res.status(200).json(teams);
 }
