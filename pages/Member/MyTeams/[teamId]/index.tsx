@@ -34,23 +34,10 @@ interface userInfo {
   image: string;
 }
 
-interface Info {
-  image: string;
-  username: string;
-  email: string;
-  institution: string;
-  totalSolved: number;
-  easySolved: number;
-  mediumSolved: number;
-  hardSolved: number;
-  ranking: number;
-}
-
 function index() {
   const route = useRouter();
   const teamId = route.query.teamId as string;
   const router = useRouter();
-  // fetch data from leetcode api for all users and update it in the database:
 
   const [teamInfo, setteamInfo] = useState<teamInfo>({
     _id: teamId as unknown as ObjectId,
@@ -60,18 +47,6 @@ function index() {
     members: [],
     disabled: false,
     myRank: 0,
-  });
-
-  const [userInfo, setUserInfo] = useState<Info>({
-    image: "",
-    username: "",
-    email: "",
-    institution: "",
-    totalSolved: 0,
-    easySolved: 0,
-    mediumSolved: 0,
-    hardSolved: 0,
-    ranking: 0,
   });
 
   useEffect(() => {
