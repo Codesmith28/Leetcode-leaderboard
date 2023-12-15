@@ -51,7 +51,6 @@ async function GET(
     .limit(maxResults)
     .toArray();
 
-  console.log("teams: ", teams);
 
   if (searchQuery && teams.length === 0) {
     // If search query provided and no teams found, return not found status

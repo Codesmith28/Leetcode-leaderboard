@@ -46,7 +46,6 @@ function useSearch(searchQuery: string, page: number) {
     fetcher
   );
 
-  console.log(data);
   return {
     teams: data as ReceivedTeamDataOnClient[],
     isLoading,
@@ -79,7 +78,6 @@ function index() {
   const [page, setPage] = useState(1);
   const { teams, isLoading, error, mutate } = useSearch(searchQuery, page);
 
-  console.log("my teams", teams);
 
   return (
     <>

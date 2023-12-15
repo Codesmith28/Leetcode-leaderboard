@@ -35,7 +35,6 @@ function useSearch(searchQuery: string, page: number) {
     fetcher
   );
 
-  console.log(data);
   return {
     teams: data as ReceivedTeamDataOnClient[],
     isLoading,
