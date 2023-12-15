@@ -24,10 +24,10 @@ export default function Pagination({ page, setPage, items }: Props) {
       </Button>
       <span>{page}</span>
       <Button
-        isDisabled={items && items.length < 10}
+        isDisabled={items && items.length < 8}
         className="clicky"
         onClick={() => {
-          if (items.length == 10) setPage(page + 1);
+          if (items?.length == 8) setPage(page + 1);
         }}
       >
         <ArrowRightIcon />

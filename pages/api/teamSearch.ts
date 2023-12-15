@@ -48,8 +48,8 @@ async function GET(
     .aggregate([
       { $match: teamsQuery }, // Optionally match specific criteria
       { $sort: { name: 1 } }, // Sort by name
-      { $skip: (page - 1) * maxResults }, // Skip based on pagination
-      { $limit: maxResults }, // Limit results per page
+      { $skip: (page - 1) * maxResults } as any, // Skip based on pagination
+      { $limit: maxResults } as any, // Limit results per page
       {
         $addFields: {
           totalMembers: { $size: "$members" }, // Calculate total members in each team
@@ -58,10 +58,10 @@ async function GET(
     ])
     .toArray();
 
-  if (searchQuery && teams.length === 0) {
-    // If search query provided and no teams found, return not found status
-    return res.status(404).json({ error: "No teams found" });
-  }
+  // if (searchQuery && teams.length === 0) {
+  //   // If search query provided and no teams found, return not found status
+  //   return res.status(404).json({ error: "No teams found" });
+  // }
 
   return res.status(200).json(teams);
 }
