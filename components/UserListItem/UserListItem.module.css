@@ -68,6 +68,7 @@
 @media (max-width: 768px) {
   .main {
     font-size: 0.9em;
+    min-width: 100%;
   }
 
   .misc {
@@ -79,7 +80,7 @@
 /* smallest level */
 @media (max-width: 425px) {
   .main {
-    min-width: 10 0%;
+    min-width: 100%;
   }
 
   .misc {
