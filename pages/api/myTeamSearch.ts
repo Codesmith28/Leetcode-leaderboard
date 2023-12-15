@@ -1,0 +1,100 @@
+import { clientPromise } from "@/util/DB";
+import { decodeReq } from "@/util/functions";
+import { MySession, UserCol } from "@/util/types";
+import { ObjectId } from "mongodb";
+import { NextApiRequest, NextApiResponse } from "next";
+import { decode } from "next-auth/jwt";
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const token = await decodeReq(req);
+
+  if (token) {
+    if (req.method === "GET") {
+      return GET(req, res, token as MySession["user"]);
+    } else {
+      return res.status(405).send("Method not allowed");
+    }
+  }
+}
+
+async function GET(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  session: MySession["user"]
+) {
+  const db = (await clientPromise).db("leetcodeleaderboard");
+  const usersCollection = db.collection<UserCol>("Users");
+  const userId = session.id;
+  const query = req.query;
+  const searchQuery = query.searchQuery as string;
+
+  const pipeline = [
+    {
+      $match: { _id: new ObjectId(userId) },
+    },
+    {
+      $unwind: "$teams", // Deconstruct the teams array
+    },
+    {
+      $lookup: {
+        from: "Teams", // Collection name
+        localField: "teams",
+        foreignField: "_id",
+        as: "teamDetails",
+      },
+    },
+    {
+      $unwind: "$teamDetails", // Unwind the resulting teamDetails array
+    },
+    {
+      $addFields: {
+        numberOfMembers: { $size: "$teamDetails.members" }, // Calculate the size of the members array
+      },
+    },
+    {
+      $match: {
+        $or: [
+          { "teamDetails.name": { $regex: new RegExp(searchQuery, "i") } },
+          // Add other fields for searching if needed
+        ],
+      },
+    },
+    {
+      $group: {
+        _id: "$_id", // Group by user ID
+        teams: {
+          $push: {
+            _id: "$teamDetails._id",
+            // Add other fields from teamDetails if needed
+            totalMembers: "$numberOfMembers",
+            name: "$teamDetails.name",
+            institution: "$teamDetails.institution",
+          },
+        }, // Push teamDetails into an array
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        teams: 1, // Include only the teams field in the output
+      },
+    },
+  ];
+
+  if (!searchQuery) {
+    // If no search query provided, remove the $match stage from the pipeline
+    pipeline.splice(5, 1);
+  }
+
+  const user = await usersCollection.aggregate(pipeline).toArray();
+
+  return res
+    .status(200)
+    .json(
+      user[0]?.teams.sort((a: any, b: any) => a.name.localeCompare(b.name)) ||
+        []
+    );
+}

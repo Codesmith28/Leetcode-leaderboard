@@ -24,7 +24,7 @@ export default function GroupList({
 
   return (
     <div className={styles.groups}>
-      {teamData.map((team, index: number) => (
+      {teamData?.map((team, index: number) => (
         <Groups
           key={index}
           teamData={team}
