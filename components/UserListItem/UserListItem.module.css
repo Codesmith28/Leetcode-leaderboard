@@ -15,24 +15,6 @@
   justify-content: center;
 }
 
-@media (max-width: 768px) {
-  .main {
-    font-size: 0.9em;
-  }
-}
-
-/* smallest level */
-@media (max-width: 425px) {
-  .main {
-    min-width: 10 0%;
-  }
-}
-@media (max-width: 375px) {
-  .main {
-    min-width: 300px;
-  }
-}
-
 .rank {
   grid-column: 1;
   grid-row: 1;
@@ -61,17 +43,13 @@
   flex-direction: row;
   gap: 2em;
   justify-content: space-around;
-  width: 100%;
 }
 .totalSolved {
-  grid-column: 4;
-  grid-row: 1;
-  align-self: center;
-  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-items: center;
 }
 .denominations {
-  grid-column: 5;
-  grid-row: 1;
   display: flex;
   flex-direction: column;
   text-align: start;
@@ -85,4 +63,37 @@
 }
 .denominations > :nth-child(3) {
   color: red;
+}
+
+@media (max-width: 768px) {
+  .main {
+    font-size: 0.9em;
+  }
+
+  .misc {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* smallest level */
+@media (max-width: 425px) {
+  .main {
+    min-width: 10 0%;
+  }
+
+  .misc {
+    align-items: center;
+    justify-content: center;
+  }
+}
+@media (max-width: 375px) {
+  .main {
+    min-width: 300px;
+  }
+
+  .misc {
+    align-items: center;
+    justify-content: center;
+  }
 }

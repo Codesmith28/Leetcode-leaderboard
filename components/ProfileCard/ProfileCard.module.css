@@ -25,6 +25,58 @@
   padding-block: 1em;
 }
 
+.labelEdit {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .txt {
   color: gray;
+}
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1em;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1em;
+}
+
+.skellyCard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2em;
+}
+
+/* responsiveness at all levels: */
+@media (max-width: 768px) {
+  .skellyCard {
+    grid-template-columns: 1fr;
+    gap: 2em;
+  }
+}
+@media (min-width: 767px) {
+  .skellyCard {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2em;
+  }
+}
+
+.skellyLabel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+  padding-inline: 2em;
+  padding-block: 1em;
+  gap: 0.5em;
 }

@@ -1,20 +1,119 @@
 import { UserCol } from "@/util/types";
+import { EditIcon } from "@chakra-ui/icons";
 import {
   Avatar,
-  Badge,
   Box,
   Button,
   Center,
   Heading,
-  Stack,
+  IconButton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select,
   Text,
   useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import styles from "./ProfileCard.module.css";
+import Loading from "./loading";
 
-// get information of the user using the get request:
+async function updateInstitution(institution: string) {
+  const res = await fetch("/api/updateInstitution", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ institution }),
+  });
+  const data = await res.json();
+  return data;
+}
+
+function EditInstitutionModal({
+  isOpen,
+  onOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}) {
+  const [institution, setInstitution] = useState("none");
+  const [loading, setLoading] = useState(false);
+
+  // let institutions = ["DAIICT", "NIRMA", "SEAS", "SVNIT"];
+
+  const [institutions, setInstitutions] = useState<string[]>([]);
+  useEffect(() => {
+    const getInstitutions = async () => {
+      const res = await fetch("/api/getInstitutions", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+
+      let inst: string[] = [];
+      data?.map((d: any) => {
+        inst.push(d.name);
+      });
+
+      setInstitutions(inst);
+    };
+
+    getInstitutions();
+  }, []);
+
+  return (
+    <Modal isCentered isOpen={isOpen} onClose={onClose} size={"sm"}>
+      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+      <ModalContent>
+        <ModalHeader>Modal Title</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody className={styles.modalForm}>
+          <div>
+            <Select
+              placeholder="Select Institution"
+              defaultValue={"none"}
+              onChange={(e) => {
+                setInstitution(e.target.value);
+              }}
+            >
+              {institutions?.map((inst) => (
+                <option key={inst} value={inst}>
+                  {inst}
+                </option>
+              ))}
+            </Select>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            className="clicky"
+            isLoading={loading}
+            onClick={async () => {
+              setLoading(true);
+              await updateInstitution(institution);
+              setLoading(false);
+              onClose();
+              window.location.reload();
+            }}
+          >
+            Change
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+}
 
 export default function ProfileCard() {
   const { data: session } = useSession();
@@ -49,6 +148,23 @@ export default function ProfileCard() {
     getInfo();
   }, []);
 
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    if (info) {
+      setIsLoading(false);
+    }
+  }, [info]);
+
+  const {
+    isOpen: isEditInstitutionOpen,
+    onOpen: onEditInstitutionOpen,
+    onClose: onEditInstitutionClose,
+  } = useDisclosure();
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <Center>
       <Box
@@ -78,7 +194,18 @@ export default function ProfileCard() {
           </div>
 
           <div className={styles.label}>
-            <Heading fontSize={"lg"}>Institution: </Heading>
+            <div className={styles.labelEdit}>
+              <Heading fontSize={"lg"}>Institution: </Heading>
+              <IconButton
+                className="clicky"
+                colorScheme="teal"
+                aria-label="edit institution"
+                size="xs"
+                icon={<EditIcon />}
+                top={"1em"}
+                onClick={onEditInstitutionOpen}
+              />
+            </div>
             <div className={styles.txt}>{info.institution}</div>
           </div>
 
@@ -103,6 +230,11 @@ export default function ProfileCard() {
           </div>
         </div>
       </Box>
+      <EditInstitutionModal
+        isOpen={isEditInstitutionOpen}
+        onOpen={onEditInstitutionOpen}
+        onClose={onEditInstitutionClose}
+      />
     </Center>
   );
 }

@@ -21,6 +21,7 @@ export default async function handler(
     return res.status(405).send("Method not allowed");
   }
 }
+
 async function GET(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -28,53 +29,41 @@ async function GET(
 ) {
   const teamId = req.query.id as string;
   const userId = session.id;
+
   if (!teamId) return res.status(400).send("No team id provided");
 
   const db = (await clientPromise).db("leetcodeleaderboard");
-  const teamCollection = db.collection<TeamCol>("Teams");
   const usersCollection = db.collection<UserCol>("Users");
 
-  const team = await teamCollection
-    .aggregate([
-      {
-        $match: {
-          _id: new ObjectId(teamId),
+  const operation = [
+    {
+      $match: { _id: new ObjectId(userId) },
+    },
+    {
+      $project: {
+        isMember: {
+          $in: [new ObjectId(teamId), "$teams"],
         },
       },
-      {
-        $addFields: {
-          totalMembers: { $size: "$members" },
+    },
+    {
+      $set: {
+        isMember: {
+          $cond: {
+            if: { $eq: ["$isMember", true] },
+            then: true,
+            else: false,
+          },
         },
       },
-      {
-        $lookup: {
-          from: "Users",
-          localField: "members",
-          foreignField: "_id",
-          as: "members",
-        },
-      },
-      {
-        $unwind: "$members",
-      },
-      {
-        $sort: {
-          "members.ranking": 1,
-        },
-      },
-      {
-        $group: {
-          _id: "$_id",
-          name: { $first: "$name" },
-          institution: { $first: "$institution" },
-          members: { $push: "$members" },
-          totalMembers: { $first: "$totalMembers" },
-        },
-      },
-    ])
-    .toArray();
+    },
+  ];
 
-  if (!team) return res.status(400).send("No team found");
+  const result = await usersCollection.aggregate(operation).toArray();
 
-  return res.status(200).json(team[0]);
+  if (result.length > 0) {
+    return res.status(200).send(result[0].isMember);
+  } else {
+    return res.status(200).send(false);
+  }
 }

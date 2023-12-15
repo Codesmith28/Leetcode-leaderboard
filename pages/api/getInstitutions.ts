@@ -26,13 +26,25 @@ async function GET(
   session: MySession["user"]
 ) {
   const db = (await clientPromise).db("leetcodeleaderboard");
-  const usersCollection = db.collection<UserCol>("Users");
-  const id = session.id;
+  // return all the teams available
+  const teamsCollection = db.collection("Teams");
+  const institutions = await teamsCollection
+    .aggregate([
+      {
+        $match: {
+          institution: { $ne: "none" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          name: 1,
+        },
+      },
+    ])
+    .toArray();
 
-  const user = await usersCollection.findOne({ _id: new ObjectId(id) });
-  if (!user) {
-    return res.status(500).json({ error: "Could not find user" });
-  }
-
-  return res.status(200).json(user);
+  return res
+    .status(200)
+    .json(institutions.sort((a: any, b: any) => a.name.localeCompare(b.name)));
 }

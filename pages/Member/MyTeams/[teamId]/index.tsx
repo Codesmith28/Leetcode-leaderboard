@@ -9,11 +9,13 @@ import React, { useEffect, useState } from "react";
 import styles from "./CurrTeam.module.css";
 
 interface teamInfo {
+  _id: ObjectId;
   name: string;
   institution: string;
   totalMembers: number;
   members: userInfo[];
   disabled: boolean;
+  myRank: number;
 }
 
 interface userInfo {
@@ -32,42 +34,19 @@ interface userInfo {
   image: string;
 }
 
-interface Info {
-  image: string;
-  username: string;
-  email: string;
-  institution: string;
-  totalSolved: number;
-  easySolved: number;
-  mediumSolved: number;
-  hardSolved: number;
-  ranking: number;
-}
-
 function index() {
   const route = useRouter();
   const teamId = route.query.teamId as string;
   const router = useRouter();
-  // fetch data from leetcode api for all users and update it in the database:
 
   const [teamInfo, setteamInfo] = useState<teamInfo>({
+    _id: teamId as unknown as ObjectId,
     name: "",
     institution: "",
     totalMembers: 0,
     members: [],
     disabled: false,
-  });
-
-  const [userInfo, setUserInfo] = useState<Info>({
-    image: "",
-    username: "",
-    email: "",
-    institution: "",
-    totalSolved: 0,
-    easySolved: 0,
-    mediumSolved: 0,
-    hardSolved: 0,
-    ranking: 0,
+    myRank: 0,
   });
 
   useEffect(() => {
@@ -81,6 +60,8 @@ function index() {
         },
       });
       const teamData = await resTeam.json();
+
+
       setteamInfo(teamData);
 
       // Iterate through each member in the teamInfo.members array
@@ -96,10 +77,8 @@ function index() {
           }
         );
         const memberData = await res.json();
-				
-				// this data is correct:
-        // console.log("user: ", member.username, "data: ", memberData);
 
+        // this data is correct:
         await fetch("/api/updateInfo", {
           method: "PUT",
           headers: {
@@ -114,7 +93,6 @@ function index() {
             ranking: memberData.ranking,
           }),
         });
-				
       }
     };
 
