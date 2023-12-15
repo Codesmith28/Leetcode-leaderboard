@@ -4,7 +4,7 @@ import {
   FormControl,
   Input,
   InputGroup,
-  InputLeftElement,
+  InputRightElement,
 } from "@chakra-ui/react";
 import React from "react";
 import useSWR from "swr";
@@ -21,7 +21,9 @@ function SearchBar({ searchQuery, setSearchQuery, setPage }: SearchBarProps) {
     <div className={styles.searchBar}>
       <FormControl id="search">
         <InputGroup>
-          <InputLeftElement pointerEvents="none"></InputLeftElement>
+          <InputRightElement pointerEvents="none">
+            <Search2Icon color="gray.300" />
+          </InputRightElement>
           <Input
             type="search"
             placeholder="Search Teams"

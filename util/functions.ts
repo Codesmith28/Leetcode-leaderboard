@@ -1,6 +1,7 @@
 import { NextApiRequest } from "next";
 import { decode } from "next-auth/jwt";
 import { MySession } from "./types";
+
 if (!process.env.JWT_COOKIE_NAME) {
   throw new Error("JWT_COOKIE_NAME not set");
 }
