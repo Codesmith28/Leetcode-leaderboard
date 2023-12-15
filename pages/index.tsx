@@ -21,18 +21,29 @@ interface Info {
   ranking: number;
 }
 
+async function fetcher(url: string) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return response.json();
+}
+
 function useSearch(searchQuery: string, page: number) {
   const { data, error, isLoading, mutate } = useSWR(
-    `/api/teamSearch/searchQuery=${searchQuery}&page=${page}`
-    // fetcher
+    `/api/teamSearch/?searchQuery=${searchQuery}&page=${page}`,
+    fetcher
   );
+
+  console.log(data);
   return {
     teams: data as ReceivedTeamDataOnClient[],
     isLoading,
-    error: error,
+    error,
     mutate,
   };
 }
+
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");

@@ -33,24 +33,30 @@ async function GET(
 
   const searchQuery = query.searchQuery as string;
 
-  if (!searchQuery) {
-    return res.status(400).json({ error: "No search query provided" });
-  }
-
   const db = (await clientPromise).db("leetcodeleaderboard");
   const teamsCollection = db.collection<TeamCol>("Teams");
-  const regex = new RegExp(searchQuery, "i");
+
+  let teamsQuery = {}; // Default query to fetch all teams
+
+  if (searchQuery) {
+    // If search query exists, add it to the query
+    const regex = new RegExp(searchQuery, "i");
+    teamsQuery = { name: { $regex: regex } };
+  }
 
   const teams = await teamsCollection
-    .find({
-      $or: [{ name: { $regex: regex } }],
-    })
+    .find(teamsQuery)
     .sort({ name: 1 })
     .skip((page - 1) * maxResults)
     .limit(maxResults)
     .toArray();
 
   console.log("teams: ", teams);
+
+  if (searchQuery && teams.length === 0) {
+    // If search query provided and no teams found, return not found status
+    return res.status(404).json({ error: "No teams found" });
+  }
 
   return res.status(200).json(teams);
 }
