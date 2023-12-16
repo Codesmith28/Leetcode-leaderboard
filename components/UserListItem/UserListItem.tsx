@@ -109,7 +109,11 @@ function UserListItem({
 
         <div className={styles.names}>
           <h1>{member.name}</h1>
-          <Link href={`https://leetcode.com/${member.username}`}>
+          <Link
+            href={`https://leetcode.com/${member.username}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <h1>@{member.username}</h1>
           </Link>
           <h1>Ranking: {member.ranking === 0 ? "N/A" : member.ranking}</h1>
