@@ -1,4 +1,3 @@
-import { ReceivedTeamDataOnClient } from "@/util/types";
 import { Search2Icon } from "@chakra-ui/icons";
 import {
   FormControl,
@@ -7,7 +6,6 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import React from "react";
-import useSWR from "swr";
 import styles from "./SearchBar.module.css";
 
 interface SearchBarProps {
@@ -25,7 +23,6 @@ function SearchBar({ searchQuery, setSearchQuery, setPage }: SearchBarProps) {
             <Search2Icon color="gray.300" />
           </InputRightElement>
           <Input
-            type="search"
             placeholder="Search Teams"
             onChange={(e) => {
               setSearchQuery(e.target.value);
