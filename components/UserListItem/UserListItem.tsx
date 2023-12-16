@@ -3,17 +3,13 @@ import { InfoIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
-  Button,
   Heading,
   IconButton,
   Popover,
   PopoverArrow,
   PopoverBody,
-  PopoverCloseButton,
   PopoverContent,
-  PopoverHeader,
   PopoverTrigger,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -47,7 +43,9 @@ function UserListItem({
   denom = (
     <div className={styles.misc}>
       <div className={styles.totalSolved}>
-        <h1>{member.LCTotalSolved} solved</h1>
+        <div>
+          <h1>{member.LCTotalSolved} solved</h1>
+        </div>
       </div>
       <div className={styles.denominations}>
         <Heading size="xs">Easy: {member.LCEasySolved}</Heading>
@@ -59,7 +57,7 @@ function UserListItem({
 
   if (isSmallScreen) {
     misc = (
-      <Popover placement="left" gutter={0} >
+      <Popover placement="left" gutter={0}>
         <PopoverTrigger>
           <IconButton
             className="clicky"
@@ -114,6 +112,7 @@ function UserListItem({
           <Link href={`https://leetcode.com/${member.username}`}>
             <h1>@{member.username}</h1>
           </Link>
+          <h1>Ranking: {member.ranking === 0 ? "N/A" : member.ranking}</h1>
         </div>
 
         <div>{misc}</div>

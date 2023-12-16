@@ -59,7 +59,8 @@ async function GET(
       },
       {
         $sort: {
-          "members.ranking": 1,
+          // sort based on number of problems solved
+          "members.LCTotalSolved": -1,
         },
       },
       {
