@@ -33,7 +33,7 @@
   align-self: center;
   justify-self: center;
 }
-.names > :nth-child(2) {
+.names > :nth-child(2), .names > :nth-child(3) {
   font-size: 0.9em;
   color: gray;
 }

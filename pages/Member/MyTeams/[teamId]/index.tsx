@@ -60,8 +60,6 @@ function index() {
         },
       });
       const teamData = await resTeam.json();
-
-
       setteamInfo(teamData);
 
       // Iterate through each member in the teamInfo.members array
