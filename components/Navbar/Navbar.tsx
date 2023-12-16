@@ -1,3 +1,4 @@
+import { UserCol } from "@/util/types";
 import { AddIcon, CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
   Avatar,
@@ -48,25 +49,6 @@ async function submitLCUsername(username: string, institution: string) {
   });
   const data = await res.json();
 }
-
-const NavLink = (props: Props) => {
-  const { children } = props;
-  return (
-    <Box
-      as="a"
-      px={2}
-      py={1}
-      rounded={"md"}
-      _hover={{
-        textDecoration: "none",
-        bg: useColorModeValue("gray.200", "gray.700"),
-      }}
-      href={`/Member/${children}`}
-    >
-      {children}
-    </Box>
-  );
-};
 
 // Modal that asks for Leetcode username if not provided
 function UsrnModal({
@@ -165,6 +147,37 @@ function UsrnModal({
 // all redirects here:
 const Links = ["MyTeams"];
 
+const NavLink = ({ text, linkTo }: { text: string; linkTo: string }) => {
+  return (
+    <Box
+      as="a"
+      px={2}
+      py={1}
+      rounded={"md"}
+      _hover={{
+        textDecoration: "none",
+        bg: useColorModeValue("gray.200", "gray.700"),
+      }}
+      href={linkTo}
+    >
+      {text}
+    </Box>
+  );
+};
+
+const navItems: {
+  [key: string]: {
+    text: string;
+    linkTo: string;
+  }[];
+} = {
+  Admin: [
+    { text: "MyTeams", linkTo: "/Member/MyTeams" },
+    { text: "CreateTeams", linkTo: "/Admin/CreateTeams" },
+  ],
+  Member: [{ text: "MyTeams", linkTo: "/Member/MyTeams" }],
+};
+
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session } = useSession();
@@ -177,6 +190,8 @@ export default function Navbar() {
   } = useDisclosure();
 
   let authBtn;
+
+  const [userInfo, setUserInfo] = useState<UserCol>();
 
   useEffect(() => {
     const isFirstTime = async () => {
@@ -192,17 +207,27 @@ export default function Navbar() {
       }
     };
 
+    const getUserInfo = async () => {
+      const res = await fetch("/api/getInfo", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setUserInfo(data);
+    };
+
     if (session && session.user) {
       isFirstTime();
     }
+
+    getUserInfo();
   }, [session]);
 
-  if (session && session.user) {
-    // session.user.role unfortunately does not exist
-    if (session.user.role === "Admin") {
-      Links.push("Admin");
-    }
+  const myRole = userInfo?.role;
 
+  if (session && session.user) {
     authBtn = (
       <div className={styles.navMenu}>
         <Menu>
@@ -264,9 +289,14 @@ export default function Navbar() {
               spacing={4}
               display={{ base: "none", md: "flex" }}
             >
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
-              ))}
+              {session &&
+                navItems[myRole!]?.map((link) => (
+                  <NavLink
+                    key={link.text}
+                    text={link.text}
+                    linkTo={link.linkTo}
+                  />
+                ))}
             </HStack>
           </HStack>
 
@@ -285,9 +315,14 @@ export default function Navbar() {
               as={"nav"}
               spacing={4}
             >
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
-              ))}
+              {session &&
+                navItems[myRole!]?.map((link) => (
+                  <NavLink
+                    key={link.text}
+                    text={link.text}
+                    linkTo={link.linkTo}
+                  />
+                ))}
             </Stack>
           </Box>
         ) : null}

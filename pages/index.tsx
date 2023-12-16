@@ -3,12 +3,12 @@ import Pagination from "@/components/Pagination/Pagination";
 import SearchBar from "@/components/SearchBar/SearchBar";
 // import { fetcher } from "@/util/functions";
 import { ReceivedTeamDataOnClient, TeamData } from "@/util/types";
+import { Center } from "@chakra-ui/react";
 import Head from "next/head";
 import Script from "next/script";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import Layout from "./Layout";
-import { Center } from "@chakra-ui/react";
 
 interface Info {
   image: string;
