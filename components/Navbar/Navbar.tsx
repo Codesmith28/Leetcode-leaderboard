@@ -173,7 +173,7 @@ const navItems: {
 } = {
   Admin: [
     { text: "MyTeams", linkTo: "/Member/MyTeams" },
-    { text: "CreateTeams", linkTo: "/Admin/CreateTeams" },
+    { text: "Manage", linkTo: "/Admin/ManageTeams" },
   ],
   Member: [{ text: "MyTeams", linkTo: "/Member/MyTeams" }],
 };

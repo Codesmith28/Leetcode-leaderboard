@@ -190,6 +190,7 @@ export default function Home() {
                 mutate={mutate}
                 isLoading={isLoading}
                 error={error}
+                isAdmin={false}
               />
             )}
             <Pagination page={page} setPage={setPage} items={teams} />

@@ -37,7 +37,6 @@ interface userInfo {
 function index() {
   const route = useRouter();
   const teamId = route.query.teamId as string;
-  const router = useRouter();
 
   const [teamInfo, setteamInfo] = useState<teamInfo>({
     _id: teamId as unknown as ObjectId,
@@ -94,10 +93,10 @@ function index() {
       }
     };
 
-    if (teamId) {
+    if (teamId && teamInfo.totalMembers > 0) {
       updateMembersInfo();
     }
-  }, [router.isReady]);
+  }, []);
 
   const topThree = teamInfo.members.slice(0, 3);
 

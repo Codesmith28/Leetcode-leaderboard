@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { ObjectId } from "mongodb";
 import { useEffect, useState } from "react";
+import { mutate } from "swr";
 import MotionDiv from "../MotionDiv/MotionDiv";
 import styles from "./Groups.module.css";
 
@@ -42,7 +43,6 @@ async function isMemberOf(teamId: ObjectId) {
   });
 
   const data = await res.json();
-
   return data;
 }
 
@@ -51,11 +51,13 @@ export default function Groups({
   mutate,
   disabled,
   transition,
+  isAdmin,
 }: {
   teamData: ReceivedTeamDataOnClient;
   mutate: () => void;
   disabled: boolean;
   transition: any;
+  isAdmin: boolean;
 }) {
   let colMain: string = teamData.institution === "none" ? "green" : "orange";
   let off = disabled && teamData.institution !== "none";
@@ -69,7 +71,7 @@ export default function Groups({
     visible: { opacity: 1, x: 0 },
   };
 
-  const [isMember, setIsMember] = useState(false);
+  let [isMember, setIsMember] = useState(false);
 
   // set the value of isMember:
   useEffect(() => {
@@ -77,8 +79,13 @@ export default function Groups({
       const res = await isMemberOf(teamData._id);
       setIsMember(res);
     };
+    mutate();
     getIsMember();
   }, []);
+
+  if (isAdmin) {
+    isMember = true;
+  }
 
   return (
     <MotionDiv
