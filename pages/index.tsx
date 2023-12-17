@@ -183,13 +183,13 @@ export default function Home() {
               setSearchQuery={setSearchQuery}
               setPage={setPage}
             />
-            {teams &&
-              userInfo &&
-              (isLoading ? (
-                <Center>
-                  <div>Loading...</div>
-                </Center>
-              ) : (
+            {isLoading ? (
+              <Center>
+                <div>Loading...</div>
+              </Center>
+            ) : (
+              teams &&
+              userInfo && (
                 <GroupList
                   teamData={teams}
                   myInsti={userInfo.institution}
@@ -198,7 +198,8 @@ export default function Home() {
                   error={error}
                   isAdmin={false}
                 />
-              ))}
+              )
+            )}
             <Pagination page={page} setPage={setPage} items={teams} />
           </div>
         </Layout>

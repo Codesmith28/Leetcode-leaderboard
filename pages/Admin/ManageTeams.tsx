@@ -45,10 +45,10 @@ function CreateTeams() {
           setSearchQuery={setSearchQuery}
           setPage={setPage}
         />
-        {teams &&
-          (isLoading ? (
-            <Center>Loading...</Center>
-          ) : (
+        {isLoading ? (
+          <Center>Loading...</Center>
+        ) : (
+          teams && (
             <GroupList
               teamData={teams}
               myInsti="none"
@@ -57,7 +57,9 @@ function CreateTeams() {
               error={error}
               isAdmin={true}
             />
-          ))}
+          )
+        )}
+
         <Pagination page={page} setPage={setPage} items={teams} />
       </div>
     </Layout>

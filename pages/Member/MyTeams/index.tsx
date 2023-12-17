@@ -90,18 +90,18 @@ function index() {
           />
 
           {isLoading ? (
-            <Center>
-              <div className={styles.loader}></div>
-            </Center>
+            <Center>Loading...</Center>
           ) : (
-            <GroupList
-              teamData={teams}
-              myInsti={"SEAS"}
-              mutate={mutate}
-              isLoading={isLoading}
-              error={error}
-              isAdmin={false}
-            />
+            teams && (
+              <GroupList
+                teamData={teams}
+                myInsti={"SEAS"}
+                mutate={mutate}
+                isLoading={isLoading}
+                error={error}
+                isAdmin={false}
+              />
+            )
           )}
 
           <Pagination page={page} setPage={setPage} items={teams} />
