@@ -183,6 +183,31 @@ export default function Groups({
               Join!
             </Button>
           )}
+
+          {isAdmin && (
+            <Button
+              mt={5}
+              w={"full"}
+              bg={"red.400"} // Set the background color to red
+              color={"white"}
+              rounded={"xl"}
+              boxShadow={`0 5px 20px 0px red`} // Adjust shadow color to red
+              _hover={{
+                bg: "red.500", // Adjust hover background color to a darker red
+              }}
+              _focus={{
+                bg: "red.500", // Adjust focus background color to a darker red
+              }}
+              onClick={async () => {
+                // Add your delete logic here
+                // For example:
+                // await deleteItem(itemId);
+                // window.location.href = "/somewhere"; // Redirect to desired location after deletion
+              }}
+            >
+              Delete
+            </Button>
+          )}
         </Box>
       </Box>
     </MotionDiv>

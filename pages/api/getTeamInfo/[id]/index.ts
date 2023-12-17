@@ -27,12 +27,10 @@ async function GET(
   session: MySession["user"]
 ) {
   const teamId = req.query.id as string;
-  const userId = session.id;
   if (!teamId) return res.status(400).send("No team id provided");
 
   const db = (await clientPromise).db("leetcodeleaderboard");
   const teamCollection = db.collection<TeamCol>("Teams");
-  const usersCollection = db.collection<UserCol>("Users");
 
   const team = await teamCollection
     .aggregate([

@@ -37,6 +37,7 @@ interface userInfo {
 function index() {
   const route = useRouter();
   const teamId = route.query.teamId as string;
+  const router = useRouter();
 
   const [teamInfo, setteamInfo] = useState<teamInfo>({
     _id: teamId as unknown as ObjectId,
@@ -59,6 +60,7 @@ function index() {
         },
       });
       const teamData = await resTeam.json();
+      console.log("error in:", teamData);
       setteamInfo(teamData);
 
       // Iterate through each member in the teamInfo.members array
@@ -93,10 +95,10 @@ function index() {
       }
     };
 
-    if (teamId && teamInfo.totalMembers > 0) {
+    if (teamId) {
       updateMembersInfo();
     }
-  }, []);
+  }, [router.isReady]);
 
   const topThree = teamInfo.members.slice(0, 3);
 
