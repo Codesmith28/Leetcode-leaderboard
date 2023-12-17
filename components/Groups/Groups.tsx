@@ -85,6 +85,7 @@ export default function Groups({
 
   if (isAdmin) {
     isMember = true;
+    colMain = "teal";
   }
 
   return (
