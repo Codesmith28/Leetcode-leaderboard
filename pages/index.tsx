@@ -145,12 +145,12 @@ export default function Home() {
 
   const { teams, isLoading, error, mutate } = useSearch(searchQuery, page);
 
-  if (isLoading)
-    return (
-      <Layout>
-        <Center>Loading...</Center>
-      </Layout>
-    );
+  // if (isLoading)
+  //   return (
+  //     <Layout>
+  //       <Center>Loading...</Center>
+  //     </Layout>
+  //   );
 
   return (
     <>
@@ -183,16 +183,22 @@ export default function Home() {
               setSearchQuery={setSearchQuery}
               setPage={setPage}
             />
-            {teams && userInfo && (
-              <GroupList
-                teamData={teams}
-                myInsti={userInfo.institution}
-                mutate={mutate}
-                isLoading={isLoading}
-                error={error}
-                isAdmin={false}
-              />
-            )}
+            {teams &&
+              userInfo &&
+              (isLoading ? (
+                <Center>
+                  <div>Loading...</div>
+                </Center>
+              ) : (
+                <GroupList
+                  teamData={teams}
+                  myInsti={userInfo.institution}
+                  mutate={mutate}
+                  isLoading={isLoading}
+                  error={error}
+                  isAdmin={false}
+                />
+              ))}
             <Pagination page={page} setPage={setPage} items={teams} />
           </div>
         </Layout>

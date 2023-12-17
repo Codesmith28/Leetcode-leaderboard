@@ -79,13 +79,6 @@ function index() {
   const [page, setPage] = useState(1);
   const { teams, isLoading, error, mutate } = useSearch(searchQuery, page);
 
-  if (isLoading)
-    return (
-      <Layout>
-        <Center>Loading...</Center>
-      </Layout>
-    );
-
   return (
     <>
       <Layout>
@@ -96,13 +89,20 @@ function index() {
             setPage={setPage}
           />
 
-          <GroupList
-            teamData={teams}
-            myInsti={"SEAS"}
-            mutate={mutate}
-            isLoading={isLoading}
-            error={error}
-          />
+          {isLoading ? (
+            <Center>
+              <div className={styles.loader}></div>
+            </Center>
+          ) : (
+            <GroupList
+              teamData={teams}
+              myInsti={"SEAS"}
+              mutate={mutate}
+              isLoading={isLoading}
+              error={error}
+              isAdmin={false}
+            />
+          )}
 
           <Pagination page={page} setPage={setPage} items={teams} />
         </div>

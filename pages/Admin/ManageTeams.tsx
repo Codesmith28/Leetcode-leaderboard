@@ -37,13 +37,6 @@ function CreateTeams() {
 
   const { teams, isLoading, error, mutate } = useSearch(searchQuery, page);
 
-  if (isLoading)
-    return (
-      <Layout>
-        <Center>Loading...</Center>
-      </Layout>
-    );
-
   return (
     <Layout>
       <div>
@@ -52,16 +45,19 @@ function CreateTeams() {
           setSearchQuery={setSearchQuery}
           setPage={setPage}
         />
-        {teams && (
-          <GroupList
-            teamData={teams}
-            myInsti="none"
-            mutate={mutate}
-            isLoading={isLoading}
-            error={error}
-            isAdmin={true}
-          />
-        )}
+        {teams &&
+          (isLoading ? (
+            <Center>Loading...</Center>
+          ) : (
+            <GroupList
+              teamData={teams}
+              myInsti="none"
+              mutate={mutate}
+              isLoading={isLoading}
+              error={error}
+              isAdmin={true}
+            />
+          ))}
         <Pagination page={page} setPage={setPage} items={teams} />
       </div>
     </Layout>
