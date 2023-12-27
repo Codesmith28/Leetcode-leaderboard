@@ -6,9 +6,27 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import styles from "./MyTeams.module.css";
 
+import FloatingButton from "@/components/FloatingButton/FloatingButton";
 import Pagination from "@/components/Pagination/Pagination";
+import loading from "@/components/ProfileCard/loading";
 import SearchBar from "@/components/SearchBar/SearchBar";
-import { Center } from "@chakra-ui/react";
+import submitLCUsername from "@/pages/api/submitLCUsername";
+import {
+  Button,
+  Center,
+  FormControl,
+  FormLabel,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select,
+  Switch,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 async function fetcher(url: string) {
   const response = await fetch(url);
@@ -56,6 +74,8 @@ function index() {
   return (
     <>
       <Layout>
+
+
         <div>
           <SearchBar
             searchQuery={searchQuery}

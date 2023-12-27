@@ -86,8 +86,6 @@ function UsrnModal({
     getInstitutions();
   }, []);
 
-  // let institutions = ["DAIICT", "NIRMA", "SEAS", "SVNIT"];
-
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
