@@ -8,12 +8,14 @@ export default function GroupList({
   mutate,
   isLoading,
   error,
+  isAdmin,
 }: {
   teamData: ReceivedTeamDataOnClient[];
   myInsti: string;
   mutate: () => void;
   isLoading: boolean;
   error: any;
+  isAdmin: boolean;
 }) {
   const transition = {
     duration: 0.3,
@@ -31,6 +33,7 @@ export default function GroupList({
           mutate={mutate}
           disabled={myInsti !== team.institution}
           transition={{ ...transition, delay: index * 0.09 }}
+          isAdmin={isAdmin}
         />
       ))}
     </div>

@@ -3,12 +3,12 @@ import Pagination from "@/components/Pagination/Pagination";
 import SearchBar from "@/components/SearchBar/SearchBar";
 // import { fetcher } from "@/util/functions";
 import { ReceivedTeamDataOnClient, TeamData } from "@/util/types";
+import { Center } from "@chakra-ui/react";
 import Head from "next/head";
 import Script from "next/script";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import Layout from "./Layout";
-import { Center } from "@chakra-ui/react";
 
 interface Info {
   image: string;
@@ -145,12 +145,12 @@ export default function Home() {
 
   const { teams, isLoading, error, mutate } = useSearch(searchQuery, page);
 
-  if (isLoading)
-    return (
-      <Layout>
-        <Center>Loading...</Center>
-      </Layout>
-    );
+  // if (isLoading)
+  //   return (
+  //     <Layout>
+  //       <Center>Loading...</Center>
+  //     </Layout>
+  //   );
 
   return (
     <>
@@ -183,14 +183,22 @@ export default function Home() {
               setSearchQuery={setSearchQuery}
               setPage={setPage}
             />
-            {teams && userInfo && (
-              <GroupList
-                teamData={teams}
-                myInsti={userInfo.institution}
-                mutate={mutate}
-                isLoading={isLoading}
-                error={error}
-              />
+            {isLoading ? (
+              <Center>
+                <div>Loading...</div>
+              </Center>
+            ) : (
+              teams &&
+              userInfo && (
+                <GroupList
+                  teamData={teams}
+                  myInsti={userInfo.institution}
+                  mutate={mutate}
+                  isLoading={isLoading}
+                  error={error}
+                  isAdmin={false}
+                />
+              )
             )}
             <Pagination page={page} setPage={setPage} items={teams} />
           </div>

@@ -59,6 +59,7 @@ function index() {
           "Content-Type": "application/json",
         },
       });
+
       const teamData = await resTeam.json();
       setteamInfo(teamData);
 

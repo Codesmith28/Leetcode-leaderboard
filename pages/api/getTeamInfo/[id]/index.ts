@@ -27,12 +27,10 @@ async function GET(
   session: MySession["user"]
 ) {
   const teamId = req.query.id as string;
-  const userId = session.id;
   if (!teamId) return res.status(400).send("No team id provided");
 
   const db = (await clientPromise).db("leetcodeleaderboard");
   const teamCollection = db.collection<TeamCol>("Teams");
-  const usersCollection = db.collection<UserCol>("Users");
 
   const team = await teamCollection
     .aggregate([
@@ -55,7 +53,10 @@ async function GET(
         },
       },
       {
-        $unwind: "$members",
+        $unwind: {
+          path: "$members",
+          preserveNullAndEmptyArrays: true, // Preserve documents even if there are no members
+        },
       },
       {
         $sort: {
@@ -75,7 +76,6 @@ async function GET(
     ])
     .toArray();
 
-  if (!team) return res.status(400).send("No team found");
-
+  if (team.length === 0) return res.status(200).send("No team found");
   return res.status(200).json(team[0]);
 }

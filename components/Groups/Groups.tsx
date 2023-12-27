@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { ObjectId } from "mongodb";
 import { useEffect, useState } from "react";
+import { mutate } from "swr";
 import MotionDiv from "../MotionDiv/MotionDiv";
 import styles from "./Groups.module.css";
 
@@ -33,6 +34,27 @@ async function joinTeam(teamId: ObjectId) {
   }
 }
 
+async function deleteTeam(teamId: ObjectId) {
+  if (!teamId) {
+    alert("Please enter a team name");
+    return;
+  }
+
+  const res = await fetch("/api/getTeams", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ teamId }),
+  });
+
+  if (res.status === 200) {
+    alert("Team deleted successfully");
+  } else {
+    alert("Team deletion failed");
+  }
+}
+
 async function isMemberOf(teamId: ObjectId) {
   const res = await fetch(`/api/isMemberOf/${teamId}`, {
     method: "GET",
@@ -42,7 +64,6 @@ async function isMemberOf(teamId: ObjectId) {
   });
 
   const data = await res.json();
-
   return data;
 }
 
@@ -51,14 +72,16 @@ export default function Groups({
   mutate,
   disabled,
   transition,
+  isAdmin,
 }: {
   teamData: ReceivedTeamDataOnClient;
   mutate: () => void;
   disabled: boolean;
   transition: any;
+  isAdmin: boolean;
 }) {
+  let off = teamData.institution !== "none" && disabled;
   let colMain: string = teamData.institution === "none" ? "green" : "orange";
-  let off = disabled && teamData.institution !== "none";
 
   if (off) {
     colMain = "gray";
@@ -69,7 +92,7 @@ export default function Groups({
     visible: { opacity: 1, x: 0 },
   };
 
-  const [isMember, setIsMember] = useState(false);
+  let [isMember, setIsMember] = useState(false);
 
   // set the value of isMember:
   useEffect(() => {
@@ -77,8 +100,14 @@ export default function Groups({
       const res = await isMemberOf(teamData._id);
       setIsMember(res);
     };
+    mutate();
     getIsMember();
   }, []);
+
+  if (isAdmin) {
+    isMember = true;
+    colMain = "teal";
+  }
 
   return (
     <MotionDiv
@@ -135,7 +164,7 @@ export default function Groups({
           {isMember ? (
             <Link href={`/Member/MyTeams/${teamData._id}`}>
               <Button
-                className={off ? "" : "clicky"}
+                className={isAdmin ? "clicky" : (off ? "" : "clicky")}
                 mt={10}
                 w={"full"}
                 bg={`${colMain}.400`}
@@ -154,7 +183,7 @@ export default function Groups({
             </Link>
           ) : (
             <Button
-              className={off ? "" : "clicky"}
+              className={isAdmin ? "clicky" : (off ? "" : "clicky")}
               mt={10}
               w={"full"}
               bg={`${colMain}.400`}
@@ -174,6 +203,29 @@ export default function Groups({
               }}
             >
               Join!
+            </Button>
+          )}
+
+          {isAdmin && (
+            <Button
+              mt={5}
+              w={"full"}
+              bg={"red.400"} // Set the background color to red
+              color={"white"}
+              rounded={"xl"}
+              boxShadow={`0 5px 20px 0px red`} // Adjust shadow color to red
+              _hover={{
+                bg: "red.500", // Adjust hover background color to a darker red
+              }}
+              _focus={{
+                bg: "red.500", // Adjust focus background color to a darker red
+              }}
+              onClick={async () => {
+                await deleteTeam(teamData._id);
+                mutate();
+              }}
+            >
+              Delete
             </Button>
           )}
         </Box>

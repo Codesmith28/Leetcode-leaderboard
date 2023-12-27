@@ -1,7 +1,6 @@
 import GroupList from "@/components/GroupList/GroupList";
-import MyGroups from "@/components/MyGroups/MyGroups";
 import Layout from "@/pages/Layout";
-import { ReceivedTeamDataOnClient, TeamCol, TeamData } from "@/util/types";
+import { ReceivedTeamDataOnClient } from "@/util/types";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import styles from "./MyTeams.module.css";
@@ -9,29 +8,6 @@ import styles from "./MyTeams.module.css";
 import Pagination from "@/components/Pagination/Pagination";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import { Center } from "@chakra-ui/react";
-
-// function GroupList({ teamData }: { teamData: TeamData[] }) {
-//   const transition = {
-//     duration: 0.3,
-//     ease: "easeInOut",
-//   };
-
-//   return (
-//     <div className={styles.groups}>
-//       {teamData.map((group: any, index: number) => (
-//         <MyGroups
-//           key={index}
-//           _id={group._id}
-//           institution={group.institution}
-//           name={group.name}
-//           totalMembers={group.totalMembers}
-//           disabled={false}
-//           transition={{ ...transition, delay: index * 0.09 }}
-//         />
-//       ))}
-//     </div>
-//   );
-// }
 
 async function fetcher(url: string) {
   const response = await fetch(url);
@@ -56,35 +32,25 @@ function useSearch(searchQuery: string, page: number) {
 }
 
 function index() {
-  // get all teams of the user
+  const [myInsti, setMyInsti] = useState("");
+  useEffect(() => {
+    const getMyInfo = async () => {
+      const res = await fetch("/api/getInfo", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setMyInsti(data.institution);
+    };
 
-  // usestate for all teams:
-  // const [teams, setTeams] = useState<TeamData[]>([]);
+    getMyInfo();
+  });
 
-  // useEffect(() => {
-  //   const getTeams = async () => {
-  //     const res = await fetch("/api/getUserTeams", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //     const data = await res.json();
-
-  //     setTeams(data);
-  //   };
-  //   getTeams();
-  // }, []);
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const { teams, isLoading, error, mutate } = useSearch(searchQuery, page);
-
-  if (isLoading)
-    return (
-      <Layout>
-        <Center>Loading...</Center>
-      </Layout>
-    );
 
   return (
     <>
@@ -96,13 +62,20 @@ function index() {
             setPage={setPage}
           />
 
-          <GroupList
-            teamData={teams}
-            myInsti={"SEAS"}
-            mutate={mutate}
-            isLoading={isLoading}
-            error={error}
-          />
+          {isLoading ? (
+            <Center>Loading...</Center>
+          ) : (
+            teams && (
+              <GroupList
+                teamData={teams}
+                myInsti={myInsti}
+                mutate={mutate}
+                isLoading={isLoading}
+                error={error}
+                isAdmin={false}
+              />
+            )
+          )}
 
           <Pagination page={page} setPage={setPage} items={teams} />
         </div>
