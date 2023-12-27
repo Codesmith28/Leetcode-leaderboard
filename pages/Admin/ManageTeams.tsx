@@ -33,6 +33,27 @@ async function fetcher(url: string) {
   return response.json();
 }
 
+async function createNewTeam(teamName: string, isInstitutional: boolean) {
+  if (!teamName) {
+    alert("Please enter a team name");
+    return;
+  }
+
+  const res = await fetch("/api/createNewTeam", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ teamName, isInstitutional }),
+  });
+
+  if (res.status === 200) {
+    alert("Team created successfully");
+  } else {
+    alert("Team creation failed");
+  }
+}
+
 function useSearch(searchQuery: string, page: number) {
   const { data, error, isLoading, mutate } = useSWR(
     `/api/teamSearch/?searchQuery=${searchQuery}&page=${page}`,
@@ -65,13 +86,12 @@ function AddTeamModal({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Add Team</ModalHeader>
-
         <ModalBody className={styles.modalForm}>
           <div>
             <FormControl id="lc-username" isRequired>
               <FormLabel>Team Name</FormLabel>
               <Input
-                placeholder=" "
+                placeholder="Enter team name"
                 onChange={(e) => {
                   setTeamName(e.target.value);
                 }}
@@ -79,9 +99,18 @@ function AddTeamModal({
             </FormControl>
           </div>
           <div>
-            <FormControl display="flex" alignItems="center">
+            <FormControl
+              display="flex"
+              alignItems="center"
+              justifyContent={"space-between"}
+            >
               <FormLabel mb="0">Is this an institutional team?</FormLabel>
-              <Switch id="email-alerts" />
+              <Switch
+                isChecked={isInstitutional}
+                onChange={(e) => {
+                  setIsInstitutional(e.target.checked);
+                }}
+              />
             </FormControl>
           </div>
         </ModalBody>
@@ -92,12 +121,12 @@ function AddTeamModal({
             isLoading={isLoading}
             onClick={async () => {
               setIsLoading(true);
-              // await submitLCUsername(username, institution);
+              await createNewTeam(teamName, isInstitutional);
               setIsLoading(false);
               onClose();
             }}
           >
-            Submit
+            Create
           </Button>
         </ModalFooter>
       </ModalContent>

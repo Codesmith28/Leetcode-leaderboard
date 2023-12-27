@@ -38,7 +38,7 @@ export type MySession = {
 export type TeamCol = {
   _id: ObjectId;
   name: string;
-  members: ObjectId[];
+  members?: ObjectId[];
   institution: string | null;
 };
 

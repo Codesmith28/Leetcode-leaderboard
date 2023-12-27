@@ -34,6 +34,27 @@ async function joinTeam(teamId: ObjectId) {
   }
 }
 
+async function deleteTeam(teamId: ObjectId) {
+  if (!teamId) {
+    alert("Please enter a team name");
+    return;
+  }
+
+  const res = await fetch("/api/getTeams", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ teamId }),
+  });
+
+  if (res.status === 200) {
+    alert("Team deleted successfully");
+  } else {
+    alert("Team deletion failed");
+  }
+}
+
 async function isMemberOf(teamId: ObjectId) {
   const res = await fetch(`/api/isMemberOf/${teamId}`, {
     method: "GET",
@@ -143,7 +164,7 @@ export default function Groups({
           {isMember ? (
             <Link href={`/Member/MyTeams/${teamData._id}`}>
               <Button
-                className={off ? "" : "clicky"}
+                className={isAdmin ? "clicky" : (off ? "" : "clicky")}
                 mt={10}
                 w={"full"}
                 bg={`${colMain}.400`}
@@ -162,7 +183,7 @@ export default function Groups({
             </Link>
           ) : (
             <Button
-              className={off ? "" : "clicky"}
+              className={isAdmin ? "clicky" : (off ? "" : "clicky")}
               mt={10}
               w={"full"}
               bg={`${colMain}.400`}
@@ -200,10 +221,8 @@ export default function Groups({
                 bg: "red.500", // Adjust focus background color to a darker red
               }}
               onClick={async () => {
-                // Add your delete logic here
-                // For example:
-                // await deleteItem(itemId);
-                // window.location.href = "/somewhere"; // Redirect to desired location after deletion
+                await deleteTeam(teamData._id);
+                mutate();
               }}
             >
               Delete

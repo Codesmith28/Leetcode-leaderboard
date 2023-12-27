@@ -1,0 +1,6 @@
+.modalForm {
+  font-size: var(--chakra-fontSizes-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
