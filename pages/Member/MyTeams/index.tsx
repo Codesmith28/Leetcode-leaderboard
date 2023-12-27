@@ -10,29 +10,6 @@ import Pagination from "@/components/Pagination/Pagination";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import { Center } from "@chakra-ui/react";
 
-// function GroupList({ teamData }: { teamData: TeamData[] }) {
-//   const transition = {
-//     duration: 0.3,
-//     ease: "easeInOut",
-//   };
-
-//   return (
-//     <div className={styles.groups}>
-//       {teamData.map((group: any, index: number) => (
-//         <MyGroups
-//           key={index}
-//           _id={group._id}
-//           institution={group.institution}
-//           name={group.name}
-//           totalMembers={group.totalMembers}
-//           disabled={false}
-//           transition={{ ...transition, delay: index * 0.09 }}
-//         />
-//       ))}
-//     </div>
-//   );
-// }
-
 async function fetcher(url: string) {
   const response = await fetch(url);
   if (!response.ok) {
@@ -56,26 +33,6 @@ function useSearch(searchQuery: string, page: number) {
 }
 
 function index() {
-  // get all teams of the user
-
-  // usestate for all teams:
-  // const [teams, setTeams] = useState<TeamData[]>([]);
-
-  // useEffect(() => {
-  //   const getTeams = async () => {
-  //     const res = await fetch("/api/getUserTeams", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //     const data = await res.json();
-
-  //     setTeams(data);
-  //   };
-  //   getTeams();
-  // }, []);
-
   const [myInsti, setMyInsti] = useState("");
   useEffect(() => {
     const getMyInfo = async () => {
