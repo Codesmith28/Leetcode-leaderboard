@@ -33,7 +33,11 @@ async function fetcher(url: string) {
   return response.json();
 }
 
-async function createNewTeam(teamName: string, isInstitutional: boolean) {
+async function createNewTeam(
+  teamName: string,
+  isInstitutional: boolean,
+  mutate: Function
+) {
   if (!teamName) {
     alert("Please enter a team name");
     return;
@@ -49,6 +53,7 @@ async function createNewTeam(teamName: string, isInstitutional: boolean) {
 
   if (res.status === 200) {
     alert("Team created successfully");
+    mutate();
   } else {
     alert("Team creation failed");
   }
@@ -72,10 +77,12 @@ function AddTeamModal({
   isOpen,
   onOpen,
   onClose,
+  mutate,
 }: {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
+  mutate: Function;
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isInstitutional, setIsInstitutional] = useState(false);
@@ -121,7 +128,7 @@ function AddTeamModal({
             isLoading={isLoading}
             onClick={async () => {
               setIsLoading(true);
-              await createNewTeam(teamName, isInstitutional);
+              await createNewTeam(teamName, isInstitutional, mutate);
               setIsLoading(false);
               onClose();
             }}
@@ -163,6 +170,7 @@ function CreateTeams() {
         isOpen={isAddTeamModalOpen}
         onOpen={onAddTeamModalOpen}
         onClose={onAddTeamModalClose}
+        mutate={mutate}
       />
 
       <div>
