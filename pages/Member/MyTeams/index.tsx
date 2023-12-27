@@ -75,6 +75,23 @@ function index() {
   //   };
   //   getTeams();
   // }, []);
+
+  const [myInsti, setMyInsti] = useState("");
+  useEffect(() => {
+    const getMyInfo = async () => {
+      const res = await fetch("/api/getInfo", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setMyInsti(data.institution);
+    };
+
+    getMyInfo();
+  });
+
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const { teams, isLoading, error, mutate } = useSearch(searchQuery, page);
@@ -95,7 +112,7 @@ function index() {
             teams && (
               <GroupList
                 teamData={teams}
-                myInsti={"SEAS"}
+                myInsti={myInsti}
                 mutate={mutate}
                 isLoading={isLoading}
                 error={error}

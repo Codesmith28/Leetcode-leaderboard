@@ -59,8 +59,8 @@ export default function Groups({
   transition: any;
   isAdmin: boolean;
 }) {
+  let off = teamData.institution !== "none" && disabled;
   let colMain: string = teamData.institution === "none" ? "green" : "orange";
-  let off = disabled && teamData.institution !== "none";
 
   if (off) {
     colMain = "gray";

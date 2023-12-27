@@ -6,74 +6,76 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { decode } from "next-auth/jwt";
 
 export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse
+  req: NextApiRequest,
+  res: NextApiResponse
 ) {
-	const token = await decodeReq(req);
+  const token = await decodeReq(req);
 
-	if (token === null) {
-		return res.status(403).send("Not logged in");
-	}
+  if (token === null) {
+    return res.status(403).send("Not logged in");
+  }
 
-	if (req.method === "GET") {
-		return GET(req, res, token as MySession["user"]);
-	} else {
-		return res.status(405).send("Method not allowed");
-	}
+  if (req.method === "GET") {
+    return GET(req, res, token as MySession["user"]);
+  } else {
+    return res.status(405).send("Method not allowed");
+  }
 }
 async function GET(
-	req: NextApiRequest,
-	res: NextApiResponse,
-	session: MySession["user"]
+  req: NextApiRequest,
+  res: NextApiResponse,
+  session: MySession["user"]
 ) {
-	const teamId = req.query.id as string;
-	if (!teamId) return res.status(400).send("No team id provided");
+  const teamId = req.query.id as string;
+  if (!teamId) return res.status(400).send("No team id provided");
 
-	const db = (await clientPromise).db("leetcodeleaderboard");
-	const teamCollection = db.collection<TeamCol>("Teams");
+  const db = (await clientPromise).db("leetcodeleaderboard");
+  const teamCollection = db.collection<TeamCol>("Teams");
 
-	const team = await teamCollection
-		.aggregate([
-			{
-				$match: {
-					_id: new ObjectId(teamId),
-				},
-			},
-			{
-				$addFields: {
-					totalMembers: { $size: "$members" },
-				},
-			},
-			{
-				$lookup: {
-					from: "Users",
-					localField: "members",
-					foreignField: "_id",
-					as: "members",
-				},
-			},
-			{
-				$unwind: "$members",
-			},
-			{
-				$sort: {
-					// sort based on number of problems solved
-					"members.LCTotalSolved": -1,
-				},
-			},
-			{
-				$group: {
-					_id: "$_id",
-					name: { $first: "$name" },
-					institution: { $first: "$institution" },
-					members: { $push: "$members" },
-					totalMembers: { $first: "$totalMembers" },
-				},
-			},
-		])
-		.toArray();
+  const team = await teamCollection
+    .aggregate([
+      {
+        $match: {
+          _id: new ObjectId(teamId),
+        },
+      },
+      {
+        $addFields: {
+          totalMembers: { $size: "$members" },
+        },
+      },
+      {
+        $lookup: {
+          from: "Users",
+          localField: "members",
+          foreignField: "_id",
+          as: "members",
+        },
+      },
+      {
+        $unwind: {
+          path: "$members",
+          preserveNullAndEmptyArrays: true, // Preserve documents even if there are no members
+        },
+      },
+      {
+        $sort: {
+          // sort based on number of problems solved
+          "members.LCTotalSolved": -1,
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          name: { $first: "$name" },
+          institution: { $first: "$institution" },
+          members: { $push: "$members" },
+          totalMembers: { $first: "$totalMembers" },
+        },
+      },
+    ])
+    .toArray();
 
-	if (team.length === 0) return res.status(400).send("No team found");
-	console.log(team);
-	return res.status(200).json(team[0]);
+  if (team.length === 0) return res.status(200).send("No team found");
+  return res.status(200).json(team[0]);
 }
