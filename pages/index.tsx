@@ -1,9 +1,9 @@
 import GroupList from "@/components/GroupList/GroupList";
 import Pagination from "@/components/Pagination/Pagination";
 import SearchBar from "@/components/SearchBar/SearchBar";
-// import { fetcher } from "@/util/functions";
 import { ReceivedTeamDataOnClient, TeamData } from "@/util/types";
 import { Center } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Script from "next/script";
 import { useEffect, useState } from "react";
@@ -126,31 +126,32 @@ export default function Home() {
       setUserInfo(data);
     };
 
-    // tp get all the teams:
-    // const getAllTeams = async () => {
-    //   const res = await fetch("/api/getTeams", {
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-    //   const teamData = await res.json();
-    //   setTeams(teamData);
-    // };
-
     upDateInfo();
     getInfo();
-    // getAllTeams();
   }, []);
 
   const { teams, isLoading, error, mutate } = useSearch(searchQuery, page);
 
-  // if (isLoading)
-  //   return (
-  //     <Layout>
-  //       <Center>Loading...</Center>
-  //     </Layout>
-  //   );
+  let mainComponent;
+  mainComponent = isLoading ? (
+    <Center>
+      <div>Loading...</div>
+    </Center>
+  ) : (
+    teams &&
+    userInfo && (
+      <GroupList
+        teamData={teams}
+        myInsti={userInfo.institution}
+        mutate={mutate}
+        isLoading={isLoading}
+        error={error}
+        isAdmin={false}
+      />
+    )
+  );
+
+  const { data: session } = useSession();
 
   return (
     <>
@@ -183,23 +184,8 @@ export default function Home() {
               setSearchQuery={setSearchQuery}
               setPage={setPage}
             />
-            {isLoading ? (
-              <Center>
-                <div>Loading...</div>
-              </Center>
-            ) : (
-              teams &&
-              userInfo && (
-                <GroupList
-                  teamData={teams}
-                  myInsti={userInfo.institution}
-                  mutate={mutate}
-                  isLoading={isLoading}
-                  error={error}
-                  isAdmin={false}
-                />
-              )
-            )}
+            {!session ? <Center m={"1em"}>Please Login</Center> : mainComponent}
+
             <Pagination page={page} setPage={setPage} items={teams} />
           </div>
         </Layout>
