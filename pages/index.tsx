@@ -184,7 +184,11 @@ export default function Home() {
               setSearchQuery={setSearchQuery}
               setPage={setPage}
             />
-            {!session ? <Center m={"1em"}>Please Login</Center> : mainComponent}
+            {!session ? (
+              <Center m={"1em"}>Please Sign In</Center>
+            ) : (
+              mainComponent
+            )}
 
             <Pagination page={page} setPage={setPage} items={teams} />
           </div>
