@@ -8,6 +8,7 @@
   transition: transform 0.3s ease;
   margin-top: 5px;
 }
+
 .searchBar:active {
   transform: scale(0.99);
 }
