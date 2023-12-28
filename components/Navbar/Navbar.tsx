@@ -29,6 +29,7 @@ import { link } from "fs";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import styles from "./Navbar.module.css";
 
 interface Props {
@@ -302,7 +303,10 @@ export default function Navbar() {
             LeetCode LeaderBoard
           </Link>
 
-          <Flex alignItems={"center"}>{authBtn}</Flex>
+          <HStack>
+            <ColorModeSwitcher />
+            <Flex alignItems={"center"}>{authBtn}</Flex>
+          </HStack>
         </Flex>
 
         {isOpen ? (

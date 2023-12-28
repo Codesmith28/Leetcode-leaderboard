@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import customTheme from "@/styles/theme";
+import { theme } from "@/styles/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
@@ -12,7 +12,7 @@ export default function App({
 }: AppProps<{ session: Session }>) {
   return (
     <SessionProvider session={session}>
-      <ChakraProvider theme={customTheme}>
+      <ChakraProvider theme={theme}>
         <GoogleAnalytics trackPageViews />
         <Component {...pageProps} />
       </ChakraProvider>
