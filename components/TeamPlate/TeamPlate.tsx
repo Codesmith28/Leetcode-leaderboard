@@ -6,11 +6,13 @@ import {
   Heading,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import classNames from "classnames";
 import { ObjectId } from "mongodb";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
+import NotifToast from "../NotifToast/NotifToast";
 import styles from "./TeamPlate.module.css";
 
 // team info prop:
@@ -37,7 +39,7 @@ interface userInfo {
   image: string;
 }
 
-async function getOut({ teamId }: { teamId: ObjectId }) {
+async function getOut({ teamId, toast }: { teamId: ObjectId; toast: any }) {
   const res = await fetch("/api/leaveTeam", {
     method: "PUT",
     headers: {
@@ -47,12 +49,19 @@ async function getOut({ teamId }: { teamId: ObjectId }) {
   });
 
   if (res.status === 200) {
-    alert("Team Left Successfully");
-
+    NotifToast({
+      title: "Team Left Successfully",
+      status: "success",
+      toast: toast,
+    });
     // redirect to my teams page:
     window.location.href = "/Member/MyTeams";
   } else {
-    alert("Something went wrong");
+    NotifToast({
+      title: "Something went wrong",
+      status: "error",
+      toast: toast,
+    });
   }
 }
 
@@ -63,6 +72,7 @@ function TeamPlate({
   teamInfo: teamInfo;
   topThree: userInfo[];
 }) {
+  const toast = useToast();
   return (
     <>
       <Card
@@ -120,6 +130,7 @@ function TeamPlate({
           onClick={() => {
             getOut({
               teamId: teamInfo._id,
+              toast,
             });
           }}
         >
