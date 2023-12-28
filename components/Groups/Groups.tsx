@@ -11,14 +11,17 @@ import {
   Text,
   useColorModeValue,
   useEditable,
+  useToast,
 } from "@chakra-ui/react";
 import { ObjectId } from "mongodb";
+import { title } from "process";
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
 import MotionDiv from "../MotionDiv/MotionDiv";
+import NotifToast from "../NotifToast/NotifToast";
 import styles from "./Groups.module.css";
 
-async function joinTeam(teamId: ObjectId) {
+async function joinTeam(teamId: ObjectId, toast: any) {
   const res = await fetch("/api/teamJoined", {
     method: "PUT",
     headers: {
@@ -28,15 +31,27 @@ async function joinTeam(teamId: ObjectId) {
   });
 
   if (res.status === 200) {
-    alert("Team Joined Successfully");
+    NotifToast({
+      title: "Team Joined Successfully",
+      status: "success",
+      toast: toast,
+    });
   } else {
-    alert("Something went wrong");
+    NotifToast({
+      title: "Something went wrong",
+      status: "error",
+      toast: toast,
+    });
   }
 }
 
-async function deleteTeam(teamId: ObjectId) {
+async function deleteTeam(teamId: ObjectId, toast: any) {
   if (!teamId) {
-    alert("Please enter a team name");
+    NotifToast({
+      title: "Please enter a team name",
+      status: "warning",
+      toast: toast,
+    });
     return;
   }
 
@@ -49,9 +64,17 @@ async function deleteTeam(teamId: ObjectId) {
   });
 
   if (res.status === 200) {
-    alert("Team deleted successfully");
+    NotifToast({
+      title: "Team deleted successfully",
+      status: "success",
+      toast: toast,
+    });
   } else {
-    alert("Team deletion failed");
+    NotifToast({
+      title: "Team deletion failed",
+      status: "error",
+      toast: toast,
+    });
   }
 }
 
@@ -109,6 +132,8 @@ export default function Groups({
     colMain = "teal";
   }
 
+  const toast = useToast();
+
   return (
     <MotionDiv
       className={styles.cen}
@@ -164,7 +189,7 @@ export default function Groups({
           {isMember ? (
             <Link href={`/Member/MyTeams/${teamData._id}`}>
               <Button
-                className={isAdmin ? "clicky" : (off ? "" : "clicky")}
+                className={isAdmin ? "clicky" : off ? "" : "clicky"}
                 mt={10}
                 w={"full"}
                 bg={`${colMain}.400`}
@@ -183,7 +208,7 @@ export default function Groups({
             </Link>
           ) : (
             <Button
-              className={isAdmin ? "clicky" : (off ? "" : "clicky")}
+              className={isAdmin ? "clicky" : off ? "" : "clicky"}
               mt={10}
               w={"full"}
               bg={`${colMain}.400`}
@@ -198,7 +223,7 @@ export default function Groups({
               }}
               isDisabled={off}
               onClick={async () => {
-                await joinTeam(teamData._id);
+                await joinTeam(teamData._id, toast);
                 window.location.href = "/Member/MyTeams";
               }}
             >
@@ -221,7 +246,7 @@ export default function Groups({
                 bg: "red.500", // Adjust focus background color to a darker red
               }}
               onClick={async () => {
-                await deleteTeam(teamData._id);
+                await deleteTeam(teamData._id, toast);
                 mutate();
               }}
             >
