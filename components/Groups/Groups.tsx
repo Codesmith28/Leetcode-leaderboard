@@ -16,7 +16,6 @@ import {
 import { ObjectId } from "mongodb";
 import { title } from "process";
 import { useEffect, useState } from "react";
-import { mutate } from "swr";
 import MotionDiv from "../MotionDiv/MotionDiv";
 import NotifToast from "../NotifToast/NotifToast";
 import styles from "./Groups.module.css";
@@ -45,7 +44,7 @@ async function joinTeam(teamId: ObjectId, toast: any) {
   }
 }
 
-async function deleteTeam(teamId: ObjectId, toast: any) {
+async function deleteTeam(teamId: ObjectId, toast: any, mutate: Function) {
   if (!teamId) {
     NotifToast({
       title: "Please enter a team name",
@@ -69,6 +68,7 @@ async function deleteTeam(teamId: ObjectId, toast: any) {
       status: "success",
       toast: toast,
     });
+    mutate();
   } else {
     NotifToast({
       title: "Team deletion failed",
@@ -246,7 +246,7 @@ export default function Groups({
                 bg: "red.500", // Adjust focus background color to a darker red
               }}
               onClick={async () => {
-                await deleteTeam(teamData._id, toast);
+                await deleteTeam(teamData._id, toast, mutate);
                 mutate();
               }}
             >
