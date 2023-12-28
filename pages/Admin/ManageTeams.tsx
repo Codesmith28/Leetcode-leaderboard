@@ -1,5 +1,6 @@
 import FloatingButton from "@/components/FloatingButton";
 import GroupList from "@/components/GroupList";
+import NotifToast from "@/components/NotifToast/NotifToast";
 import Pagination from "@/components/Pagination/Pagination";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import { ReceivedTeamDataOnClient } from "@/util/types";
@@ -18,6 +19,7 @@ import {
   ModalOverlay,
   Switch,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { userInfo } from "os";
 import React, { useState } from "react";
@@ -36,10 +38,15 @@ async function fetcher(url: string) {
 async function createNewTeam(
   teamName: string,
   isInstitutional: boolean,
-  mutate: Function
+  mutate: Function,
+  toast: any
 ) {
   if (!teamName) {
-    alert("Please enter a team name");
+    NotifToast({
+      title: "Please enter a team name",
+      status: "warning",
+      toast: toast,
+    });
     return;
   }
 
@@ -52,10 +59,18 @@ async function createNewTeam(
   });
 
   if (res.status === 200) {
-    alert("Team created successfully");
+    NotifToast({
+      title: "Team created successfully",
+      status: "success",
+      toast: toast,
+    });
     mutate();
   } else {
-    alert("Team creation failed");
+    NotifToast({
+      title: "Team creation failed",
+      status: "error",
+      toast: toast,
+    });
   }
 }
 
@@ -78,11 +93,13 @@ function AddTeamModal({
   onOpen,
   onClose,
   mutate,
+  toast,
 }: {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
   mutate: Function;
+  toast: any;
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isInstitutional, setIsInstitutional] = useState(false);
@@ -128,7 +145,7 @@ function AddTeamModal({
             isLoading={isLoading}
             onClick={async () => {
               setIsLoading(true);
-              await createNewTeam(teamName, isInstitutional, mutate);
+              await createNewTeam(teamName, isInstitutional, mutate, toast);
               setIsLoading(false);
               onClose();
             }}
@@ -154,6 +171,9 @@ function CreateTeams() {
     onClose: onAddTeamModalClose,
   } = useDisclosure();
 
+
+  const toast = useToast();
+
   return (
     <Layout>
       <FloatingButton
@@ -171,6 +191,7 @@ function CreateTeams() {
         onOpen={onAddTeamModalOpen}
         onClose={onAddTeamModalClose}
         mutate={mutate}
+        toast={toast}
       />
 
       <div>

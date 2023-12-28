@@ -15,22 +15,6 @@ import Link from "next/link";
 import MotionDiv from "../MotionDiv";
 import styles from "./MyGroups.module.css";
 
-async function joinTeam(teamId: ObjectId) {
-	const res = await fetch("/api/teamJoined", {
-		method: "PUT",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({ teamId }),
-	});
-
-	if (res.status === 200) {
-		alert("Team Joined Successfully");
-	} else {
-		alert("Something went wrong");
-	}
-}
-
 export default function Groups({
 	name,
 	_id,
