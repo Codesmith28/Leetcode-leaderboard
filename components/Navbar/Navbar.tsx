@@ -104,7 +104,9 @@ function UsrnModal({
                   setUsername(e.target.value);
                 }}
               />
-              <FormLabel>LeetCode Username</FormLabel>
+              <FormLabel bg={useColorModeValue("white", "gray.700")}>
+                LeetCode Username
+              </FormLabel>
             </FormControl>
           </div>
           <div>
