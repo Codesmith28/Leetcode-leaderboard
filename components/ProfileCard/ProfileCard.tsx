@@ -173,9 +173,16 @@ export default function ProfileCard() {
         boxShadow={"2xl"}
         rounded={"lg"}
         textAlign={"center"}
+        mt={16}
         p={6}
       >
-        <Avatar size={"xl"} src={info.image} mt={-30} mb={4} pos={"relative"} />
+        <Avatar
+          size={"xl"}
+          src={info.image}
+          mt={"-70px"}
+          mb={4}
+          pos={"relative"}
+        />
 
         <Heading fontSize={"2xl"} fontFamily={"body"}>
           {info.name}
