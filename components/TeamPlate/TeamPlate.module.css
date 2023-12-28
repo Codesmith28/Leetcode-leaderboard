@@ -32,6 +32,35 @@
   letter-spacing: -1px;
 }
 
+
+.gold {
+  background: linear-gradient(45deg, #ffd700, #ffaf00);
+  /* For older browsers */
+  background: -webkit-linear-gradient(45deg, #ffd700, #ffaf00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.silver {
+  background: linear-gradient(45deg, #c0c0c0, #a9a9a9);
+  /* For older browsers */
+  background: -webkit-linear-gradient(45deg, #c0c0c0, #a9a9a9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bronze {
+  background: linear-gradient(45deg, #cd7f32, #b87333);
+  /* For older browsers */
+  background: -webkit-linear-gradient(45deg, #cd7f32, #b87333);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+
 /* Responsive design at four levels */
 
 @media (max-width: 425px) {

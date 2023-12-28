@@ -6,13 +6,11 @@ import {
   Heading,
   Stack,
   Text,
-  useToast,
 } from "@chakra-ui/react";
 import classNames from "classnames";
 import { ObjectId } from "mongodb";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import NotifToast from "../NotifToast/NotifToast";
 import styles from "./TeamPlate.module.css";
 
 // team info prop:
@@ -39,7 +37,7 @@ interface userInfo {
   image: string;
 }
 
-async function getOut({ teamId, toast }: { teamId: ObjectId; toast: any }) {
+async function getOut({ teamId }: { teamId: ObjectId }) {
   const res = await fetch("/api/leaveTeam", {
     method: "PUT",
     headers: {
@@ -49,19 +47,12 @@ async function getOut({ teamId, toast }: { teamId: ObjectId; toast: any }) {
   });
 
   if (res.status === 200) {
-    NotifToast({
-      title: "Team Left Successfully",
-      status: "success",
-      toast: toast,
-    });
+    alert("Team Left Successfully");
+
     // redirect to my teams page:
     window.location.href = "/Member/MyTeams";
   } else {
-    NotifToast({
-      title: "Something went wrong",
-      status: "error",
-      toast: toast,
-    });
+    alert("Something went wrong");
   }
 }
 
@@ -72,7 +63,6 @@ function TeamPlate({
   teamInfo: teamInfo;
   topThree: userInfo[];
 }) {
-  const toast = useToast();
   return (
     <>
       <Card
@@ -94,13 +84,25 @@ function TeamPlate({
           <Heading size={"sm"}>Total Members : {teamInfo.totalMembers}</Heading>
 
           <div className={styles.topThree}>
-            <Heading size={"sm"} color={"gold"} textDecor={"underline"}>
+            <Heading
+              size={"sm"}
+              textDecor={"underline"}
+              className={styles.gold}
+            >
               #1 {topThree[0]?.name || "N/A"}
             </Heading>
-            <Heading size={"sm"} color={"silver"} textDecor={"underline"}>
+            <Heading
+              size={"sm"}
+              textDecor={"underline"}
+              className={styles.silver}
+            >
               #2 {topThree[1]?.name || "N/A"}
             </Heading>
-            <Heading size={"sm"} color={"brown"} textDecor={"underline"}>
+            <Heading
+              size={"sm"}
+              textDecor={"underline"}
+              className={styles.bronze}
+            >
               #3 {topThree[2]?.name || "N/A"}
             </Heading>
           </div>
@@ -130,7 +132,6 @@ function TeamPlate({
           onClick={() => {
             getOut({
               teamId: teamInfo._id,
-              toast,
             });
           }}
         >

@@ -10,6 +10,7 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -91,7 +92,10 @@ function UserListItem({
       transition={transition}
     >
       {/* rank */}
-      <Box className={styles.content}>
+      <Box
+        className={styles.content}
+        bg={useColorModeValue("white", "gray.900")}
+      >
         <div className={styles.rank}>
           <h1># {rank}</h1>
         </div>

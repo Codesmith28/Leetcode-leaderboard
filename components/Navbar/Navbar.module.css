@@ -70,3 +70,25 @@
   justify-content: center;
   gap: 1em;
 }
+
+@media (max-width: 374px) {
+  .responsiveStack > :nth-child(1) {
+    display: none;
+  }
+}
+
+.responsiveItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.responsiveItem > * {
+  width: 100%;
+}
+
+@media (min-width: 375px) {
+  .responsiveItem {
+    display: none;
+  }
+}

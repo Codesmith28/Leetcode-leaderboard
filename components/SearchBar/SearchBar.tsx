@@ -23,7 +23,7 @@ function SearchBar({ searchQuery, setSearchQuery, setPage }: SearchBarProps) {
 						<Search2Icon color="gray.300" />
 					</InputRightElement>
 					<Input
-						type="text"
+						type="search"
 						placeholder="Search Teams"
 						value={searchQuery}
 						onChange={(e) => {

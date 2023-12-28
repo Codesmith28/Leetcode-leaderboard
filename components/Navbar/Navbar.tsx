@@ -4,6 +4,7 @@ import {
   Avatar,
   Box,
   Button,
+  Center,
   Flex,
   FormControl,
   FormLabel,
@@ -25,10 +26,12 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import classNames from "classnames";
 import { link } from "fs";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import styles from "./Navbar.module.css";
 
 interface Props {
@@ -233,6 +236,9 @@ export default function Navbar() {
             <Avatar size={"md"} src={session.user.image!} />
           </MenuButton>
           <MenuList className={styles.menuList} minWidth="100x">
+            <div className={styles.responsiveItem}>
+              <ColorModeSwitcher className={styles.menuItem} />
+            </div>
             <Link href={"/Profile"}>
               <MenuItem className={styles.menuItem}>My Profile</MenuItem>
             </Link>
@@ -302,17 +308,23 @@ export default function Navbar() {
             LeetCode LeaderBoard
           </Link>
 
-          <Flex alignItems={"center"}>{authBtn}</Flex>
+          <HStack className={styles.responsiveStack}>
+            <div>
+              <ColorModeSwitcher />
+            </div>
+            <div>
+              <Flex alignItems={"center"}>{authBtn}</Flex>
+            </div>
+          </HStack>
         </Flex>
 
         {isOpen ? (
-          <Box pb={4} display={{ md: "none" }}>
-            <Stack
-              bg={"gray.50"}
-              className={styles.navBtn}
-              as={"nav"}
-              spacing={4}
-            >
+          <Box
+            pb={4}
+            display={{ md: "none" }}
+            bg={useColorModeValue("gray.100", "gray.900")}
+          >
+            <Stack className={styles.navBtn} as={"nav"} spacing={4}>
               {session &&
                 navItems[myRole!]?.map((link) => (
                   <NavLink
