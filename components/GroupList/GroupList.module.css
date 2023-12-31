@@ -4,3 +4,9 @@
   /* maximum possible cols for the given width */
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
+
+@media (max-width: 425px) {
+  .groups {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
