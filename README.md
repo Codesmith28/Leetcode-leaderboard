@@ -1,40 +1,65 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# LeetCode Leaderboard
 
-## Getting Started
+A Leaderboard for LeetCode made in NextJS!
 
-First, run the development server:
+All you need is a leetcode username and you are good to go!
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<!-- insert all the images from public/screenshots folder -->
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Features
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+1. You can view all available teams from the homepage:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+![Homepage](public/screenshots/homepage.png)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+2. You can view all your joined teams under **My Teams** sections:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+![My Teams](public/screenshots/myTeams.png)
 
-## Learn More
+3. The leaderboard for the team is displayed when you enter a team:
 
-To learn more about Next.js, take a look at the following resources:
+![Team Leaderboard](public/screenshots/leaderboard.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. You can view your own profile and can also change your institution from here:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+![Profile](public/screenshots/myProfile.png)
 
-## Deploy on Vercel
+5. As an admin, you can manage the teams and add new teams in add
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+![Admin Panel](public/screenshots/manageTeams.png)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# Tech Stack:
+
+## Frontend:
+
+- React
+- ChakraUI
+- Framer Motion
+
+## Backend:
+
+- Vercel serverless functions
+- MongoDB
+
+# For further development:
+
+### Pre-requisites:
+
+- NodeJS
+- MongoDB
+- Typescript
+
+### Required environment variables:
+
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `MONGO_URI`
+- `NEXTAUTH_SECRET`
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID`
+- `JWT_COOKIE_NAME`
+
+### Steps to run:
+
+- Clone the repo
+- Run `npm install`
+- Run `npm run dev`
