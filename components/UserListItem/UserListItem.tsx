@@ -117,6 +117,7 @@ function UserListItem({
             href={`https://leetcode.com/${member.username}`}
             target="_blank"
             rel="noopener noreferrer"
+            className={styles.userLink}
           >
             <h1>@{member.username}</h1>
           </Link>
