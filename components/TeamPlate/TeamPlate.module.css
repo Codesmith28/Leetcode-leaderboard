@@ -31,7 +31,6 @@
   letter-spacing: -1px;
 }
 
-
 .gold {
   background: linear-gradient(45deg, #ffd700, #ffaf00);
   /* For older browsers */
@@ -58,7 +57,6 @@
   background-clip: text;
   color: transparent;
 }
-
 
 /* Responsive design at four levels */
 
