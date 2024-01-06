@@ -1,13 +1,28 @@
 // 1. Import `extendTheme`
-import { ThemeConfig, extendTheme, useColorModeValue } from "@chakra-ui/react";
-
-const config: ThemeConfig = {
-  initialColorMode: "light",
-  useSystemColorMode: false,
-};
+import {
+  ThemeConfig,
+  theme as chakraTheme,
+  extendTheme,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
 const activeLabelStyles = {
   transform: "scale(0.85) translateY(-25px)",
+};
+
+const Button = {
+  variants: {
+    delete: {
+      bg: "red.500",
+      color: "white",
+      _hover: {
+        bg: "red.600",
+      },
+      _active: {
+        bg: "red.700",
+      },
+    },
+  },
 };
 
 const Form = {
@@ -39,8 +54,17 @@ const Form = {
   },
 };
 
+const config: ThemeConfig = {
+  initialColorMode: "light",
+  useSystemColorMode: false,
+};
+
 export const theme = extendTheme({
   config,
+  components: {
+    Form,
+    Button,
+  },
   styles: {
     global: () => ({
       body: {},
@@ -49,8 +73,5 @@ export const theme = extendTheme({
   fonts: {
     heading: "Ubuntu, sans-serif",
     body: "Ubuntu, sans-serif",
-  },
-  components: {
-    Form,
   },
 });
