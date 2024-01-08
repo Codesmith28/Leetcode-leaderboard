@@ -189,19 +189,7 @@ export default function ProfileCard() {
         </Heading>
 
         <div className={styles.userInfo}>
-          <div className={styles.editUserName}>
-            <div>{info.username}</div>
-            <div>
-              <IconButton
-                className="clicky"
-                colorScheme="teal"
-                aria-label="edit institution"
-                size="xs"
-                icon={<EditIcon />}
-                onClick={onEditInstitutionOpen}
-              />
-            </div>
-          </div>
+          <div>{info.username}</div>
           <div>Ranking: {info.ranking}</div>
         </div>
 

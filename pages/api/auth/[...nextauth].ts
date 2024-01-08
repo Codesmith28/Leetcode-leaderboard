@@ -35,6 +35,7 @@ const authOptions = NextAuth({
           LCHardSolved: 0,
           ranking: 0,
           image: user.image!,
+          visits: 0,
         });
       } else {
         // If user exists, update the user's information in the database
@@ -45,6 +46,7 @@ const authOptions = NextAuth({
               name: user.name!,
               image: user.image!,
               // Update other fields as needed
+              $inc: { visits: 1 },
             },
           }
         );
