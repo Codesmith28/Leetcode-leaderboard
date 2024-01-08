@@ -76,7 +76,7 @@ function EditInstitutionModal({
     <Modal isCentered isOpen={isOpen} onClose={onClose} size={"sm"}>
       <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
       <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
+        <ModalHeader>Change Institution</ModalHeader>
         <ModalCloseButton />
         <ModalBody className={styles.modalForm}>
           <div>
