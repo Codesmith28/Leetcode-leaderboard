@@ -18,6 +18,7 @@ const authOptions = NextAuth({
   ],
 
   callbacks: {
+    
     async signIn({ user, account, credentials, email, profile }) {
       const db = (await clientPromise).db("leetcodeleaderboard");
       const users = db.collection<UserCol>("Users");

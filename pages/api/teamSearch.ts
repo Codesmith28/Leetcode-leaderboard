@@ -58,10 +58,5 @@ async function GET(
     ])
     .toArray();
 
-  // if (searchQuery && teams.length === 0) {
-  //   // If search query provided and no teams found, return not found status
-  //   return res.status(404).json({ error: "No teams found" });
-  // }
-
   return res.status(200).json(teams);
 }
