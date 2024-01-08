@@ -1,15 +1,27 @@
+import createNewTeam from "@/pages/api/createNewTeam";
 import { ReceivedTeamDataOnClient } from "@/util/types";
 import { ArrowRightIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  FormControl,
+  FormLabel,
+  Input,
   Link,
   List,
   ListIcon,
   ListItem,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
+  Switch,
   Text,
   useColorModeValue,
+  useDisclosure,
   useEditable,
   useToast,
 } from "@chakra-ui/react";
@@ -78,6 +90,54 @@ async function deleteTeam(teamId: ObjectId, toast: any, mutate: Function) {
   }
 }
 
+function DeleteTeamModal({
+  isOpen,
+  onOpen,
+  onClose,
+  mutate,
+  toast,
+  teamId,
+}: {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  mutate: Function;
+  toast: any;
+  teamId: ObjectId;
+}) {
+  const [isLoading, setIsLoading] = useState(false);
+  // const [isInstitutional, setIsInstitutional] = useState(false);
+  // const [teamName, setTeamName] = useState("");
+
+  return (
+    <Modal isCentered isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Delete Team</ModalHeader>
+        <ModalBody className={styles.modalForm}>
+          <div>Are you sure you want to delete this team?</div>
+        </ModalBody>
+
+        {/* submit leetcode username: */}
+        <ModalFooter>
+          <Button
+            isLoading={isLoading}
+            colorScheme="red"
+            onClick={async () => {
+              setIsLoading(true);
+              await deleteTeam(teamId, toast, mutate);
+              setIsLoading(false);
+              onClose();
+            }}
+          >
+            Delete
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+}
+
 async function isMemberOf(teamId: ObjectId) {
   const res = await fetch(`/api/isMemberOf/${teamId}`, {
     method: "GET",
@@ -131,6 +191,12 @@ export default function Groups({
     isMember = true;
     colMain = "teal";
   }
+
+  const {
+    isOpen: isDeleteTeamModalOpen,
+    onOpen: onDeleteTeamModalOpen,
+    onClose: onDeleteTeamModalClose,
+  } = useDisclosure();
 
   const toast = useToast();
 
@@ -245,16 +311,22 @@ export default function Groups({
               _focus={{
                 bg: "red.500", // Adjust focus background color to a darker red
               }}
-              onClick={async () => {
-                await deleteTeam(teamData._id, toast, mutate);
-                mutate();
-              }}
+              onClick={onDeleteTeamModalOpen}
             >
               Delete
             </Button>
           )}
         </Box>
       </Box>
+
+      <DeleteTeamModal
+        isOpen={isDeleteTeamModalOpen}
+        onOpen={onDeleteTeamModalOpen}
+        onClose={onDeleteTeamModalClose}
+        mutate={mutate}
+        toast={toast}
+        teamId={teamData._id}
+      />
     </MotionDiv>
   );
 }

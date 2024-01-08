@@ -158,7 +158,7 @@ function AddTeamModal({
   );
 }
 
-function CreateTeams() {
+function ManageTeams() {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
 
@@ -170,7 +170,6 @@ function CreateTeams() {
     onOpen: onAddTeamModalOpen,
     onClose: onAddTeamModalClose,
   } = useDisclosure();
-
 
   const toast = useToast();
 
@@ -221,4 +220,4 @@ function CreateTeams() {
   );
 }
 
-export default CreateTeams;
+export default ManageTeams;

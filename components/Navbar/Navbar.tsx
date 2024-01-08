@@ -99,10 +99,8 @@ function UsrnModal({
           <div>
             <FormControl variant="floating" id="lc-username" isRequired>
               <Input
-                placeholder=" "
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                }}
+                placeholder=""
+                onChange={(e) => setUsername(e.target.value.trim())}
               />
               <FormLabel bg={useColorModeValue("white", "gray.700")}>
                 LeetCode Username

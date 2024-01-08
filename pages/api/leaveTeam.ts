@@ -3,7 +3,6 @@ import { decodeReq } from "@/util/functions";
 import { MySession, TeamCol, UserCol } from "@/util/types";
 import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import { decode } from "next-auth/jwt";
 
 export default async function handler(
   req: NextApiRequest,
