@@ -31,9 +31,25 @@
   justify-content: space-between;
 }
 
+.userInfo {
+  font-weight: 600;
+  margin-bottom: 1em;
+  color: var(--chakra-colors-gray-500);
+  display: flex;
+  flex-direction: column;
+}
+
+.editUserName {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 4px;
+}
+
 .txt {
   color: gray;
 }
+
 .modalForm {
   display: flex;
   flex-direction: column;

@@ -188,11 +188,22 @@ export default function ProfileCard() {
           {info.name}
         </Heading>
 
-        <Text fontWeight={600} color={"gray.500"} mb={4}>
-          {info.username}
-          <br />
-          Ranking: {info.ranking}
-        </Text>
+        <div className={styles.userInfo}>
+          <div className={styles.editUserName}>
+            <div>{info.username}</div>
+            <div>
+              <IconButton
+                className="clicky"
+                colorScheme="teal"
+                aria-label="edit institution"
+                size="xs"
+                icon={<EditIcon />}
+                onClick={onEditInstitutionOpen}
+              />
+            </div>
+          </div>
+          <div>Ranking: {info.ranking}</div>
+        </div>
 
         <div className={styles.card}>
           <div className={styles.label}>
