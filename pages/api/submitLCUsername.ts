@@ -6,54 +6,61 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { decode } from "next-auth/jwt";
 
 export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse
+  req: NextApiRequest,
+  res: NextApiResponse
 ) {
-	const token = await decodeReq(req);
-	if (token === null) {
-		return res.status(403).send("Not logged in");
-	}
+  const token = await decodeReq(req);
+  if (token === null) {
+    return res.status(403).send("Not logged in");
+  }
 
-	if (req.method === "PUT") {
-		return PUT(req, res, token as MySession["user"]);
-	} else {
-		return res.status(405).send("Method not allowed");
-	}
+  if (req.method === "PUT") {
+    return PUT(req, res, token as MySession["user"]);
+  } else {
+    return res.status(405).send("Method not allowed");
+  }
 }
 
 async function PUT(
-	req: NextApiRequest,
-	res: NextApiResponse,
-	session: MySession["user"]
+  req: NextApiRequest,
+  res: NextApiResponse,
+  session: MySession["user"]
 ) {
-	const body: {
-		username: string;
-		institution: string;
-	} = req.body;
+  const body: {
+    username: string;
+    institution: string;
+  } = req.body;
 
-	if (!body.username || !body.institution) {
-		return res
-			.status(400)
-			.json({ error: "Missing username or institution" });
-	}
+  if (!body.username || !body.institution) {
+    return res.status(400).json({ error: "Missing username or institution" });
+  }
 
-	const db = (await clientPromise).db("leetcodeleaderboard");
-	const usersCollection = db.collection<UserCol>("Users");
-	const id = session.id;
+  const db = (await clientPromise).db("leetcodeleaderboard");
+  const usersCollection = db.collection<UserCol>("Users");
+  const id = session.id;
 
-	const updateUser = await usersCollection.updateOne(
-		{ _id: new ObjectId(id) },
-		{
-			$set: {
-				username: body.username,
-				institution: body.institution,
-			},
-		}
-	);
+  const username = body.username;
+  const institution = body.institution;
 
-	if (!updateUser.acknowledged) {
-		return res.status(500).json({ error: "Could not update user" });
-	}
+  const usernameExists = await usersCollection.findOne({ username });
 
-	return res.status(200).json({ message: "Success" });
+  if (usernameExists) {
+    return res.status(500).json({ message: "Username already taken" });
+  }
+
+  const updateUser = await usersCollection.updateOne(
+    { _id: new ObjectId(id) },
+    {
+      $set: {
+        username: username,
+        institution: institution,
+      },
+    }
+  );
+
+  if (!updateUser.acknowledged) {
+    return res.status(500).json({ error: "Could not update user" });
+  }
+
+  return res.status(200).json({ message: "Success" });
 }
