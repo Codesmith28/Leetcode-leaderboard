@@ -31,7 +31,7 @@ async function PUT(
   } = req.body;
 
   if (!body.institution) {
-    return res.status(400).json({ error: "Missing username or institution" });
+    return res.status(400).json({ message: "Missing username or institution" });
   }
 
   const db = (await clientPromise).db("leetcodeleaderboard");
@@ -42,7 +42,7 @@ async function PUT(
   const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
 
   if (!user) {
-    return res.status(404).json({ error: "User not found" });
+    return res.status(404).json({ message: "User not found" });
   }
 
   const oldInstitution = user.institution;
@@ -52,8 +52,11 @@ async function PUT(
     institution: oldInstitution,
   });
 
-
   if (oldInstitution === "none") {
+    if (oldInstitution === newInstitution) {
+      return res.status(400).json({ message: "Same institution" });
+    }
+
     const operation = [
       {
         updateOne: {
@@ -70,10 +73,10 @@ async function PUT(
     if (res1.modifiedCount > 0) {
       return res.status(200).json({ message: "Institution updated" });
     } else {
-      return res.status(404).send("User not found");
+      return res.status(404).json({ message: "User not found" });
     }
   } else if (oldInstitution === newInstitution) {
-    return res.status(400).json({ error: "Same institution" });
+    return res.status(400).json({ message: "Same institution" });
   } else {
     const operation1 = [
       {
@@ -101,10 +104,6 @@ async function PUT(
     const res1 = await teamsCollection.bulkWrite(operation1);
     const res2 = await usersCollection.bulkWrite(operation2);
 
-    if (res1.modifiedCount > 0 && res2.modifiedCount > 0) {
-      return res.status(200).json({ message: "Institution updated" });
-    } else {
-      return res.status(404).send("User or team not found");
-    }
+    return res.status(200).json({ message: "Institution updated" });
   }
 }

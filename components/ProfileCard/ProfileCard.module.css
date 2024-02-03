@@ -41,6 +41,12 @@
   gap: 1em;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
 .stack {
   display: flex;
   flex-direction: column;

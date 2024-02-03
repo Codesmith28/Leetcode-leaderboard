@@ -33,7 +33,6 @@ async function deleteUser(toast: any) {
       toast: toast,
     });
   } else {
-    console.log("success");
     NotifToast({
       title: "Success",
       description: "Successfully deleted user",
@@ -55,24 +54,19 @@ function DeleteUserModal({
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  // mutate: Function;
   toast: any;
-  // teamId: ObjectId;
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  // const [isInstitutional, setIsInstitutional] = useState(false);
-  // const [teamName, setTeamName] = useState("");
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Delete Team</ModalHeader>
+        <ModalHeader>Delete Account</ModalHeader>
         <ModalBody className={styles.modalForm}>
           <div>Are you sure you want to delete your account?</div>
         </ModalBody>
 
-        {/* submit leetcode username: */}
         <ModalFooter>
           <Button
             isLoading={isLoading}
@@ -104,7 +98,8 @@ function Profile() {
   return (
     <Layout>
       <div className={styles.whole}>
-        <ProfileCard />
+
+        <ProfileCard toast = {toast}/>
 
         <Button variant={"delete"} onClick={onDeleteUserModalOpen}>
           Delete Account

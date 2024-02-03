@@ -5,8 +5,10 @@ import {
   Box,
   Button,
   Center,
+  FormControl,
   Heading,
   IconButton,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -16,15 +18,17 @@ import {
   ModalOverlay,
   Select,
   Text,
+  Toast,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
+import NotifToast from "../NotifToast/NotifToast";
 import styles from "./ProfileCard.module.css";
 import Loading from "./loading";
 
-async function updateInstitution(institution: string) {
+async function updateInstitution(institution: string, toast: any) {
   const res = await fetch("/api/updateInstitution", {
     method: "PUT",
     headers: {
@@ -33,22 +37,75 @@ async function updateInstitution(institution: string) {
     body: JSON.stringify({ institution }),
   });
   const data = await res.json();
+
+  if (res.status !== 200) {
+    NotifToast({
+      title: "Error",
+      description: data.message,
+      status: "error",
+      toast: toast,
+    });
+  } else {
+    NotifToast({
+      title: "Success",
+      description: data.message,
+      status: "success",
+      toast: toast,
+    });
+
+    window.location.reload();
+  }
   return data;
+}
+
+async function updateUsername(username: string, toast: any) {
+  if (username.trim().length === 0) {
+    NotifToast({
+      title: "Error",
+      description: "Username cannot be empty",
+      status: "error",
+      toast: toast,
+    });
+    return;
+  }
+
+  const res = await fetch("/api/getInfo", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ username }),
+  });
+
+  const data = await res.json();
+
+  if (res.status !== 200) {
+    NotifToast({
+      title: "Error",
+      description: data.message,
+      status: "error",
+      toast: toast,
+    });
+  } else {
+    window.location.reload();
+  }
 }
 
 function EditInstitutionModal({
   isOpen,
   onOpen,
   onClose,
+  toast,
 }: {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
+  toast: any;
 }) {
+  const [instLoading, setInstLoading] = useState(false);
+  const [usrLoading, setUsrLoading] = useState(false);
   const [institution, setInstitution] = useState("none");
-  const [loading, setLoading] = useState(false);
-
-  // let institutions = ["DAIICT", "NIRMA", "SEAS", "SVNIT"];
+  const [username, setUsername] = useState("");
 
   const [institutions, setInstitutions] = useState<string[]>([]);
   useEffect(() => {
@@ -76,10 +133,11 @@ function EditInstitutionModal({
     <Modal isCentered isOpen={isOpen} onClose={onClose} size={"sm"}>
       <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
       <ModalContent>
-        <ModalHeader>Change Institution</ModalHeader>
+        <ModalHeader>Change Credentials</ModalHeader>
         <ModalCloseButton />
+
         <ModalBody className={styles.modalForm}>
-          <div>
+          <div className={styles.form}>
             <Select
               placeholder="Select Institution"
               defaultValue={"none"}
@@ -93,29 +151,53 @@ function EditInstitutionModal({
                 </option>
               ))}
             </Select>
+
+            <Button
+              className="clicky"
+              isLoading={instLoading}
+              onClick={async () => {
+                setInstLoading(true);
+                await updateInstitution(institution, toast);
+                setInstLoading(false);
+                onClose();
+              }}
+            >
+              Change Institution
+            </Button>
+          </div>
+
+          <div className={styles.form}>
+            <FormControl isRequired>
+              <Input
+                value={username}
+                placeholder={"username"}
+                size="md"
+                onChange={(e) => setUsername(e.target.value.trim())}
+                readOnly={false}
+              />
+            </FormControl>
+
+            <Button
+              className="clicky"
+              isLoading={usrLoading}
+              onClick={async () => {
+                setUsrLoading(true);
+                await updateUsername(String(username), toast);
+                setUsrLoading(false);
+                onClose();
+              }}
+            >
+              Change Username
+            </Button>
           </div>
         </ModalBody>
-        <ModalFooter>
-          <Button
-            className="clicky"
-            isLoading={loading}
-            onClick={async () => {
-              setLoading(true);
-              await updateInstitution(institution);
-              setLoading(false);
-              onClose();
-              window.location.reload();
-            }}
-          >
-            Change
-          </Button>
-        </ModalFooter>
+        <ModalFooter />
       </ModalContent>
     </Modal>
   );
 }
 
-export default function ProfileCard() {
+export default function ProfileCard({ toast }: { toast: any }) {
   const { data: session } = useSession();
 
   const [info, setInfo] = useState<UserCol>({
@@ -148,22 +230,11 @@ export default function ProfileCard() {
     getInfo();
   }, []);
 
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    if (info) {
-      setIsLoading(false);
-    }
-  }, [info]);
-
   const {
     isOpen: isEditInstitutionOpen,
     onOpen: onEditInstitutionOpen,
     onClose: onEditInstitutionClose,
   } = useDisclosure();
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <Center>
@@ -241,6 +312,7 @@ export default function ProfileCard() {
         isOpen={isEditInstitutionOpen}
         onOpen={onEditInstitutionOpen}
         onClose={onEditInstitutionClose}
+        toast={toast}
       />
     </Center>
   );
