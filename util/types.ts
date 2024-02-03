@@ -15,6 +15,7 @@ export type UserCol = {
   teams: ObjectId[];
   ranking: number;
   image: string;
+  visits?: number;
 };
 
 export type MySession = {
@@ -55,5 +56,5 @@ export type ReceivedTeamDataOnClient = Omit<
     name: string;
     totalMembers: number;
   },
-  "members" 
+  "members"
 >;
